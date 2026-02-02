@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+#countdown {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 3em;
+    font-weight: 700;
+}
+
+.box {
+    position: relative;
+}
+
+.box span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rotate-svg {
+    transform-origin: center center;
+    transform: rotate(-90deg);
+}
+
+svg circle {
+    fill: none;
+    stroke: url(#gradient);
+    stroke-width: 10px;
+    stroke-linecap: round;
+    transform: translate(5px, 5px);
+    stroke-dasharray: 313;
+    stroke-dashoffset: 313;
+}
+
+.fond {
+    stroke: #e9f0f3;
+    stroke-dashoffset: 0;
+}
+
+@keyframes circle {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.page {
+    display: none;
+}

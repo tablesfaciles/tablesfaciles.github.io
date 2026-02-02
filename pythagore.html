@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords"
+        content="multiplication, table pythagore, tables multiplication aléatoires, exercices, Quiz opérations mathématiques, Entraînement au calcul mental">
+    <title>Table de Pythagore Interactive</title>
+
+    <!-- Favicons & PWA -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="mask-icon" href="img/favicons/safari-pinned-tab.svg" color="#1e40af">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Multiplication">
+    <meta name="msapplication-TileColor" content="#1e40af">
+    <meta name="theme-color" content="#1e40af">
+
+    <!-- Tailwind CSS Local -->
+    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602020211">
+</head>
+
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <!-- Navigation Responsive -->
+    <nav class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg" x-data="{ mobileMenuOpen: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 gap-4">
+                <div class="flex items-center space-x-3 flex-shrink-0">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span class="text-xl font-bold">Multiplication</span>
+                </div>
+
+                <div class="hidden xl:flex space-x-1 items-center text-sm">
+                    <a href="index.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">🏠 Accueil</a>
+                    <div class="w-px h-6 bg-white bg-opacity-20"></div>
+                    <a href="debutant.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">👶 Débutants</a>
+                    <a href="intermediaire.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">📘
+                        Intermédiaire</a>
+                    <a href="expert.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">🔥 Expert</a>
+                    <div class="w-px h-6 bg-white bg-opacity-20"></div>
+                    <a href="operations-aleatoires.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">🎲
+                        Opérations</a>
+                    <a href="pythagore.html" class="bg-blue-800 px-3 py-2 rounded shadow-inner">📊 Pythagore</a>
+                    <a href="quiz.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">❓ Quiz</a>
+                    <a href="historique.html" class="hover:bg-blue-800 px-3 py-2 rounded transition">📈 Historique</a>
+                </div>
+
+                <button @click="mobileMenuOpen = !mobileMenuOpen"
+                    class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path x-show="mobileMenuOpen" x-cloak stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
+                x-transition:enter-start="opacity-0 transform -translate-y-2"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4">
+                <div class="flex flex-col space-y-1 pt-2">
+                    <a href="index.html" class="block px-3 py-2 hover:bg-blue-800 rounded mx-2 transition">🏠
+                        Accueil</a>
+                    <div class="px-4 py-2 text-xs font-bold text-blue-200 uppercase tracking-widest">Apprentissage</div>
+                    <a href="debutant.html" class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition">👶
+                        Débutants (1-5)</a>
+                    <a href="intermediaire.html" class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition">📘
+                        Intermédiaire (6-8)</a>
+                    <a href="expert.html" class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition">🔥 Expert
+                        (9+)</a>
+                    <div class="px-4 py-2 text-xs font-bold text-blue-200 uppercase tracking-widest mt-2">Exercices
+                    </div>
+                    <a href="operations-aleatoires.html"
+                        class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition">🎲 Opérations</a>
+                    <a href="pythagore.html" class="block px-6 py-2 bg-blue-800 rounded mx-2 transition">📊
+                        Pythagore</a>
+                    <a href="quiz.html" class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition">❓ Quiz</a>
+                    <a href="historique.html" class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition">📈
+                        Historique</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu Principal -->
+    <main class="max-w-6xl mx-auto px-4 py-12" x-data="pythagoreComponent()">
+        <h1 class="text-4xl font-bold text-center mb-8">Table de Pythagore Interactive</h1>
+
+        <!-- Contrôles -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+            <!-- Sélection du Mode -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold mb-3">Mode</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <button @click="setMode('complete')"
+                        :class="mode === 'complete' ? 'bg-blue-700 text-white' : 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100'"
+                        class="font-bold py-2 px-4 rounded-lg transition hover:scale-105">
+                        📊 Table Complète
+                    </button>
+                    <button @click="setMode('discover')"
+                        :class="mode === 'discover' ? 'bg-blue-700 text-white' : 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100'"
+                        class="font-bold py-2 px-4 rounded-lg transition hover:scale-105">
+                        🔍 À Découvrir
+                    </button>
+                </div>
+            </div>
+
+            <!-- Options -->
+            <div class="mb-6">
+                <h3 class="text-lg font-bold mb-3">Options</h3>
+                <div class="flex gap-3 flex-wrap">
+                    <button @click="toggleDuplicates()"
+                        :class="showDuplicates ? 'bg-orange-600 hover:bg-orange-700' : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500'"
+                        class="text-white font-bold py-2 px-4 rounded-lg transition">
+                        <span x-text="showDuplicates ? '⭐ Doublons (ON)' : 'Trouver doublons'"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Boutons Mode Complète -->
+            <div x-show="mode === 'complete'" x-transition class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="col-span-1 md:col-span-2 text-sm text-gray-600 dark:text-gray-400">
+                    Cliquez sur une case pour surligner sa ligne et colonne
+                </div>
+            </div>
+
+            <!-- Boutons Mode Découvrir -->
+            <div x-show="mode === 'discover'" x-transition class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <button @click="resetDiscovery()"
+                    class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                    🔄 Redémarrer
+                </button>
+                <div class="text-sm text-gray-600 dark:text-gray-400">
+                    Cliquez les cases pour les découvrir
+                </div>
+
+                <!-- Tables à pratiquer -->
+                <div class="col-span-1 md:col-span-2 mt-4">
+                    <label class="block text-lg font-bold mb-3">Tables à pratiquer</label>
+                    <div class="flex gap-2 flex-wrap mb-3">
+                        <template x-for="num in [2, 3, 4, 5, 6, 7, 8, 9]" :key="num">
+                            <button type="button" @click="toggleSelectedTable(num)"
+                                :class="selectedTablesDiscover.includes(num) ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                                class="p-2 rounded transition font-semibold w-12 h-12">
+                                <span x-text="num"></span>
+                            </button>
+                        </template>
+                    </div>
+                    <div class="flex gap-2 mb-4">
+                        <button @click="selectAllTableDiscover()"
+                            class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">
+                            Tout sélectionner
+                        </button>
+                        <button @click="deselectAllTableDiscover()"
+                            class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition text-sm">
+                            Tout désélectionner
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Barre de progression -->
+                <div class="col-span-1 md:col-span-2 mt-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-semibold">Découvertes: <span
+                                x-text="discoveredCells.length"></span>/<span
+                                x-text="getTotalCellsToDiscover()"></span></span>
+                        <span class="text-sm font-semibold" x-text="Math.round(getProgressPercentage()) + '%'"></span>
+                    </div>
+                    <div class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
+                        <div class="bg-gradient-to-r from-orange-500 to-red-500 h-full transition-all duration-300"
+                            :style="`width: ${getProgressPercentage()}%`">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-x-auto">
+            <table class="w-full border-collapse text-sm md:text-base">
+                <thead>
+                    <tr class="bg-blue-600 text-white">
+                        <th class="border-2 border-gray-300 dark:border-gray-700 p-2">×</th>
+                        <template x-for="col in [2, 3, 4, 5, 6, 7, 8, 9]" :key="col">
+                            <th class="border-2 border-gray-300 dark:border-gray-700 p-2 font-bold transition"
+                                :class="mode === 'complete' && highlightMode === 'rowcol' && isHeaderColHighlighted(col) ? 'bg-blue-400 scale-105' : 'bg-blue-600'">
+                                <span x-text="col"></span>
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template x-for="row in [2, 3, 4, 5, 6, 7, 8, 9]" :key="row">
+                        <tr>
+                            <th class="border-2 border-gray-300 dark:border-gray-700 p-2 font-bold transition"
+                                :class="mode === 'complete' && highlightMode === 'rowcol' && isHeaderRowHighlighted(row) ? 'bg-blue-400 scale-105' : 'bg-blue-600 text-white'">
+                                <span x-text="row"></span>
+                            </th>
+                            <template x-for="col in [2, 3, 4, 5, 6, 7, 8, 9]" :key="`${row}-${col}`">
+                                <td class="border-2 border-gray-300 dark:border-gray-700 p-3 text-center font-semibold cursor-pointer transition"
+                                    @click="highlightRowColumn(row, col)" :class="getCellClass(row, col)">
+                                    <span x-show="mode === 'discover' ? isCellDiscovered(row, col) : true"
+                                        x-text="row * col"></span>
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Légende -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-orange-100 dark:bg-orange-900/20 p-4 rounded-lg border-l-4 border-orange-600">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-orange-500 rounded"></div>
+                    <span class="font-semibold">Apparaît 3 fois<br><span
+                            class="text-sm text-gray-600 dark:text-gray-400">(16, 36)</span></span>
+                </div>
+            </div>
+            <div class="bg-red-100 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-600">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-red-500 rounded"></div>
+                    <span class="font-semibold">Apparaît 4+ fois<br><span
+                            class="text-sm text-gray-600 dark:text-gray-400">(12, 18, 24)</span></span>
+                </div>
+            </div>
+            <div class="bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-700">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-blue-700 rounded"></div>
+                    <span class="font-semibold">Cellule cliquée<br><span
+                            class="text-sm text-gray-600 dark:text-gray-400">Mode Complète et Découvrir</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explication -->
+        <div class="mt-8 bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+            <h2 class="text-xl font-bold mb-2">💡 Conseils d'utilisation</h2>
+            <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                <li>• <strong>Mode Complète:</strong> Cliquez sur une case pour surligner seulement les en-têtes (haut
+                    et gauche)</li>
+                <li>• <strong>Mode Découvrir:</strong> Cliquez les cases pour les découvrir une par une - elles restent
+                    visibles</li>
+                <li>• <strong>Option Doublons:</strong> Active/désactive la mise en évidence des nombres qui
+                    apparaissent plusieurs fois</li>
+                <li>• Les doublons gardent leur couleur même en changeant de mode (avec les découvertes)</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 py-8 mt-12">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Application de Multiplication - Version Alpine.js & Tailwind</p>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Local -->
+    <script defer src="vendor/alpinejs.min.js?v=202602020211"></script>
+    <script src="./js/alpine-store.js?v=202602020211"></script>
+
+    <script>
+        function pythagoreComponent() {
+            return {
+                mode: 'complete', // 'complete' ou 'discover'
+                showDuplicates: true,
+                highlightMode: null,
+                selectedRow: null,
+                selectedCol: null,
+                cellValues: {}, // Stocke les positions des valeurs
+                discoveredCells: [], // Cellules découvertes en mode découvrir
+                selectedTablesDiscover: [2, 3, 4, 5, 6, 7, 8, 9], // Tables à pratiquer en mode découvrir
+
+                init() {
+                    // Initialiser les valeurs des cellules et compter les occurrences
+                    for (let row = 2; row <= 9; row++) {
+                        for (let col = 2; col <= 9; col++) {
+                            const value = row * col;
+                            if (!this.cellValues[value]) {
+                                this.cellValues[value] = [];
+                            }
+                            this.cellValues[value].push({ row, col });
+                        }
+                    }
+                    // Charger les découvertes et préférences depuis localStorage
+                    this.loadDiscovered();
+                    this.loadTablePreferences();
+                    this.loadDuplicatesPreference();
+                },
+
+                loadDiscovered() {
+                    const saved = localStorage.getItem('pythagoreDiscovered');
+                    if (saved) {
+                        this.discoveredCells = JSON.parse(saved);
+                    }
+                },
+
+                saveDiscovered() {
+                    localStorage.setItem('pythagoreDiscovered', JSON.stringify(this.discoveredCells));
+                },
+
+                loadTablePreferences() {
+                    const saved = localStorage.getItem('pythagoreTablePreferences');
+                    if (saved) {
+                        try {
+                            this.selectedTablesDiscover = JSON.parse(saved);
+                        } catch (e) {
+                            this.selectedTablesDiscover = [2, 3, 4, 5, 6, 7, 8, 9];
+                        }
+                    }
+                },
+
+                saveTablePreferences() {
+                    localStorage.setItem('pythagoreTablePreferences', JSON.stringify(this.selectedTablesDiscover));
+                },
+
+                loadDuplicatesPreference() {
+                    const saved = localStorage.getItem('pythagoreDuplicates');
+                    if (saved !== null) {
+                        this.showDuplicates = JSON.parse(saved);
+                    }
+                },
+
+                saveDuplicatesPreference() {
+                    localStorage.setItem('pythagoreDuplicates', JSON.stringify(this.showDuplicates));
+                },
+
+                setMode(newMode) {
+                    this.mode = newMode;
+                    this.highlightMode = null;
+                    this.selectedRow = null;
+                    this.selectedCol = null;
+                },
+
+                resetDiscovery() {
+                    this.discoveredCells = [];
+                    localStorage.removeItem('pythagoreDiscovered');
+                    this.highlightMode = null;
+                },
+
+                toggleDuplicates() {
+                    this.showDuplicates = !this.showDuplicates;
+                    this.saveDuplicatesPreference();
+                },
+
+                toggleSelectedTable(num) {
+                    const index = this.selectedTablesDiscover.indexOf(num);
+                    if (index > -1) {
+                        this.selectedTablesDiscover.splice(index, 1);
+                    } else {
+                        this.selectedTablesDiscover.push(num);
+                        this.selectedTablesDiscover.sort((a, b) => a - b);
+                    }
+                    this.saveTablePreferences();
+                },
+
+                selectAllTableDiscover() {
+                    this.selectedTablesDiscover = [2, 3, 4, 5, 6, 7, 8, 9];
+                    this.saveTablePreferences();
+                },
+
+                deselectAllTableDiscover() {
+                    this.selectedTablesDiscover = [];
+                    this.saveTablePreferences();
+                },
+
+                getTotalCellsToDiscover() {
+                    if (this.selectedTablesDiscover.length === 0) {
+                        return 0;
+                    }
+                    let count = 0;
+                    for (let row = 2; row <= 9; row++) {
+                        for (let col = 2; col <= 9; col++) {
+                            if (this.selectedTablesDiscover.includes(row) || this.selectedTablesDiscover.includes(col)) {
+                                count++;
+                            }
+                        }
+                    }
+                    return count;
+                },
+
+                getProgressPercentage() {
+                    const total = this.getTotalCellsToDiscover();
+                    if (total === 0) return 0;
+
+                    let discovered = 0;
+                    for (const cell of this.discoveredCells) {
+                        if (this.selectedTablesDiscover.includes(cell.row) || this.selectedTablesDiscover.includes(cell.col)) {
+                            discovered++;
+                        }
+                    }
+                    return (discovered / total) * 100;
+                },
+
+                isCellDiscovered(row, col) {
+                    return this.discoveredCells.some(cell => cell.row === row && cell.col === col);
+                },
+
+                addDiscoveredCell(row, col) {
+                    if (!this.isCellDiscovered(row, col)) {
+                        this.discoveredCells.push({ row, col });
+                        this.saveDiscovered();
+                    }
+                },
+
+                isDuplicate(value) {
+                    const occurrences = this.cellValues[value]?.length || 0;
+                    return occurrences >= 3;
+                },
+
+                isHeaderRowHighlighted(row) {
+                    return this.highlightMode === 'rowcol' && this.selectedRow === row;
+                },
+
+                isHeaderColHighlighted(col) {
+                    return this.highlightMode === 'rowcol' && this.selectedCol === col;
+                },
+
+                getCellClass(row, col) {
+                    const value = row * col;
+
+                    // Mode Découvrir
+                    if (this.mode === 'discover') {
+                        // Déterminer si cette cellule fait partie des tables à pratiquer
+                        const inSelectedTable = this.selectedTablesDiscover.length === 0 ||
+                            this.selectedTablesDiscover.includes(row) ||
+                            this.selectedTablesDiscover.includes(col);
+
+                        if (this.isCellDiscovered(row, col)) {
+                            // Cellule découverte
+                            if (this.showDuplicates && this.isDuplicate(value)) {
+                                const occ = this.cellValues[value].length;
+                                return occ === 3 ? 'bg-orange-500 text-white font-bold scale-105' : 'bg-red-500 text-white font-bold scale-105';
+                            }
+                            return 'bg-blue-500 text-white font-bold scale-105';
+                        }
+
+                        // Cellule non découverte
+                        if (inSelectedTable) {
+                            // Cellule à découvrir - mise en surbrillance jaune
+                            return 'bg-yellow-200 dark:bg-yellow-900/40 text-gray-900 dark:text-gray-200 cursor-pointer hover:bg-yellow-300 dark:hover:bg-yellow-900/60 font-semibold';
+                        }
+                        // Cellule hors des tables sélectionnées
+                        return 'bg-gray-200 dark:bg-gray-700 text-transparent cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600';
+                    }
+
+                    // Mode Complète
+                    // Surligner seulement la cellule cliquée (pas la ligne/colonne entière)
+                    if (this.highlightMode === 'rowcol') {
+                        if (row === this.selectedRow && col === this.selectedCol) {
+                            return 'bg-blue-700 text-white font-bold scale-105';
+                        }
+                        // Pas de surligne du reste, retourner normal
+                        if (this.showDuplicates && this.isDuplicate(value)) {
+                            const occ = this.cellValues[value].length;
+                            return occ === 3 ? 'bg-orange-500 text-white font-bold' : 'bg-red-500 text-white font-bold';
+                        }
+                        return 'hover:bg-gray-100 dark:hover:bg-gray-700';
+                    }
+
+                    // Pas de surbrillance active
+                    if (this.showDuplicates && this.isDuplicate(value)) {
+                        const occ = this.cellValues[value].length;
+                        return occ === 3 ? 'bg-orange-500 text-white font-bold' : 'bg-red-500 text-white font-bold';
+                    }
+
+                    return 'hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer';
+                },
+
+                highlightRowColumn(row, col) {
+                    // Mode Découvrir
+                    if (this.mode === 'discover') {
+                        this.addDiscoveredCell(row, col);
+                        return;
+                    }
+
+                    // Mode Complète - Surligner seulement la cellule cliquée
+                    if (this.highlightMode === 'rowcol' && this.selectedRow === row && this.selectedCol === col) {
+                        this.highlightMode = null;
+                    } else {
+                        this.highlightMode = 'rowcol';
+                        this.selectedRow = row;
+                        this.selectedCol = col;
+                    }
+                }
+            };
+        }
+    </script>
+
+    <!-- Service Worker Registration pour PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Une nouvelle version est là, on recharge automatiquement
+                            window.location.reload();
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

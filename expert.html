@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="expert, tables de multiplication, 9, défi, calcul rapide">
+    <title>Niveau Expert - Tables 9 et Plus</title>
+
+    <!-- Favicons & PWA -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="mask-icon" href="img/favicons/safari-pinned-tab.svg" color="#1e40af">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Multiplication">
+    <meta name="msapplication-TileColor" content="#1e40af">
+    <meta name="theme-color" content="#1e40af">
+
+    <!-- Tailwind CSS Local -->
+    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602020211">
+    <style>
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+        }
+
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-gradient-to-br from-orange-100 to-red-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+    <!-- Navigation Responsive -->
+    <nav class="bg-gradient-to-br from-red-500 to-orange-500 text-white shadow-lg font-bold sticky top-0 z-50"
+        x-data="{ mobileMenuOpen: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 gap-4">
+                <div class="flex items-center space-x-3 flex-shrink-0">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span class="text-xl font-bold">Multiplication</span>
+                </div>
+
+                <div class="hidden xl:flex space-x-1 items-center text-sm">
+                    <a href="index.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">🏠
+                        Accueil</a>
+                    <div class="w-px h-6 bg-white/20 mx-1"></div>
+
+                    <a href="debutant.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">👶
+                        Débutants</a>
+                    <a href="intermediaire.html"
+                        class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">📘 Intermédiaire</a>
+
+                    <a href="expert.html"
+                        class="bg-white/30 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-105 transition-all">
+                        <span class="mr-1">🔥</span> Expert
+                    </a>
+
+                    <div class="w-px h-6 bg-white/20 mx-1"></div>
+                    <a href="operations-aleatoires.html"
+                        class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">🎲 Opérations</a>
+                    <a href="pythagore.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">📊
+                        Pythagore</a>
+                    <a href="quiz.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">❓ Quiz</a>
+                    <a href="historique.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">📈
+                        Historique</a>
+                </div>
+
+                <button @click="mobileMenuOpen = !mobileMenuOpen"
+                    class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                        <path x-show="mobileMenuOpen" x-cloak stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div x-show="mobileMenuOpen" x-transition class="xl:hidden border-t border-white/20 pb-4">
+                <div class="flex flex-col space-y-1 pt-3">
+                    <a href="index.html"
+                        class="block px-4 py-2 hover:bg-white/10 rounded-lg mx-2 transition font-medium">🏠 Accueil</a>
+                    <div class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest">Apprentissage</div>
+
+                    <a href="debutant.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium">👶
+                        Débutants (1-5)</a>
+                    <a href="intermediaire.html"
+                        class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium">📘 Intermédiaire (6-8)</a>
+
+                    <a href="expert.html"
+                        class="block px-6 py-3 bg-white/25 border-l-4 border-white mx-2 font-black shadow-inner">
+                        🔥 Expert (9+)
+                    </a>
+
+                    <div class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest mt-2">Exercices
+                    </div>
+                    <a href="operations-aleatoires.html"
+                        class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium">🎲 Opérations</a>
+                    <a href="pythagore.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium">📊
+                        Pythagore</a>
+                    <a href="quiz.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium">❓ Quiz</a>
+                    <a href="historique.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium">📈
+                        Historique</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu Principal -->
+    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full transition-colors duration-300"
+        x-data="expertComponent()">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+                🔥 Niveau Expert
+            </h1>
+            <p class="text-lg text-gray-700 dark:text-gray-300">Les plus grands défis ! Tables 9 et au-delà, tu es
+                prêt(e) pour ça !</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors">
+                <h2 class="text-2xl font-bold mb-4 flex items-center dark:text-white">
+                    <span class="text-3xl mr-2">🚀</span> Quel défi veux-tu relever ?
+                </h2>
+                <div class="grid grid-cols-2 gap-3">
+                    <template x-for="num in [9, 10, 11, 12]" :key="num">
+                        <button @click="selectTable(num)"
+                            :class="selectedTable === num 
+                                ? 'bg-gradient-to-br from-red-500 to-orange-500 text-white scale-103 shadow-lg outline-none' 
+                                : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-103 outline-none'"
+                            class="p-3 md:p-4 rounded-lg font-bold text-xl transition transform duration-200">
+                            <span x-text="num"></span>
+                        </button>
+                    </template>
+                </div>
+            </div>
+
+            <div
+                class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-3 flex items-center dark:text-white">
+                    <span class="text-3xl mr-2">⚡</span> Astuce Pro
+                </h2>
+                <p class="text-gray-800 dark:text-gray-200 mb-3">
+                    <strong>Tu es un champion !</strong> La table de 9 a des motifs secrets. La table de 12 ? Réfléchis
+                    : 12 = 10 + 2 !
+                </p>
+                <div class="bg-white dark:bg-gray-800 p-3 rounded text-sm">
+                    <p>🎯 Secret: 9 × n = (10-1) × n = 10n - n. C'est facile !</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8 transition-colors">
+            <h2 class="text-3xl font-bold mb-6 text-center dark:text-white">
+                Table de
+                <span x-text="selectedTable" class="font-bold text-4xl bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+                </span>
+            </h2>
+
+            <div class="grid grid-cols-3 md:grid-cols-5 gap-4 mb-8">
+                <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
+                    <div @click="toggleCellReveal(i)" :class="revealedCells.includes(i) 
+                            ? 'bg-gradient-to-br from-red-400 to-orange-600' 
+                            : 'bg-gradient-to-br from-red-200 to-orange-200 opacity-90'"
+                        class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center text-white cursor-pointer shadow-red-200 dark:shadow-none">
+                        <div class="text-sm font-bold opacity-90">
+                            <span x-text="selectedTable"></span> × <span x-text="i"></span>
+                        </div>
+                        <div class="text-3xl font-bold mt-2">
+                            <span x-show="revealedCells.includes(i)" x-text="selectedTable * i"></span>
+                            <span x-show="!revealedCells.includes(i)">?</span>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex gap-4 justify-center flex-wrap">
+                <button @click="revealAll()" class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-md">
+                    ✓ Voir tout
+                </button>
+                <button @click="hideAll()" class="bg-gradient-to-r from-orange-500 to-orange-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-md">
+                    🔄 Recommencer
+                </button>
+                <button @click="aleaTable()" class="bg-gradient-to-r from-pink-500 to-red-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-md">
+                    🎲 Aléatoire
+                </button>
+            </div>
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg shadow-lg p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center dark:text-white">
+                <span class="text-3xl mr-3">💪</span> Secrets des tables difficiles
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+                <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-pink-400">
+                    <div class="text-4xl mb-2">9️⃣</div>
+                    <h3 class="font-bold mb-2 dark:text-white">Table de 9</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">La somme des chiffres fait toujours 9 ! (ex:
+                        2+7=9).</p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-red-400">
+                    <div class="flex text-4xl mb-2 -space-x-2">
+                        <span>1️⃣</span><span>0️⃣</span>
+                    </div>
+                    <h3 class="font-bold mb-2 dark:text-white">Table de 10</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">Ajoute simplement un <strong
+                            class="text-red-500">0</strong> à la fin du chiffre.</p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-orange-400">
+                    <div class="flex text-4xl mb-2 -space-x-2">
+                        <span>1️⃣</span><span>1️⃣</span>
+                    </div>
+                    <h3 class="font-bold mb-2 dark:text-white">Table de 11</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">Double le chiffre (ex: 7 &rarr; 77). Très visuel
+                        !</p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-yellow-400">
+                    <div class="flex text-4xl mb-2 -space-x-2">
+                        <span>1️⃣</span><span>2️⃣</span>
+                    </div>
+                    <h3 class="font-bold mb-2 dark:text-white">Table de 12</h3>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">C'est la table de 10 + la table de 2 combinées.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg shadow-lg p-8 text-center">
+            <h2 class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white">
+                <span class="text-3xl mr-2">🏆</span> Prêt pour le Quiz Expert ?
+            </h2>
+            <p class="text-gray-800 dark:text-gray-200 mb-6">
+                Maintenant que tu maîtrises les tables les plus difficiles, teste tes réflexes !
+            </p>
+            <a href="quiz.html"
+                class="inline-block bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold p-4 rounded-lg transition transform hover:scale-110 shadow-xl outline-none">
+                ⚡ Commencer le Quiz Expert
+            </a>
+        </div>
+    </main>
+
+    <footer class="bg-gradient-to-r from-red-500 to-orange-500 text-white py-8 mt-auto">
+        <div class="max-w-7xl mx-auto text-center">
+            <p>&copy; 2024 Niveau Expert - Tu es un champion ! 🏆</p>
+        </div>
+    </footer>
+
+    <!-- Alpine.js Local -->
+    <script defer src="vendor/alpinejs.min.js?v=202602020211"></script>
+
+    <script>
+        function expertComponent() {
+            return {
+                selectedTable: 9,
+                revealedCells: [],
+
+                selectTable(num) {
+                    this.selectedTable = num;
+                    this.revealedCells = [];
+                },
+
+                toggleCellReveal(index) {
+                    if (this.revealedCells.includes(index)) {
+                        this.revealedCells = this.revealedCells.filter(i => i !== index);
+                    } else {
+                        this.revealedCells.push(index);
+                    }
+                },
+
+                revealAll() {
+                    this.revealedCells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+                },
+
+                hideAll() {
+                    this.revealedCells = [];
+                },
+
+                aleaTable() {
+                    const tables = [9, 10, 11, 12];
+                    this.selectedTable = tables[Math.floor(Math.random() * tables.length)];
+                    this.revealedCells = [];
+                }
+            };
+        }
+    </script>
+
+    <!-- Service Worker Registration pour PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js').then(reg => {
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // Une nouvelle version est là, on recharge automatiquement
+                            window.location.reload();
+                        }
+                    });
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,120 @@
+# ==============================================================================
+# Configuration Apache pour Application Multiplication sur O2Switch
+# ==============================================================================
+
+# Activer le mod_rewrite
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Forcer HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Rediriger les requêtes vers index.html si le fichier n'existe pas
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.html [QSA,L]
+</IfModule>
+
+# ==============================================================================
+# Compression GZIP
+# ==============================================================================
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/xml+rss application/rss+xml
+</IfModule>
+
+# ==============================================================================
+# Cache des navigateurs
+# ==============================================================================
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Fichiers HTML (revalidation courte)
+    ExpiresByType text/html "access plus 1 day"
+    
+    # CSS et JS (cache long)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    
+    # Images (cache long)
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    
+    # Favicons
+    ExpiresByType application/json "access plus 1 year"
+    ExpiresByType application/xml "access plus 1 year"
+    
+    # Par défaut (1 jour)
+    ExpiresDefault "access plus 1 day"
+</IfModule>
+
+# ==============================================================================
+# Headers de sécurité
+# ==============================================================================
+<IfModule mod_headers.c>
+    # HTTPS Strict Transport Security
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    
+    # Prévenir le clickjacking
+    Header always append X-Frame-Options "SAMEORIGIN"
+    
+    # Prévenir MIME type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    
+    # Prévenir XSS
+    Header always set X-XSS-Protection "1; mode=block"
+    
+    # Referer Policy
+    Header always set Referrer-Policy "no-referrer-when-downgrade"
+</IfModule>
+
+# ==============================================================================
+# Types MIME supplémentaires
+# ==============================================================================
+<IfModule mod_mime.c>
+    AddType application/javascript js
+    AddType application/manifest+json webmanifest
+    AddType image/svg+xml svg svgz
+    AddEncoding gzip svgz
+</IfModule>
+
+# ==============================================================================
+# Protections supplémentaires
+# ==============================================================================
+
+# Refuser l'accès aux fichiers/dossiers sensibles
+<FilesMatch "^\.env$|^\.git|^\.gitignore$|^\.well-known">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Permettre l'accès aux favicons
+<FilesMatch "\.(ico|manifest|webmanifest)$">
+    <IfModule mod_authz_core.c>
+        Require all granted
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Allow from all
+    </IfModule>
+</FilesMatch>
+
+# Désactiver l'indexation des répertoires
+Options -Indexes
+
+# ==============================================================================
+# Support des URLs propres (optionnel)
+# ==============================================================================
+# Décommenter si vous utilisez des URLs sans .html
+# RewriteCond %{REQUEST_FILENAME} !-f
+# RewriteCond %{REQUEST_FILENAME} !-d
+# RewriteRule ^([^\.]+)$ $1.html [NC,L]

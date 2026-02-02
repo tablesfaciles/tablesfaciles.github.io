@@ -1,0 +1,23 @@
+{
+  "name": "multiplication-app",
+  "version": "1.0.0",
+  "description": "Application interactive pour apprendre les tables de multiplication",
+  "scripts": {
+    "build": "npm run build:css && npm run build:js",
+    "build:css": "tailwindcss -i css/tailwind-input.css -o vendor/tailwind.min.css --minify",
+    "build:js": "cp node_modules/alpinejs/dist/cdn.min.js vendor/alpinejs.min.js && cp node_modules/chart.js/dist/chart.umd.js vendor/chart.umd.min.js && cp node_modules/chart.js/dist/chart.umd.js.map vendor/chart.umd.js.map",
+    "watch:css": "tailwindcss -i css/tailwind-input.css -o vendor/tailwind.min.css --watch",
+    "watch": "npm run watch:css",
+    "dev": "npm run watch:css",
+    "prod": "npm run build"
+  },
+  "devDependencies": {
+    "alpinejs": "^3.15.4",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1"
+  }
+}
