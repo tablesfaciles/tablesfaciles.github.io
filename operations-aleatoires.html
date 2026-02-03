@@ -53,7 +53,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -63,6 +63,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -74,13 +75,13 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="debutant.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -96,10 +97,11 @@
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🔥 Expert</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="bg-blue-800 px-3 py-2 rounded shadow-inner"
+              aria-current="page"
               >🎲 Opérations</a
             >
             <a
@@ -120,14 +122,17 @@
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
+            @click="toggle()"
             class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -154,6 +159,7 @@
           x-transition:enter-start="opacity-0 transform -translate-y-2"
           x-transition:enter-end="opacity-100 transform translate-y-0"
           class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4"
+          id="mobile-menu"
         >
           <div class="flex flex-col space-y-1 pt-2">
             <a
@@ -188,7 +194,7 @@
             </div>
             <a
               href="operations-aleatoires.html"
-              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition"
+              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition shadow-inner"
               >🎲 Opérations</a
             >
             <a
@@ -213,8 +219,7 @@
     <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-12 w-full"
-      x-data="randomTablesComponent()"
-      @alpine:init="init()"
+      x-data="randomTablesComponent"
     >
       <h1
         class="text-4xl font-bold text-center mb-2"
@@ -231,12 +236,14 @@
         x-show="showScrollTop"
         @scroll.window="showScrollTop = window.scrollY > 300"
         class="fixed bottom-8 right-8 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition z-50"
+        aria-label="Retour en haut"
       >
         <svg
           class="w-6 h-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -250,10 +257,10 @@
       <!-- Bloc : Sélecteurs de configuration -->
       <div class="space-y-6 mb-8">
         <!-- Bloc : Type d'opération -->
-        <div class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
-          <label
+        <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+          <legend
             class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
-            >Type d'opération</label
+            >Type d'opération</legend
           >
           <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
             <button
@@ -261,8 +268,9 @@
               @click="setOperationType('multiplication')"
               :class="operationType === 'multiplication' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
               class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm hover:scale-105 transform"
+              :aria-pressed="operationType === 'multiplication'"
             >
-              <span class="text-3xl mb-1">×</span>
+              <span class="text-3xl mb-1" aria-hidden="true">×</span>
               <span class="text-[10px] sm:text-xs uppercase opacity-90"
                 >Multiplication</span
               >
@@ -273,8 +281,9 @@
               @click="setOperationType('division')"
               :class="operationType === 'division' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
               class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm hover:scale-105 transform"
+              :aria-pressed="operationType === 'division'"
             >
-              <span class="text-3xl mb-1">÷</span>
+              <span class="text-3xl mb-1" aria-hidden="true">÷</span>
               <span class="text-[10px] sm:text-xs uppercase opacity-90"
                 >Division</span
               >
@@ -285,8 +294,9 @@
               @click="setOperationType('addition')"
               :class="operationType === 'addition' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
               class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm hover:scale-105 transform"
+              :aria-pressed="operationType === 'addition'"
             >
-              <span class="text-3xl mb-1">+</span>
+              <span class="text-3xl mb-1" aria-hidden="true">+</span>
               <span class="text-[10px] sm:text-xs uppercase opacity-90"
                 >Addition</span
               >
@@ -297,18 +307,19 @@
               @click="setOperationType('soustraction')"
               :class="operationType === 'soustraction' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
               class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm hover:scale-105 transform"
+              :aria-pressed="operationType === 'soustraction'"
             >
-              <span class="text-3xl mb-1">−</span>
+              <span class="text-3xl mb-1" aria-hidden="true">−</span>
               <span class="text-[10px] sm:text-xs uppercase opacity-90"
                 >Soustraction</span
               >
             </button>
           </div>
-        </div>
+        </fieldset>
 
         <!-- Bloc : Tables à pratiquer -->
-        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-          <label class="block text-lg font-bold mb-3">Tables à pratiquer</label>
+        <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+          <legend class="block text-lg font-bold mb-3">Tables à pratiquer</legend>
           <div class="space-y-3">
             <div class="flex gap-2">
               <button
@@ -333,19 +344,20 @@
                   @click="toggleTable(num)"
                   :class="selectedTables.includes(num) ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="p-2 rounded transition font-semibold"
+                  :aria-pressed="selectedTables.includes(num)"
                 >
                   <span x-text="num"></span>
                 </button>
               </template>
             </div>
           </div>
-        </div>
+        </fieldset>
       </div>
 
       <!-- Bloc : Grille des tables -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <template x-for="table in tables" :key="table.num">
-          <div
+          <section
             class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition flex flex-col"
           >
             <div
@@ -389,7 +401,7 @@
                 🔄 Remélanger
               </button>
             </div>
-          </div>
+          </section>
         </template>
       </div>
 
@@ -417,174 +429,8 @@
     </footer>
 
     <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-    <script src="./js/alpine-store.js?v=202602030600"></script>
-
-    <script>
-      function randomTablesComponent() {
-        return {
-          tables: [],
-          showScrollTop: false,
-          operationType: "multiplication",
-          selectedTables: [2, 3, 4, 5, 6, 7, 8, 9],
-
-          init() {
-            // Charger les préférences depuis localStorage
-            this.loadPreferences();
-
-            // Watchers pour sauvegarder automatiquement
-            this.$watch("operationType", () => {
-              this.generateTables();
-              this.savePreferences();
-            });
-            this.$watch(
-              "selectedTables",
-              () => {
-                this.generateTables();
-                this.savePreferences();
-              },
-              { deep: true },
-            );
-
-            this.generateTables();
-          },
-
-          loadPreferences() {
-            const saved = localStorage.getItem("randomTablesPreferences");
-            if (saved) {
-              try {
-                const data = JSON.parse(saved);
-                this.operationType = data.operationType || "multiplication";
-                this.selectedTables = data.selectedTables || [
-                  2, 3, 4, 5, 6, 7, 8, 9,
-                ];
-              } catch (e) {
-                console.error("Erreur chargement préférences:", e);
-              }
-            }
-          },
-
-          savePreferences() {
-            const data = {
-              operationType: this.operationType,
-              selectedTables: this.selectedTables,
-            };
-            localStorage.setItem(
-              "randomTablesPreferences",
-              JSON.stringify(data),
-            );
-          },
-
-          setOperationType(type) {
-            this.operationType = type;
-          },
-
-          getOperationLabel(plural = false) {
-            const labels = {
-              multiplication: plural ? "multiplications" : "multiplications",
-              division: plural ? "divisions" : "divisions",
-              addition: plural ? "additions" : "additions",
-              soustraction: plural ? "soustractions" : "soustractions",
-            };
-            return labels[this.operationType] || "multiplications";
-          },
-
-          getOperatorSymbol() {
-            const symbols = {
-              multiplication: "×",
-              division: "÷",
-              addition: "+",
-              soustraction: "−",
-            };
-            return symbols[this.operationType] || "×";
-          },
-
-          calculateResult(a, b) {
-            switch (this.operationType) {
-              case "multiplication":
-                return a * b;
-              case "division":
-                return Math.floor(a / b);
-              case "addition":
-                return a + b;
-              case "soustraction":
-                return a - b;
-              default:
-                return a * b;
-            }
-          },
-
-          getPossibleNumbers(tableNum) {
-            const allNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-            if (this.operationType === "division") {
-              return allNumbers.filter((b) => tableNum % b === 0);
-            } else if (this.operationType === "soustraction") {
-              return allNumbers.filter((b) => tableNum >= b);
-            }
-
-            return allNumbers;
-          },
-
-          generateTables() {
-            this.tables = [];
-            for (let a of this.selectedTables) {
-              const numbers = this.getPossibleNumbers(a);
-              const items = [];
-              const numbersCopy = [...numbers];
-              this.shuffle(numbersCopy);
-
-              for (let num of numbersCopy) {
-                items.push({ num, result: this.calculateResult(a, num) });
-              }
-
-              this.tables.push({ num: a, items });
-            }
-          },
-
-          toggleTable(num) {
-            const index = this.selectedTables.indexOf(num);
-            if (index > -1) {
-              this.selectedTables.splice(index, 1);
-            } else {
-              this.selectedTables.push(num);
-              this.selectedTables.sort((a, b) => a - b);
-            }
-          },
-
-          selectAllTables() {
-            this.selectedTables = [2, 3, 4, 5, 6, 7, 8, 9];
-          },
-
-          deselectAllTables() {
-            this.selectedTables = [];
-          },
-
-          remixTable(tableNum) {
-            const tableIndex = this.tables.findIndex((t) => t.num === tableNum);
-            if (tableIndex !== -1) {
-              const table = this.tables[tableIndex];
-              this.shuffle(table.items);
-              this.$nextTick(() => {
-                this.tables[tableIndex] = { ...table };
-              });
-            }
-          },
-
-          shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-          },
-
-          scrollToTop() {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>

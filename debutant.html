@@ -45,37 +45,6 @@
 
     <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
-    <style>
-      @keyframes bounce-soft {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-
-      .animate-bounce-soft {
-        animation: bounce-soft 1s infinite;
-      }
-
-      @keyframes pulse-scale {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-
-        50% {
-          transform: scale(1.05);
-        }
-      }
-
-      .animate-pulse-scale {
-        animation: pulse-scale 0.6s cubic-bezier(0.4, 0, 0.6, 1);
-      }
-    </style>
   </head>
 
   <body
@@ -84,7 +53,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-br from-pink-500 to-blue-500 text-white shadow-lg font-bold sticky top-0 z-50"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -94,6 +63,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -105,17 +75,18 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
 
             <a
               href="debutant.html"
               class="bg-white/30 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-110 transition-all font-bold"
+              aria-current="page"
             >
               <span class="mr-1">👶</span> Débutants
             </a>
@@ -131,7 +102,7 @@
               >🔥 Expert</a
             >
 
-            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
@@ -155,14 +126,17 @@
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
-            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition"
+            @click="toggle()"
+            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -187,6 +161,7 @@
           x-show="mobileMenuOpen"
           x-transition
           class="xl:hidden border-t border-white/20 pb-4"
+          id="mobile-menu"
         >
           <div class="flex flex-col space-y-1 pt-3">
             <a
@@ -250,7 +225,7 @@
     <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full"
-      x-data="debutantComponent()"
+      x-data="debutantComponent"
     >
       <!-- Bloc : Titre -->
       <div class="text-center mb-8">
@@ -269,7 +244,7 @@
         <!-- Bloc : Sélection des tables -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <h2 class="text-2xl font-bold mb-4 flex items-center">
-            <span class="text-3xl mr-2">📚</span> Quelle table veux-tu apprendre
+            <span class="text-3xl mr-2" role="img" aria-label="Livres">📚</span> Quelle table veux-tu apprendre
             ?
           </h2>
           <div class="grid grid-cols-5 gap-3">
@@ -278,6 +253,8 @@
                 @click="selectTable(num)"
                 :class="selectedTable === num ? 'bg-gradient-to-br from-pink-500 to-blue-500 text-white scale-110' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:scale-105'"
                 class="p-4 rounded-lg font-bold text-xl transition transform"
+                :aria-label="'Apprendre la table de ' + num"
+                :aria-pressed="selectedTable === num"
               >
                 <span x-text="num"></span>
               </button>
@@ -290,7 +267,7 @@
           class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6"
         >
           <h2 class="text-2xl font-bold mb-3 flex items-center">
-            <span class="text-3xl mr-2">💡</span> Conseil
+            <span class="text-3xl mr-2" role="img" aria-label="Ampoule">💡</span> Conseil
           </h2>
           <p class="text-gray-800 dark:text-gray-200 mb-3">
             <strong>Commence par la table de 1 !</strong> C'est la plus facile.
@@ -308,7 +285,7 @@
           Table de
           <span
             x-text="selectedTable"
-            class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-blue-600 font-bold text-4xl"
+            class="bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-blue-600 font-bold text-4xl"
           ></span>
         </h2>
 
@@ -317,8 +294,13 @@
           <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
             <div
               @click="toggleCellReveal(i)"
+              @keydown.enter="toggleCellReveal(i)"
+              @keydown.space.prevent="toggleCellReveal(i)"
               :class="revealedCells.includes(i) ? 'bg-gradient-to-br from-green-400 to-green-500 text-white' : 'bg-gradient-to-br from-pink-300 to-blue-300 hover:from-pink-400 hover:to-blue-400 text-white cursor-pointer'"
               class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center"
+              role="button"
+              tabindex="0"
+              :aria-label="'Calcul ' + selectedTable + ' fois ' + i"
             >
               <div class="text-sm opacity-75">
                 <span x-text="selectedTable"></span> × <span x-text="i"></span>
@@ -356,25 +338,25 @@
         class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 mb-8"
       >
         <h2 class="text-2xl font-bold mb-4 flex items-center">
-          <span class="text-3xl mr-2">🤓</span> Comment ça marche ?
+          <span class="text-3xl mr-2" role="img" aria-label="Visage geek">🤓</span> Comment ça marche ?
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="text-center">
-            <div class="text-5xl mb-3">1️⃣</div>
+            <div class="text-5xl mb-3" role="img" aria-label="Etape 1">1️⃣</div>
             <h3 class="font-bold mb-2">Choisis une table</h3>
             <p class="text-gray-700 dark:text-gray-300 text-sm">
               Sélectionne le nombre que tu veux apprendre (1, 2, 3, 4 ou 5)
             </p>
           </div>
           <div class="text-center">
-            <div class="text-5xl mb-3">2️⃣</div>
+            <div class="text-5xl mb-3" role="img" aria-label="Etape 2">2️⃣</div>
             <h3 class="font-bold mb-2">Clique sur les cases</h3>
             <p class="text-gray-700 dark:text-gray-300 text-sm">
               Clique sur chaque case pour découvrir la réponse
             </p>
           </div>
           <div class="text-center">
-            <div class="text-5xl mb-3">3️⃣</div>
+            <div class="text-5xl mb-3" role="img" aria-label="Etape 3">3️⃣</div>
             <h3 class="font-bold mb-2">Retiens le résultat</h3>
             <p class="text-gray-700 dark:text-gray-300 text-sm">
               Essaie de retenir la réponse avant de cliquer
@@ -388,11 +370,11 @@
         class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg p-8"
       >
         <h2 class="text-2xl font-bold mb-4 flex items-center">
-          <span class="text-3xl mr-2">⭐</span> Astuces pour bien apprendre
+          <span class="text-3xl mr-2" role="img" aria-label="Etoile">⭐</span> Astuces pour bien apprendre
         </h2>
         <ul class="space-y-3">
           <li class="flex items-start">
-            <span class="text-xl mr-3">🎯</span>
+            <span class="text-xl mr-3" role="img" aria-label="Cible">🎯</span>
             <span
               ><strong>Commence par 1 et 2</strong> - Ce sont les plus faciles.
               Par exemple, 2 × 3 = 6, c'est comme avoir 2 groupes de 3 objets
@@ -400,21 +382,21 @@
             >
           </li>
           <li class="flex items-start">
-            <span class="text-xl mr-3">🔁</span>
+            <span class="text-xl mr-3" role="img" aria-label="Boucle">🔁</span>
             <span
               ><strong>Rappelle-toi que l'ordre ne change rien</strong> - 2 × 3
               = 3 × 2 = 6. C'est pareil !</span
             >
           </li>
           <li class="flex items-start">
-            <span class="text-xl mr-3">📈</span>
+            <span class="text-xl mr-3" role="img" aria-label="Graphique">📈</span>
             <span
               ><strong>Practique régulièrement</strong> - Même 5 minutes par
               jour, c'est mieux qu'une longue session !</span
             >
           </li>
           <li class="flex items-start">
-            <span class="text-xl mr-3">🎮</span>
+            <span class="text-xl mr-3" role="img" aria-label="Manette de jeu">🎮</span>
             <span
               ><strong>Fais-en un jeu</strong> - Une fois que tu connais bien
               une table, essaie le quiz avec des temps rapides !</span
@@ -429,7 +411,7 @@
         <h2
           class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white"
         >
-          <span class="text-3xl mr-2">🚀</span> Prêt pour la suite ?
+          <span class="text-3xl mr-2" role="img" aria-label="Fusée">🚀</span> Prêt pour la suite ?
         </h2>
         <p class="text-gray-800 dark:text-gray-200 mb-6">
           Tu maîtrises bien les bases ! Es-tu prêt à découvrir les tables de 6,
@@ -454,39 +436,8 @@
     </footer>
 
     <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-
-    <script>
-      function debutantComponent() {
-        return {
-          selectedTable: 1,
-          revealedCells: [],
-
-          selectTable(num) {
-            this.selectedTable = num;
-            this.revealedCells = [];
-          },
-
-          toggleCellReveal(index) {
-            if (this.revealedCells.includes(index)) {
-              this.revealedCells = this.revealedCells.filter(
-                (i) => i !== index,
-              );
-            } else {
-              this.revealedCells.push(index);
-            }
-          },
-
-          revealAll() {
-            this.revealedCells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-          },
-
-          hideAll() {
-            this.revealedCells = [];
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>
