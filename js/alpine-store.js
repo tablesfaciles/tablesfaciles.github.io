@@ -11,7 +11,12 @@ document.addEventListener('alpine:init', () => {
     }
   });
 
-  const LEARNING_PATH = [[2, 5, 10], [3, 4], [6, 7, 8, 9]];
+  // Définition du parcours d'apprentissage par niveaux
+  const LEARNING_PATH = [
+    [2, 5, 10],    // Niveau 1 : Tables faciles
+    [3, 4],        // Niveau 2 : Tables moyennes
+    [6, 7, 8, 9]   // Niveau 3 : Tables difficiles
+  ];
 
   Alpine.store('quiz', {
     // État global du quiz
@@ -41,8 +46,8 @@ document.addEventListener('alpine:init', () => {
     isQuizRunning: false,
     isQuizFinished: false,
     userAnswer: '',
-    quizModeUsed: 'question', // mode utilisé pour ce quiz
-    totalSecondsAllocated: 0, // temps total alloué pour le quiz
+    quizModeUsed: 'question',
+    totalSecondsAllocated: 0,
 
     // Opérateurs
     operatorSymbols: {
@@ -55,14 +60,14 @@ document.addEventListener('alpine:init', () => {
     // Historique
     quizResults: [],
 
-    // Maîtrise des paires
+    // Maîtrise des paires (LocalStorage)
     masteryData: {},
 
     // Table de Pythagore
     pythagoreValues: {},
     highlightMode: null,
 
-    // Initialiser les résultats depuis localStorage
+    // Initialisation
     init() {
       this.loadResults();
       this.loadQuizPreferences();
@@ -71,16 +76,18 @@ document.addEventListener('alpine:init', () => {
       this.loadLevel();
     },
 
+    // Charger le niveau actuel
     loadLevel() {
       const stored = localStorage.getItem('quiz_current_level');
       this.currentLevel = stored ? parseInt(stored, 10) : 0;
     },
 
+    // Récupérer les tables du niveau actuel
     getLevelTables() {
       return LEARNING_PATH[this.currentLevel] || [2, 3, 4, 5, 6, 7, 8, 9];
     },
 
-    // Charger les résultats depuis localStorage
+    // Charger l'historique
     loadResults() {
       const stored = localStorage.getItem('quizResults');
       if (stored) {
@@ -108,7 +115,7 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
-    // Mettre à jour les statistiques de maîtrise
+    // Mettre à jour les statistiques de maîtrise après chaque question
     updateStats(pairKey, isCorrect, time) {
       if (!this.masteryData[pairKey]) {
         this.masteryData[pairKey] = {
@@ -125,14 +132,14 @@ document.addEventListener('alpine:init', () => {
         stats.failure++;
       }
 
-      // Mise à jour de la moyenne glissante du temps de réponse
+      // Moyenne glissante du temps de réponse
       const totalAttempts = stats.success + stats.failure;
       stats.avgTime = (stats.avgTime * (totalAttempts - 1) + time) / totalAttempts;
 
       localStorage.setItem('mastery_data', JSON.stringify(this.masteryData));
     },
 
-    // Charger les préférences du quiz depuis localStorage
+    // Charger les préférences utilisateur
     loadQuizPreferences() {
       const stored = localStorage.getItem('quizPreferences');
       if (stored) {
@@ -149,7 +156,7 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
-    // Sauvegarder les préférences du quiz
+    // Sauvegarder les préférences utilisateur
     saveQuizPreferences() {
       const prefs = {
         operationType: this.operationType,
@@ -161,7 +168,7 @@ document.addEventListener('alpine:init', () => {
       localStorage.setItem('quizPreferences', JSON.stringify(prefs));
     },
 
-    // Sauvegarder un résultat
+    // Enregistrer un nouveau résultat de quiz
     saveResultData(quizData) {
       if (!this.quizResults) {
         this.quizResults = [];
@@ -170,7 +177,7 @@ document.addEventListener('alpine:init', () => {
       localStorage.setItem('quizResults', JSON.stringify(this.quizResults));
     },
 
-    // Formatage du temps
+    // Formatage utilitaire du temps
     formatTime(seconds) {
       const totalSeconds = parseFloat(seconds) || 0;
       if (totalSeconds <= 0) return '0s';
@@ -184,7 +191,7 @@ document.addEventListener('alpine:init', () => {
       return result.trim();
     },
 
-    // Générer les paires aléatoires
+    // Générer les paires de questions pour la session
     generatePairs() {
       let selected;
       if (this.modeApprentissage) {
@@ -201,6 +208,7 @@ document.addEventListener('alpine:init', () => {
       }));
     },
 
+    // Algorithme de sélection intelligente basé sur la maîtrise
     generateIntelligentPairs() {
       const tables = this.getLevelTables();
       const allPossible = [];
@@ -213,7 +221,7 @@ document.addEventListener('alpine:init', () => {
       const selected = [];
       const numToSelect = Math.min(this.numOfQuestions, allPossible.length);
 
-      // On veut environ 30% de rappels (succès) et 70% de défis
+      // Objectif : ~30% de rappels de succès, 70% de défis ou nouveautés
       const targetReminders = Math.floor(numToSelect * 0.3);
 
       while (selected.length < numToSelect) {
@@ -228,6 +236,7 @@ document.addEventListener('alpine:init', () => {
           let weight = 1;
           const isReminder = stats.success > 0 && stats.failure === 0;
 
+          // Ajustement des poids pour favoriser les rappels si nécessaire
           if (selected.filter(s => {
             const skey = `${s[0]}x${s[1]}`;
             return this.masteryData[skey]?.success > 0 && (this.masteryData[skey]?.failure || 0) === 0;
@@ -235,6 +244,7 @@ document.addEventListener('alpine:init', () => {
             if (isReminder) weight += 5;
           }
 
+          // Prioriser les erreurs passées, les temps lents et les paires jamais vues
           if (stats.failure > stats.success) weight += 10;
           if (stats.avgTime > 4000) weight += 5;
           if (stats.success === 0 && stats.failure === 0) weight += 3;
@@ -249,6 +259,7 @@ document.addEventListener('alpine:init', () => {
       return this.shuffle(selected);
     },
 
+    // Lister toutes les paires possibles selon la configuration
     getAllPossiblePairs() {
       const pairs = [];
       if (this.selectedValues.length > 0) {
@@ -268,6 +279,7 @@ document.addEventListener('alpine:init', () => {
           }
         }
       } else {
+        // Fallback par défaut
         for (let i = 2; i <= 9; i++) {
           for (let j = 2; j <= 9; j++) {
             if (this.operationType === 'soustraction' && i < j) continue;
@@ -279,6 +291,7 @@ document.addEventListener('alpine:init', () => {
       return pairs;
     },
 
+    // Sélection aléatoire simple
     selectRandomPairs(allPairs, count) {
       const selected = [];
       const available = [...allPairs];
@@ -298,6 +311,7 @@ document.addEventListener('alpine:init', () => {
       return selected;
     },
 
+    // Calculer la réponse attendue
     getCorrectAnswer(a, b) {
       switch (this.operationType) {
         case 'multiplication': return a * b;
@@ -308,24 +322,32 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    // Vérifier la réponse de l'utilisateur
     checkAnswer(userAnswer) {
       if (!this.currentPair) return false;
       const [a, b] = this.currentPair.factors;
       const correct = this.getCorrectAnswer(a, b);
       const userAnswerNum = userAnswer === '' ? null : parseInt(userAnswer, 10);
       const isCorrect = userAnswerNum === correct;
+
       if (isCorrect) this.numCorrectAnswers++;
       else this.numIncorrectAnswers++;
+
       this.currentPair.answer = userAnswer;
       this.currentPair.isCorrect = isCorrect;
       return isCorrect;
     },
 
+    // Calculer la note finale basée sur la précision et la vitesse
     calculateGrade(accuracy, avgTime) {
-      if (accuracy === 100) return avgTime < 2000 ? 'A+' : 'A';
+      if (accuracy === 100) {
+        if (avgTime < 2000) return 'A+';
+        if (avgTime < 4000) return 'A';
+      }
       return accuracy >= 80 ? 'B' : 'C';
     },
 
+    // Identifier la paire la plus difficile de la session
     getBeteNoire() {
       let worst = null;
       let maxFailRatio = -1;
@@ -347,6 +369,7 @@ document.addEventListener('alpine:init', () => {
       return worst;
     },
 
+    // Vérifier si l'utilisateur peut passer au niveau suivant
     checkLevelProgression(grade) {
       if (this.modeApprentissage && (grade === 'A' || grade === 'A+')) {
         if (this.currentLevel < LEARNING_PATH.length - 1) {
@@ -355,12 +378,14 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    // Accepter le passage au niveau supérieur
     acceptLevelUp() {
       this.currentLevel++;
       localStorage.setItem('quiz_current_level', this.currentLevel);
       this.proposedNextLevel = false;
     },
 
+    // Initialisation utilitaire pour Pythagore
     initPythagoreValues() {
       for (let i = 2; i < 10; i++) {
         for (let j = 2; j < 10; j++) {
@@ -370,6 +395,7 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    // Mélange de tableau
     shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -379,6 +405,7 @@ document.addEventListener('alpine:init', () => {
     }
   });
 
+  // Composant pour l'écran débutant
   Alpine.data('debutantComponent', () => ({
     selectedTable: 1, revealedCells: [],
     selectTable(num) { this.selectedTable = num; this.revealedCells = []; },
@@ -390,6 +417,7 @@ document.addEventListener('alpine:init', () => {
     hideAll() { this.revealedCells = []; }
   }));
 
+  // Composant pour l'écran intermédiaire
   Alpine.data('niveauComponent', () => ({
     selectedTable: 6, revealedCells: [],
     selectTable(num) { this.selectedTable = num; this.revealedCells = []; },
@@ -406,6 +434,7 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 
+  // Composant pour l'écran expert
   Alpine.data('expertComponent', () => ({
     selectedTable: 9, revealedCells: [],
     selectTable(num) { this.selectedTable = num; this.revealedCells = []; },
@@ -422,6 +451,7 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 
+  // Composant pour les tables aléatoires
   Alpine.data('randomTablesComponent', () => ({
     tables: [], showScrollTop: false, operationType: "multiplication", selectedTables: [2, 3, 4, 5, 6, 7, 8, 9],
     init() {
@@ -499,6 +529,7 @@ document.addEventListener('alpine:init', () => {
     scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
   }));
 
+  // Composant pour la table de Pythagore
   Alpine.data('pythagoreComponent', () => ({
     mode: "complete", showDuplicates: true, highlightMode: null, selectedRow: null, selectedCol: null, cellValues: {}, discoveredCells: [], selectedTablesDiscover: [2, 3, 4, 5, 6, 7, 8, 9],
     init() {
@@ -549,9 +580,28 @@ document.addEventListener('alpine:init', () => {
     }
   }));
 
+  // Composant principal du Quiz
   Alpine.data('quizComponent', () => ({
-    isStarted: false, isFinished: false, userAnswer: "", remainingTime: 0, showFeedback: false, isLastAnswerCorrect: false, timerInterval: null, isProcessing: false, timePerQuestion: [], questionStartTime: 0, audioCtx: null, feedbackType: "", isMobileModal: false, isFeedbackModalVisible: false,
-    get timeRatio() { const t = Alpine.store('quiz').chronoMode === "question" ? Alpine.store('quiz').secondsChrono : Alpine.store('quiz').totalSecondsAllocated; return this.remainingTime / t; },
+    isStarted: false,
+    isFinished: false,
+    userAnswer: "",
+    remainingTime: 0,
+    showFeedback: false,
+    isLastAnswerCorrect: false,
+    timerInterval: null,
+    isProcessing: false,
+    timePerQuestion: [],
+    questionStartTime: 0,
+    audioCtx: null,
+    feedbackType: "",
+    isMobileModal: false,
+    isFeedbackModalVisible: false,
+
+    get timeRatio() {
+      const t = Alpine.store('quiz').chronoMode === "question" ? Alpine.store('quiz').secondsChrono : Alpine.store('quiz').totalSecondsAllocated;
+      return this.remainingTime / t;
+    },
+
     init() {
       this.isMobileModal = window.innerHeight < 600;
       this.remainingTime = Alpine.store('quiz').secondsChrono;
@@ -560,85 +610,185 @@ document.addEventListener('alpine:init', () => {
         this.remainingTime = Alpine.store('quiz').secondsChrono;
       });
     },
-    speak(t) { if (window.speechSynthesis) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = "fr-FR"; window.speechSynthesis.speak(u); } },
+
+    speak(t) {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(t);
+        u.lang = "fr-FR";
+        window.speechSynthesis.speak(u);
+      }
+    },
+
     toggleTable(n) {
       const i = Alpine.store('quiz').selectedValues.indexOf(n);
       if (i > -1) Alpine.store('quiz').selectedValues.splice(i, 1);
       else Alpine.store('quiz').selectedValues.push(n);
     },
-    selectAllTables() { Alpine.store('quiz').selectedValues = [2, 3, 4, 5, 6, 7, 8, 9]; },
-    deselectAllTables() { Alpine.store('quiz').selectedValues = []; },
+
+    selectAllTables() {
+      Alpine.store('quiz').selectedValues = [2, 3, 4, 5, 6, 7, 8, 9];
+    },
+
+    deselectAllTables() {
+      Alpine.store('quiz').selectedValues = [];
+    },
+
+    // Démarrer le parcours d'apprentissage intelligent
+    startLearningPath() {
+      Alpine.store('quiz').modeApprentissage = true;
+      Alpine.store('quiz').selectedValues = Alpine.store('quiz').getLevelTables();
+      Alpine.store('quiz').operationType = 'multiplication';
+      this.startQuiz();
+    },
+
+    // Initialiser et lancer le quiz
     startQuiz() {
       if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      if (!Alpine.store('quiz').modeApprentissage && Alpine.store('quiz').selectedValues.length === 0) return alert("Sélectionnez une table");
+      if (!Alpine.store('quiz').modeApprentissage && Alpine.store('quiz').selectedValues.length === 0) return alert("Sélectionnez au moins une table");
+
       Alpine.store('quiz').pairs = Alpine.store('quiz').generatePairs();
-      Alpine.store('quiz').currentQuestionIndex = 0; Alpine.store('quiz').numCorrectAnswers = 0; Alpine.store('quiz').numIncorrectAnswers = 0;
+      Alpine.store('quiz').currentQuestionIndex = 0;
+      Alpine.store('quiz').numCorrectAnswers = 0;
+      Alpine.store('quiz').numIncorrectAnswers = 0;
       Alpine.store('quiz').currentPair = Alpine.store('quiz').pairs[0];
-      this.isStarted = true; this.isFinished = false; this.timePerQuestion = []; this.userAnswer = ""; this.showFeedback = false;
+      Alpine.store('quiz').proposedNextLevel = false;
+
+      this.isStarted = true;
+      this.isFinished = false;
+      this.timePerQuestion = [];
+      this.userAnswer = "";
+      this.showFeedback = false;
       this.remainingTime = Alpine.store('quiz').secondsChrono;
-      this.$nextTick(() => { this.startTimer(); this.questionStartTime = Date.now(); this.speak(`${Alpine.store('quiz').currentPair.factors[0]} fois ${Alpine.store('quiz').currentPair.factors[1]}`); });
+
+      this.$nextTick(() => {
+        this.startTimer();
+        this.questionStartTime = Date.now();
+        this.speak(`${Alpine.store('quiz').currentPair.factors[0]} fois ${Alpine.store('quiz').currentPair.factors[1]}`);
+      });
     },
+
+    // Gérer le compte à rebours
     startTimer() {
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.timerInterval = setInterval(() => {
         this.remainingTime--;
         if (this.remainingTime <= 0) {
           clearInterval(this.timerInterval);
-          if (this.userAnswer !== "") this.submitAnswer();
-          else {
+          if (this.userAnswer !== "") {
+            this.submitAnswer();
+          } else {
             const pair = Alpine.store('quiz').currentPair;
             Alpine.store('quiz').updateStats(`${pair.factors[0]}x${pair.factors[1]}`, false, Date.now() - this.questionStartTime);
             Alpine.store('quiz').checkAnswer("");
-            this.feedbackType = "noAnswer"; this.showFeedback = true;
+            this.feedbackType = "noAnswer";
+            this.showFeedback = true;
             setTimeout(() => this.nextQuestion(), 2000);
           }
         }
       }, 1000);
     },
+
+    // Soumettre une réponse
     submitAnswer() {
       if (this.userAnswer === "" || this.isProcessing) return;
-      this.isProcessing = true; clearInterval(this.timerInterval);
+      this.isProcessing = true;
+      clearInterval(this.timerInterval);
+
       const respTime = Date.now() - this.questionStartTime;
       const pair = Alpine.store('quiz').currentPair;
+
       this.isLastAnswerCorrect = Alpine.store('quiz').checkAnswer(this.userAnswer);
+
+      // Enregistrer les stats de maîtrise
       Alpine.store('quiz').updateStats(`${pair.factors[0]}x${pair.factors[1]}`, this.isLastAnswerCorrect, respTime);
-      this.feedbackType = this.isLastAnswerCorrect ? "correct" : "incorrect"; this.showFeedback = true;
+
+      this.feedbackType = this.isLastAnswerCorrect ? "correct" : "incorrect";
+      this.showFeedback = true;
+
       this.speak(this.isLastAnswerCorrect ? `Bravo, ${this.userAnswer}` : `Faux, le résultat était ${Alpine.store('quiz').getCorrectAnswer(pair.factors[0], pair.factors[1])}`);
+
       setTimeout(() => this.nextQuestion(), 2000);
     },
+
+    // Passer à la question suivante ou terminer
     nextQuestion() {
-      if (Alpine.store('quiz').chronoMode === "question") this.timePerQuestion.push(Alpine.store('quiz').secondsChrono - this.remainingTime);
-      Alpine.store('quiz').currentQuestionIndex++;
-      if (Alpine.store('quiz').currentQuestionIndex >= Alpine.store('quiz').numOfQuestions) this.finishQuiz();
-      else {
-        Alpine.store('quiz').currentPair = Alpine.store('quiz').pairs[Alpine.store('quiz').currentQuestionIndex];
-        this.userAnswer = ""; this.showFeedback = false; this.isProcessing = false;
-        if (Alpine.store('quiz').chronoMode === "question") this.remainingTime = Alpine.store('quiz').secondsChrono;
-        this.$nextTick(() => { this.startTimer(); this.questionStartTime = Date.now(); this.speak(`${Alpine.store('quiz').currentPair.factors[0]} fois ${Alpine.store('quiz').currentPair.factors[1]}`); });
+      if (Alpine.store('quiz').chronoMode === "question") {
+        this.timePerQuestion.push(Alpine.store('quiz').secondsChrono - this.remainingTime);
       }
-    },
-    finishQuiz() {
-      this.isFinished = true; clearInterval(this.timerInterval);
-      const totalTime = this.timePerQuestion.reduce((a,b) => a+b, 0) * 1000;
-      const avgTime = totalTime / Alpine.store('quiz').numOfQuestions;
-      const accuracy = (Alpine.store('quiz').numCorrectAnswers / Alpine.store('quiz').numOfQuestions) * 100;
-      Alpine.store('quiz').latestGrade = Alpine.store('quiz').calculateGrade(accuracy, avgTime);
-      Alpine.store('quiz').beteNoire = Alpine.store('quiz').getBeteNoire();
-      Alpine.store('quiz').checkLevelProgression(Alpine.store('quiz').latestGrade);
-      this.speak(`Terminé. Note : ${Alpine.store('quiz').latestGrade}`);
-      if (Alpine.store('quiz').shouldSaveResult) {
-        Alpine.store('quiz').saveResultData({
-          pairs: Alpine.store('quiz').pairs.filter(p => p.answer !== null),
-          quizProperties: { date: new Date().toLocaleString(), grade: Alpine.store('quiz').latestGrade, modeApprentissage: Alpine.store('quiz').modeApprentissage }
+
+      Alpine.store('quiz').currentQuestionIndex++;
+
+      if (Alpine.store('quiz').currentQuestionIndex >= Alpine.store('quiz').numOfQuestions) {
+        this.finishQuiz();
+      } else {
+        Alpine.store('quiz').currentPair = Alpine.store('quiz').pairs[Alpine.store('quiz').currentQuestionIndex];
+        this.userAnswer = "";
+        this.showFeedback = false;
+        this.isProcessing = false;
+
+        if (Alpine.store('quiz').chronoMode === "question") {
+          this.remainingTime = Alpine.store('quiz').secondsChrono;
+        }
+
+        this.$nextTick(() => {
+          this.startTimer();
+          this.questionStartTime = Date.now();
+          this.speak(`${Alpine.store('quiz').currentPair.factors[0]} fois ${Alpine.store('quiz').currentPair.factors[1]}`);
         });
       }
     },
-    resetQuiz() { this.isStarted = false; this.isFinished = false; Alpine.store('quiz').modeApprentissage = false; }
+
+    // Finaliser le quiz et afficher les résultats
+    finishQuiz() {
+      this.isFinished = true;
+      clearInterval(this.timerInterval);
+
+      const totalTime = this.timePerQuestion.reduce((a, b) => a + b, 0) * 1000;
+      const avgTime = totalTime / Alpine.store('quiz').numOfQuestions;
+      const accuracy = (Alpine.store('quiz').numCorrectAnswers / Alpine.store('quiz').numOfQuestions) * 100;
+
+      Alpine.store('quiz').latestGrade = Alpine.store('quiz').calculateGrade(accuracy, avgTime);
+      Alpine.store('quiz').beteNoire = Alpine.store('quiz').getBeteNoire();
+
+      // Vérifier si promotion de niveau possible
+      Alpine.store('quiz').checkLevelProgression(Alpine.store('quiz').latestGrade);
+
+      this.speak(`Terminé. Note : ${Alpine.store('quiz').latestGrade}`);
+
+      if (Alpine.store('quiz').shouldSaveResult) {
+        Alpine.store('quiz').saveResultData({
+          pairs: Alpine.store('quiz').pairs.filter(p => p.answer !== null),
+          quizProperties: {
+            date: new Date().toLocaleString(),
+            grade: Alpine.store('quiz').latestGrade,
+            modeApprentissage: Alpine.store('quiz').modeApprentissage
+          }
+        });
+      }
+    },
+
+    // Réinitialiser pour un nouveau quiz
+    resetQuiz() {
+      this.isStarted = false;
+      this.isFinished = false;
+      Alpine.store('quiz').modeApprentissage = false;
+    },
+
+    // Accepter le passage au niveau supérieur
+    acceptLevelUp() {
+      Alpine.store('quiz').acceptLevelUp();
+      this.resetQuiz();
+    }
   }));
 
+  // Composant pour l'historique
   Alpine.data('historyComponent', () => ({
     chart: null,
-    init() { Alpine.store('quiz').loadResults(); this.$nextTick(() => this.renderChart()); },
+    init() {
+      Alpine.store('quiz').loadResults();
+      this.$nextTick(() => this.renderChart());
+    },
     renderChart() {
       const ctx = document.getElementById("progressionChart");
       if (!ctx || Alpine.store('quiz').quizResults.length === 0) return;
@@ -647,13 +797,25 @@ document.addEventListener('alpine:init', () => {
         type: "line",
         data: {
           labels: Alpine.store('quiz').quizResults.map(r => r.quizProperties.date.split(" ")[0]),
-          datasets: [{ label: "Score %", data: Alpine.store('quiz').quizResults.map(r => Math.round((r.pairs.filter(p => p.isCorrect).length / r.pairs.length) * 100)), borderColor: "#2563eb", fill: false }]
+          datasets: [{
+            label: "Score %",
+            data: Alpine.store('quiz').quizResults.map(r => Math.round((r.pairs.filter(p => p.isCorrect).length / r.pairs.length) * 100)),
+            borderColor: "#2563eb",
+            fill: false
+          }]
         },
-        options: { responsive: true, maintainAspectRatio: false }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
       });
     },
-    clearHistory() { Alpine.store('quiz').quizResults = []; localStorage.setItem("quizResults", JSON.stringify([])); }
+    clearHistory() {
+      Alpine.store('quiz').quizResults = [];
+      localStorage.setItem("quizResults", JSON.stringify([]));
+    }
   }));
 
+  // Initialisation finale du store
   Alpine.store('quiz').init();
 });
