@@ -46,6 +46,9 @@ document.addEventListener('alpine:init', () => {
     // Historique
     quizResults: [],
 
+    // Mastery Tracking
+    masteryData: {},
+
     // Table de Pythagore
     pythagoreValues: {},
     highlightMode: null,
@@ -55,6 +58,47 @@ document.addEventListener('alpine:init', () => {
       this.loadResults();
       this.loadQuizPreferences();
       this.initPythagoreValues();
+      this.loadMasteryData();
+    },
+
+    // Charger les données de maîtrise depuis localStorage
+    loadMasteryData() {
+      const stored = localStorage.getItem('mastery_data');
+      if (stored) {
+        try {
+          this.masteryData = JSON.parse(stored);
+        } catch (e) {
+          console.error('Erreur chargement mastery_data:', e);
+          this.masteryData = {};
+        }
+      } else {
+        this.masteryData = {};
+      }
+    },
+
+    // Mettre à jour les statistiques de maîtrise pour une paire
+    updateStats(pair, isCorrect, time) {
+      if (!this.masteryData[pair]) {
+        this.masteryData[pair] = {
+          success: 0,
+          failure: 0,
+          avgTime: 0
+        };
+      }
+
+      const stats = this.masteryData[pair];
+      const totalAttempts = stats.success + stats.failure;
+
+      // Calculer la nouvelle moyenne du temps de réponse
+      stats.avgTime = (stats.avgTime * totalAttempts + time) / (totalAttempts + 1);
+
+      if (isCorrect) {
+        stats.success++;
+      } else {
+        stats.failure++;
+      }
+
+      localStorage.setItem('mastery_data', JSON.stringify(this.masteryData));
     },
 
     // Charger les résultats depuis localStorage
@@ -796,6 +840,17 @@ document.addEventListener('alpine:init', () => {
     feedbackType: "",
     isMobileModal: false,
     isFeedbackModalVisible: false,
+    questionStartTime: 0,
+
+    getPairKey(a, b, op) {
+      const symbols = {
+        multiplication: 'x',
+        division: '/',
+        addition: '+',
+        soustraction: '-'
+      };
+      return `${a}${symbols[op] || 'x'}${b}`;
+    },
 
     get timeRatio() {
       const total =
@@ -960,6 +1015,7 @@ document.addEventListener('alpine:init', () => {
       this.isStarted = true;
       this.isFinished = false;
       this.timePerQuestion = [];
+      this.questionStartTime = Date.now();
       this.userAnswer = "";
       this.isProcessing = false;
       this.showFeedback = false;
@@ -1017,6 +1073,14 @@ document.addEventListener('alpine:init', () => {
           } else {
             Alpine.store('quiz').checkAnswer("");
             this.isLastAnswerCorrect = false;
+
+            // Mise à jour des statistiques pour l'absence de réponse (échec)
+            const timeUsed = (Date.now() - this.questionStartTime) / 1000;
+            const [a, b] = Alpine.store('quiz').currentPair.factors;
+            const op = Alpine.store('quiz').operationType;
+            const pairKey = this.getPairKey(a, b, op);
+            Alpine.store('quiz').updateStats(pairKey, false, timeUsed);
+
             this.feedbackType = "noAnswer";
             this.showFeedback = true;
             this.isFeedbackModalVisible = this.isMobileModal;
@@ -1167,6 +1231,7 @@ document.addEventListener('alpine:init', () => {
           this.remainingTime = Alpine.store('quiz').secondsChrono;
         }
         this.isProcessing = false;
+        this.questionStartTime = Date.now();
 
         this.$nextTick(() => {
           // 1. Démarrer le timer juste après l'affichage du nouveau template
@@ -1202,6 +1267,14 @@ document.addEventListener('alpine:init', () => {
       this.isLastAnswerCorrect = Alpine.store('quiz').checkAnswer(
         this.userAnswer,
       );
+
+      // Mise à jour des statistiques de maîtrise
+      const timeUsed = (Date.now() - this.questionStartTime) / 1000;
+      const [a, b] = Alpine.store('quiz').currentPair.factors;
+      const op = Alpine.store('quiz').operationType;
+      const pairKey = this.getPairKey(a, b, op);
+      Alpine.store('quiz').updateStats(pairKey, this.isLastAnswerCorrect, timeUsed);
+
       this.feedbackType = this.isLastAnswerCorrect
         ? "correct"
         : "incorrect";
