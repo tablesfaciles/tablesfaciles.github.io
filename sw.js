@@ -1,4 +1,4 @@
-const CACHE_NAME = 'multiplication-app-202602020211'; // Incrémente ce numéro à chaque mise à jour
+const CACHE_NAME = 'multiplication-app-202602030308'; // Incrémente ce numéro à chaque mise à jour
 const urlsToCache = [
   './',
   './index.html',
