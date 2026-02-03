@@ -1,352 +1,510 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr" class="scroll-smooth">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="keywords" content="apprentissage, débutants, tables de multiplication, primaire, enfants">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="apprentissage, débutants, tables de multiplication, primaire, enfants"
+    />
     <title>Pour les Débutants - Tables de 1 à 5</title>
 
     <!-- Favicons & PWA -->
-    <link rel="apple-touch-icon" sizes="180x180" href="img/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicons/favicon-16x16.png">
-    <link rel="manifest" href="manifest.json">
-    <link rel="mask-icon" href="img/favicons/safari-pinned-tab.svg" color="#1e40af">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Multiplication">
-    <meta name="msapplication-TileColor" content="#1e40af">
-    <meta name="theme-color" content="#1e40af">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="mask-icon"
+      href="img/favicons/safari-pinned-tab.svg"
+      color="#1e40af"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Multiplication" />
+    <meta name="msapplication-TileColor" content="#1e40af" />
+    <meta name="theme-color" content="#1e40af" />
 
     <!-- Tailwind CSS Local -->
-    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030308">
+    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
     <style>
-        @keyframes bounce-soft {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-10px);
-            }
+      @keyframes bounce-soft {
+        0%,
+        100% {
+          transform: translateY(0);
         }
 
-        .animate-bounce-soft {
-            animation: bounce-soft 1s infinite;
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      .animate-bounce-soft {
+        animation: bounce-soft 1s infinite;
+      }
+
+      @keyframes pulse-scale {
+        0%,
+        100% {
+          transform: scale(1);
         }
 
-        @keyframes pulse-scale {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
+        50% {
+          transform: scale(1.05);
         }
+      }
 
-        .animate-pulse-scale {
-            animation: pulse-scale 0.6s cubic-bezier(0.4, 0, 0.6, 1);
-        }
+      .animate-pulse-scale {
+        animation: pulse-scale 0.6s cubic-bezier(0.4, 0, 0.6, 1);
+      }
     </style>
-</head>
+  </head>
 
-<body
-    class="bg-gradient-to-br from-pink-100 to-blue-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen">
+  <body
+    class="bg-gradient-to-br from-pink-100 to-blue-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
+  >
     <!-- Navigation -->
-    <nav class="bg-gradient-to-br from-pink-500 to-blue-500 text-white shadow-lg font-bold sticky top-0 z-50"
-        x-data="{ mobileMenuOpen: false }">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 gap-4">
-                <div class="flex items-center space-x-3 flex-shrink-0">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z">
-                        </path>
-                    </svg>
-                    <span class="text-xl font-bold">Multiplication</span>
-                </div>
+    <nav
+      class="bg-gradient-to-br from-pink-500 to-blue-500 text-white shadow-lg font-bold sticky top-0 z-50"
+      x-data="{ mobileMenuOpen: false }"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 gap-4">
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <svg
+              class="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <span class="text-xl font-bold">Multiplication</span>
+          </div>
 
-                <div class="hidden xl:flex space-x-1 items-center text-sm">
-                    <a href="index.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">🏠
-                        Accueil</a>
-                    <div class="w-px h-6 bg-white/20 mx-1"></div>
+          <div class="hidden xl:flex space-x-1 items-center text-sm">
+            <a
+              href="index.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >🏠 Accueil</a
+            >
+            <div class="w-px h-6 bg-white/20 mx-1"></div>
 
-                    <a href="debutant.html"
-                        class="bg-white/30 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-110 transition-all font-bold">
-                        <span class="mr-1">👶</span> Débutants
-                    </a>
+            <a
+              href="debutant.html"
+              class="bg-white/30 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-110 transition-all font-bold"
+            >
+              <span class="mr-1">👶</span> Débutants
+            </a>
 
-                    <a href="intermediaire.html"
-                        class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">📘 Intermédiaire</a>
-                    <a href="expert.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">🔥
-                        Expert</a>
+            <a
+              href="intermediaire.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >📘 Intermédiaire</a
+            >
+            <a
+              href="expert.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >🔥 Expert</a
+            >
 
-                    <div class="w-px h-6 bg-white/20 mx-1"></div>
-                    <a href="operations-aleatoires.html"
-                        class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">🎲 Opérations</a>
-                    <a href="pythagore.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">📊
-                        Pythagore</a>
-                    <a href="quiz.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">❓ Quiz</a>
-                    <a href="historique.html" class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium">📈
-                        Historique</a>
-                </div>
+            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <a
+              href="operations-aleatoires.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >📈 Historique</a
+            >
+          </div>
 
-                <button @click="mobileMenuOpen = !mobileMenuOpen"
-                    class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                        <path x-show="mobileMenuOpen" x-cloak stroke-linecap="round" stroke-linejoin="round"
-                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <div x-show="mobileMenuOpen" x-transition class="xl:hidden border-t border-white/20 pb-4">
-                <div class="flex flex-col space-y-1 pt-3">
-                    <a href="index.html" class="block px-4 py-2 hover:bg-white/10 rounded-lg mx-2 transition">🏠
-                        Accueil</a>
-                    <div class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest">Apprentissage</div>
-
-                    <a href="debutant.html"
-                        class="block px-6 py-3 bg-white/25 border-l-4 border-white mx-2 font-black shadow-inner">
-                        👶 Débutants (1-5)
-                    </a>
-
-                    <a href="intermediaire.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2">📘
-                        Intermédiaire (6-8)</a>
-                    <a href="expert.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2">🔥 Expert (9+)</a>
-
-                    <div class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest mt-2">Exercices
-                    </div>
-                    <a href="operations-aleatoires.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2">🎲
-                        Opérations</a>
-                    <a href="pythagore.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2">📊 Pythagore</a>
-                    <a href="quiz.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2">❓ Quiz</a>
-                    <a href="historique.html" class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2">📈
-                        Historique</a>
-                </div>
-            </div>
+          <button
+            @click="mobileMenuOpen = !mobileMenuOpen"
+            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                x-show="!mobileMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+              <path
+                x-show="mobileMenuOpen"
+                x-cloak
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
         </div>
+
+        <div
+          x-show="mobileMenuOpen"
+          x-transition
+          class="xl:hidden border-t border-white/20 pb-4"
+        >
+          <div class="flex flex-col space-y-1 pt-3">
+            <a
+              href="index.html"
+              class="block px-4 py-2 hover:bg-white/10 rounded-lg mx-2 transition"
+              >🏠 Accueil</a
+            >
+            <div
+              class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest"
+            >
+              Apprentissage
+            </div>
+
+            <a
+              href="debutant.html"
+              class="block px-6 py-3 bg-white/25 border-l-4 border-white mx-2 font-black shadow-inner"
+            >
+              👶 Débutants (1-5)
+            </a>
+
+            <a
+              href="intermediaire.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2"
+              >📘 Intermédiaire (6-8)</a
+            >
+            <a
+              href="expert.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2"
+              >🔥 Expert (9+)</a
+            >
+
+            <div
+              class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest mt-2"
+            >
+              Exercices
+            </div>
+            <a
+              href="operations-aleatoires.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2"
+              >📈 Historique</a
+            >
+          </div>
+        </div>
+      </div>
     </nav>
     <!-- Contenu Principal -->
-    <main class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full" x-data="debutantComponent()">
-        <!-- Titre -->
-        <div class="text-center mb-8">
-            <h1
-                class="text-4xl md:text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600">
-                🎉 Apprendre doucement
-            </h1>
-            <p class="text-lg text-gray-700 dark:text-gray-300">Commençons par les tables 1 à 5, c'est facile et amusant
-                !</p>
+    <main
+      class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full"
+      x-data="debutantComponent()"
+    >
+      <!-- Titre -->
+      <div class="text-center mb-8">
+        <h1
+          class="text-4xl md:text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600"
+        >
+          🎉 Apprendre doucement
+        </h1>
+        <p class="text-lg text-gray-700 dark:text-gray-300">
+          Commençons par les tables 1 à 5, c'est facile et amusant !
+        </p>
+      </div>
+
+      <!-- Section de sélection -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Sélection des tables -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <h2 class="text-2xl font-bold mb-4 flex items-center">
+            <span class="text-3xl mr-2">📚</span> Quelle table veux-tu apprendre
+            ?
+          </h2>
+          <div class="grid grid-cols-5 gap-3">
+            <template x-for="num in [1, 2, 3, 4, 5]" :key="num">
+              <button
+                @click="selectTable(num)"
+                :class="selectedTable === num ? 'bg-gradient-to-br from-pink-500 to-blue-500 text-white scale-110' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:scale-105'"
+                class="p-4 rounded-lg font-bold text-xl transition transform"
+              >
+                <span x-text="num"></span>
+              </button>
+            </template>
+          </div>
         </div>
 
-        <!-- Section de sélection -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <!-- Sélection des tables -->
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                <h2 class="text-2xl font-bold mb-4 flex items-center">
-                    <span class="text-3xl mr-2">📚</span> Quelle table veux-tu apprendre ?
-                </h2>
-                <div class="grid grid-cols-5 gap-3">
-                    <template x-for="num in [1, 2, 3, 4, 5]" :key="num">
-                        <button @click="selectTable(num)"
-                            :class="selectedTable === num ? 'bg-gradient-to-br from-pink-500 to-blue-500 text-white scale-110' : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:scale-105'"
-                            class="p-4 rounded-lg font-bold text-xl transition transform">
-                            <span x-text="num"></span>
-                        </button>
-                    </template>
-                </div>
-            </div>
+        <!-- Infos -->
+        <div
+          class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6"
+        >
+          <h2 class="text-2xl font-bold mb-3 flex items-center">
+            <span class="text-3xl mr-2">💡</span> Conseil
+          </h2>
+          <p class="text-gray-800 dark:text-gray-200 mb-3">
+            <strong>Commence par la table de 1 !</strong> C'est la plus facile.
+            Clique sur chaque résultat pour voir la réponse.
+          </p>
+          <div class="bg-white dark:bg-gray-800 p-3 rounded text-sm">
+            <p>🎯 Tip: 1 × n = n. C'est toujours le même nombre !</p>
+          </div>
+        </div>
+      </div>
 
-            <!-- Infos -->
+      <!-- Table affichée -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
+        <h2 class="text-3xl font-bold mb-6 text-center">
+          Table de
+          <span
+            x-text="selectedTable"
+            class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-blue-600 font-bold text-4xl"
+          ></span>
+        </h2>
+
+        <!-- Grille de la table -->
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+          <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
             <div
-                class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6">
-                <h2 class="text-2xl font-bold mb-3 flex items-center">
-                    <span class="text-3xl mr-2">💡</span> Conseil
-                </h2>
-                <p class="text-gray-800 dark:text-gray-200 mb-3">
-                    <strong>Commence par la table de 1 !</strong> C'est la plus facile. Clique sur chaque résultat pour
-                    voir la réponse.
-                </p>
-                <div class="bg-white dark:bg-gray-800 p-3 rounded text-sm">
-                    <p>🎯 Tip: 1 × n = n. C'est toujours le même nombre !</p>
-                </div>
+              @click="toggleCellReveal(i)"
+              :class="revealedCells.includes(i) ? 'bg-gradient-to-br from-green-400 to-green-500 text-white' : 'bg-gradient-to-br from-pink-300 to-blue-300 hover:from-pink-400 hover:to-blue-400 text-white cursor-pointer'"
+              class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center"
+            >
+              <div class="text-sm opacity-75">
+                <span x-text="selectedTable"></span> × <span x-text="i"></span>
+              </div>
+              <div class="text-3xl font-bold mt-2">
+                <span
+                  x-show="revealedCells.includes(i)"
+                  x-text="selectedTable * i"
+                ></span>
+                <span x-show="!revealedCells.includes(i)">?</span>
+              </div>
             </div>
+          </template>
         </div>
 
-        <!-- Table affichée -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
-            <h2 class="text-3xl font-bold mb-6 text-center">
-                Table de
-                <span x-text="selectedTable"
-                    class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-pink-600 to-blue-600 font-bold text-4xl"></span>
-            </h2>
-
-            <!-- Grille de la table -->
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-                <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
-                    <div @click="toggleCellReveal(i)"
-                        :class="revealedCells.includes(i) ? 'bg-gradient-to-br from-green-400 to-green-500 text-white' : 'bg-gradient-to-br from-pink-300 to-blue-300 hover:from-pink-400 hover:to-blue-400 text-white cursor-pointer'"
-                        class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center">
-                        <div class="text-sm opacity-75">
-                            <span x-text="selectedTable"></span> × <span x-text="i"></span>
-                        </div>
-                        <div class="text-3xl font-bold mt-2">
-                            <span x-show="revealedCells.includes(i)" x-text="selectedTable * i"></span>
-                            <span x-show="!revealedCells.includes(i)">?</span>
-                        </div>
-                    </div>
-                </template>
-            </div>
-
-            <!-- Boutons d'action -->
-            <div class="flex gap-4 justify-center">
-                <button @click="revealAll()"
-                    class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105">
-                    ✓ Voir tout
-                </button>
-                <button @click="hideAll()"
-                    class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105">
-                    🔄 Recommencer
-                </button>
-            </div>
+        <!-- Boutons d'action -->
+        <div class="flex gap-4 justify-center">
+          <button
+            @click="revealAll()"
+            class="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105"
+          >
+            ✓ Voir tout
+          </button>
+          <button
+            @click="hideAll()"
+            class="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105"
+          >
+            🔄 Recommencer
+          </button>
         </div>
+      </div>
 
-        <!-- Section Explication -->
-        <div
-            class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 mb-8">
-            <h2 class="text-2xl font-bold mb-4 flex items-center">
-                <span class="text-3xl mr-2">🤓</span> Comment ça marche ?
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="text-center">
-                    <div class="text-5xl mb-3">1️⃣</div>
-                    <h3 class="font-bold mb-2">Choisis une table</h3>
-                    <p class="text-gray-700 dark:text-gray-300 text-sm">Sélectionne le nombre que tu veux apprendre (1,
-                        2, 3, 4 ou 5)</p>
-                </div>
-                <div class="text-center">
-                    <div class="text-5xl mb-3">2️⃣</div>
-                    <h3 class="font-bold mb-2">Clique sur les cases</h3>
-                    <p class="text-gray-700 dark:text-gray-300 text-sm">Clique sur chaque case pour découvrir la réponse
-                    </p>
-                </div>
-                <div class="text-center">
-                    <div class="text-5xl mb-3">3️⃣</div>
-                    <h3 class="font-bold mb-2">Retiens le résultat</h3>
-                    <p class="text-gray-700 dark:text-gray-300 text-sm">Essaie de retenir la réponse avant de cliquer
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Astuces -->
-        <div class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg p-8">
-            <h2 class="text-2xl font-bold mb-4 flex items-center">
-                <span class="text-3xl mr-2">⭐</span> Astuces pour bien apprendre
-            </h2>
-            <ul class="space-y-3">
-                <li class="flex items-start">
-                    <span class="text-xl mr-3">🎯</span>
-                    <span><strong>Commence par 1 et 2</strong> - Ce sont les plus faciles. Par exemple, 2 × 3 = 6, c'est
-                        comme avoir 2 groupes de 3 objets !</span>
-                </li>
-                <li class="flex items-start">
-                    <span class="text-xl mr-3">🔁</span>
-                    <span><strong>Rappelle-toi que l'ordre ne change rien</strong> - 2 × 3 = 3 × 2 = 6. C'est pareil
-                        !</span>
-                </li>
-                <li class="flex items-start">
-                    <span class="text-xl mr-3">📈</span>
-                    <span><strong>Practique régulièrement</strong> - Même 5 minutes par jour, c'est mieux qu'une longue
-                        session !</span>
-                </li>
-                <li class="flex items-start">
-                    <span class="text-xl mr-3">🎮</span>
-                    <span><strong>Fais-en un jeu</strong> - Une fois que tu connais bien une table, essaie le quiz avec
-                        des temps rapides !</span>
-                </li>
-            </ul>
-        </div>
-        <div
-            class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg shadow-lg p-8 text-center mt-8">
-            <h2 class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white">
-                <span class="text-3xl mr-2">🚀</span> Prêt pour la suite ?
-            </h2>
-            <p class="text-gray-800 dark:text-gray-200 mb-6">
-                Tu maîtrises bien les bases ! Es-tu prêt à découvrir les tables de 6, 7 et 8 ?
+      <!-- Section Explication -->
+      <div
+        class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 mb-8"
+      >
+        <h2 class="text-2xl font-bold mb-4 flex items-center">
+          <span class="text-3xl mr-2">🤓</span> Comment ça marche ?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="text-center">
+            <div class="text-5xl mb-3">1️⃣</div>
+            <h3 class="font-bold mb-2">Choisis une table</h3>
+            <p class="text-gray-700 dark:text-gray-300 text-sm">
+              Sélectionne le nombre que tu veux apprendre (1, 2, 3, 4 ou 5)
             </p>
-            <a href="intermediaire.html"
-                class="inline-block bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold p-4 rounded-lg transition transform hover:scale-110 shadow-xl outline-none">
-                📘 Passer au niveau Intermédiaire
-            </a>
+          </div>
+          <div class="text-center">
+            <div class="text-5xl mb-3">2️⃣</div>
+            <h3 class="font-bold mb-2">Clique sur les cases</h3>
+            <p class="text-gray-700 dark:text-gray-300 text-sm">
+              Clique sur chaque case pour découvrir la réponse
+            </p>
+          </div>
+          <div class="text-center">
+            <div class="text-5xl mb-3">3️⃣</div>
+            <h3 class="font-bold mb-2">Retiens le résultat</h3>
+            <p class="text-gray-700 dark:text-gray-300 text-sm">
+              Essaie de retenir la réponse avant de cliquer
+            </p>
+          </div>
         </div>
+      </div>
+
+      <!-- Astuces -->
+      <div
+        class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg p-8"
+      >
+        <h2 class="text-2xl font-bold mb-4 flex items-center">
+          <span class="text-3xl mr-2">⭐</span> Astuces pour bien apprendre
+        </h2>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <span class="text-xl mr-3">🎯</span>
+            <span
+              ><strong>Commence par 1 et 2</strong> - Ce sont les plus faciles.
+              Par exemple, 2 × 3 = 6, c'est comme avoir 2 groupes de 3 objets
+              !</span
+            >
+          </li>
+          <li class="flex items-start">
+            <span class="text-xl mr-3">🔁</span>
+            <span
+              ><strong>Rappelle-toi que l'ordre ne change rien</strong> - 2 × 3
+              = 3 × 2 = 6. C'est pareil !</span
+            >
+          </li>
+          <li class="flex items-start">
+            <span class="text-xl mr-3">📈</span>
+            <span
+              ><strong>Practique régulièrement</strong> - Même 5 minutes par
+              jour, c'est mieux qu'une longue session !</span
+            >
+          </li>
+          <li class="flex items-start">
+            <span class="text-xl mr-3">🎮</span>
+            <span
+              ><strong>Fais-en un jeu</strong> - Une fois que tu connais bien
+              une table, essaie le quiz avec des temps rapides !</span
+            >
+          </li>
+        </ul>
+      </div>
+      <div
+        class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg shadow-lg p-8 text-center mt-8"
+      >
+        <h2
+          class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white"
+        >
+          <span class="text-3xl mr-2">🚀</span> Prêt pour la suite ?
+        </h2>
+        <p class="text-gray-800 dark:text-gray-200 mb-6">
+          Tu maîtrises bien les bases ! Es-tu prêt à découvrir les tables de 6,
+          7 et 8 ?
+        </p>
+        <a
+          href="intermediaire.html"
+          class="inline-block bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold p-4 rounded-lg transition transform hover:scale-110 shadow-xl outline-none"
+        >
+          📘 Passer au niveau Intermédiaire
+        </a>
+      </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-pink-500 to-blue-500 text-white py-8 mt-auto">
-        <div class="max-w-7xl mx-auto text-center">
-            <p>&copy; 2024 Pour les débutants - Apprendre en s'amusant 🎉</p>
-        </div>
+    <footer
+      class="bg-gradient-to-r from-pink-500 to-blue-500 text-white py-8 mt-auto"
+    >
+      <div class="max-w-7xl mx-auto text-center">
+        <p>&copy; 2024 Pour les débutants - Apprendre en s'amusant 🎉</p>
+      </div>
     </footer>
 
     <!-- Alpine.js Local -->
-    <script defer src="vendor/alpinejs.min.js?v=202602030308"></script>
+    <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
 
     <script>
-        function debutantComponent() {
-            return {
-                selectedTable: 1,
-                revealedCells: [],
+      function debutantComponent() {
+        return {
+          selectedTable: 1,
+          revealedCells: [],
 
-                selectTable(num) {
-                    this.selectedTable = num;
-                    this.revealedCells = [];
-                },
+          selectTable(num) {
+            this.selectedTable = num;
+            this.revealedCells = [];
+          },
 
-                toggleCellReveal(index) {
-                    if (this.revealedCells.includes(index)) {
-                        this.revealedCells = this.revealedCells.filter(i => i !== index);
-                    } else {
-                        this.revealedCells.push(index);
-                    }
-                },
+          toggleCellReveal(index) {
+            if (this.revealedCells.includes(index)) {
+              this.revealedCells = this.revealedCells.filter(
+                (i) => i !== index,
+              );
+            } else {
+              this.revealedCells.push(index);
+            }
+          },
 
-                revealAll() {
-                    this.revealedCells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-                },
+          revealAll() {
+            this.revealedCells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+          },
 
-                hideAll() {
-                    this.revealedCells = [];
-                }
-            };
-        }
+          hideAll() {
+            this.revealedCells = [];
+          },
+        };
+      }
     </script>
 
     <!-- Service Worker Registration pour PWA -->
     <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js').then(reg => {
-                reg.addEventListener('updatefound', () => {
-                    const newWorker = reg.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // Une nouvelle version est là, on recharge automatiquement
-                            window.location.reload();
-                        }
-                    });
-                });
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").then((reg) => {
+          reg.addEventListener("updatefound", () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener("statechange", () => {
+              if (
+                newWorker.state === "installed" &&
+                navigator.serviceWorker.controller
+              ) {
+                // Une nouvelle version est là, on recharge automatiquement
+                window.location.reload();
+              }
             });
-        }
+          });
+        });
+      }
     </script>
-</body>
-
+  </body>
 </html>
