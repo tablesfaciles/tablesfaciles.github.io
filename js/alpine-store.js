@@ -20,6 +20,7 @@ document.addEventListener('alpine:init', () => {
     selectedValues: [2, 3, 4, 5, 6, 7, 8, 9],
     operationType: 'multiplication',
     shouldSaveResult: true,
+    intelligentLearning: false,
 
     // État du quiz en cours
     currentQuestionIndex: 0,
@@ -82,6 +83,26 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    getPairKey(a, b, op) {
+      const symbols = {
+        multiplication: 'x',
+        division: '/',
+        addition: '+',
+        soustraction: '-'
+      };
+      return `${a}${symbols[op] || 'x'}${b}`;
+    },
+
+    getPairWeight(factors) {
+      const key = this.getPairKey(factors[0], factors[1], this.operationType);
+      const stats = this.masteryData[key];
+
+      if (!stats) return 3; // Nouveauté
+
+      const isHard = stats.failure > stats.success || stats.avgTime > 4;
+      return isHard ? 3 : 1;
+    },
+
     // Mettre à jour les statistiques de maîtrise pour une paire
     updateStats(pair, isCorrect, time) {
       if (!this.masteryData[pair]) {
@@ -132,6 +153,7 @@ document.addEventListener('alpine:init', () => {
           this.chronoMode = prefs.chronoMode || 'question';
           this.numOfQuestions = prefs.numOfQuestions || 10;
           this.selectedValues = prefs.selectedValues || [2, 3, 4, 5, 6, 7, 8, 9];
+          this.intelligentLearning = prefs.intelligentLearning || false;
         } catch (e) {
           console.error('Erreur chargement préférences:', e);
         }
@@ -145,7 +167,8 @@ document.addEventListener('alpine:init', () => {
         secondsChrono: this.secondsChrono,
         chronoMode: this.chronoMode,
         numOfQuestions: this.numOfQuestions,
-        selectedValues: this.selectedValues
+        selectedValues: this.selectedValues,
+        intelligentLearning: this.intelligentLearning
       };
       localStorage.setItem('quizPreferences', JSON.stringify(prefs));
     },
@@ -230,15 +253,67 @@ document.addEventListener('alpine:init', () => {
 
     // Générer les paires aléatoires
     generatePairs() {
-      const pairs = [];
-      const allPossible = this.getAllPossiblePairs();
-      const selected = this.selectRandomPairs(allPossible, this.numOfQuestions);
+      let selected = [];
+      const allPossible = this.intelligentLearning
+        ? this.getAllPossiblePairsForTables(this.LEARNING_PATH[this.currentLevel])
+        : this.getAllPossiblePairs();
+
+      if (this.intelligentLearning) {
+        const numReminders = Math.floor(this.numOfQuestions * 0.3);
+        const numWeighted = this.numOfQuestions - numReminders;
+
+        // 1. Rappels (paires déjà réussies)
+        const remindersPool = allPossible.filter(p => {
+          const key = this.getPairKey(p[0], p[1], this.operationType);
+          return this.masteryData[key]?.success > 0;
+        });
+
+        const reminders = this.selectRandomPairs(remindersPool.length > 0 ? remindersPool : allPossible, numReminders);
+        selected = [...reminders];
+
+        // 2. Sélection pondérée
+        const weightedPool = [...allPossible];
+        for (let i = 0; i < numWeighted; i++) {
+          const weights = weightedPool.map(p => this.getPairWeight(p));
+          const picked = this.weightedPick(weightedPool, weights);
+          selected.push(picked);
+          // Optionnel : retirer de la pool pour éviter trop de doublons si possible
+          if (weightedPool.length > numWeighted) {
+             const idx = weightedPool.indexOf(picked);
+             weightedPool.splice(idx, 1);
+          }
+        }
+
+        this.shuffle(selected);
+      } else {
+        selected = this.selectRandomPairs(allPossible, this.numOfQuestions);
+      }
 
       return selected.map(pair => ({
         factors: pair,
         answer: null,
         isCorrect: null
       }));
+    },
+
+    // Sélection aléatoire pondérée
+    weightedPick(items, weights) {
+      const totalWeight = weights.reduce((a, b) => a + b, 0);
+      let random = Math.random() * totalWeight;
+      for (let i = 0; i < items.length; i++) {
+        random -= weights[i];
+        if (random <= 0) return items[i];
+      }
+      return items[items.length - 1];
+    },
+
+    // Version de getAllPossiblePairs qui prend des tables en paramètre
+    getAllPossiblePairsForTables(tables) {
+      const originalSelected = this.selectedValues;
+      this.selectedValues = tables || [];
+      const pairs = this.getAllPossiblePairs();
+      this.selectedValues = originalSelected;
+      return pairs;
     },
 
     getAllPossiblePairs() {
@@ -902,15 +977,6 @@ document.addEventListener('alpine:init', () => {
     isFeedbackModalVisible: false,
     questionStartTime: 0,
 
-    getPairKey(a, b, op) {
-      const symbols = {
-        multiplication: 'x',
-        division: '/',
-        addition: '+',
-        soustraction: '-'
-      };
-      return `${a}${symbols[op] || 'x'}${b}`;
-    },
 
     get timeRatio() {
       const total =
@@ -1150,7 +1216,7 @@ document.addEventListener('alpine:init', () => {
             const timeUsed = (Date.now() - this.questionStartTime) / 1000;
             const [a, b] = Alpine.store('quiz').currentPair.factors;
             const op = Alpine.store('quiz').operationType;
-            const pairKey = this.getPairKey(a, b, op);
+            const pairKey = Alpine.store('quiz').getPairKey(a, b, op);
             Alpine.store('quiz').updateStats(pairKey, false, timeUsed);
 
             this.feedbackType = "noAnswer";
@@ -1357,7 +1423,7 @@ document.addEventListener('alpine:init', () => {
       const timeUsed = (Date.now() - this.questionStartTime) / 1000;
       const [a, b] = Alpine.store('quiz').currentPair.factors;
       const op = Alpine.store('quiz').operationType;
-      const pairKey = this.getPairKey(a, b, op);
+      const pairKey = Alpine.store('quiz').getPairKey(a, b, op);
       Alpine.store('quiz').updateStats(pairKey, this.isLastAnswerCorrect, timeUsed);
 
       this.feedbackType = this.isLastAnswerCorrect
