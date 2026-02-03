@@ -10,7 +10,7 @@
     />
     <title>Table de Pythagore Interactive</title>
 
-    <!-- Favicons & PWA -->
+    <!-- Bloc : Favicons & PWA -->
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -43,14 +43,14 @@
     <meta name="msapplication-TileColor" content="#1e40af" />
     <meta name="theme-color" content="#1e40af" />
 
-    <!-- Tailwind CSS Local -->
+    <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
   </head>
 
   <body
     class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300"
   >
-    <!-- Navigation Responsive -->
+    <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
       x-data="{ mobileMenuOpen: false }"
@@ -211,15 +211,15 @@
       </div>
     </nav>
 
-    <!-- Contenu Principal -->
+    <!-- Bloc : Contenu principal -->
     <main class="max-w-6xl mx-auto px-4 py-12" x-data="pythagoreComponent()">
       <h1 class="text-4xl font-bold text-center mb-8">
         Table de Pythagore Interactive
       </h1>
 
-      <!-- Contrôles -->
+      <!-- Bloc : Contrôles de configuration -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
-        <!-- Sélection du Mode -->
+        <!-- Bloc : Sélection du mode -->
         <div class="mb-6">
           <h3 class="text-lg font-bold mb-3">Mode</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -240,7 +240,7 @@
           </div>
         </div>
 
-        <!-- Options -->
+        <!-- Bloc : Options -->
         <div class="mb-6">
           <h3 class="text-lg font-bold mb-3">Options</h3>
           <div class="flex gap-3 flex-wrap">
@@ -256,7 +256,7 @@
           </div>
         </div>
 
-        <!-- Boutons Mode Complète -->
+        <!-- Bloc : Boutons mode complet -->
         <div
           x-show="mode === 'complete'"
           x-transition
@@ -269,13 +269,13 @@
           </div>
         </div>
 
-        <!-- Boutons Mode Découvrir -->
+        <!-- Bloc : Boutons mode découverte -->
         <div
           x-show="mode === 'discover'"
           x-transition
           class="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
-          <!-- Tables à pratiquer -->
+          <!-- Bloc : Tables à pratiquer -->
           <div
             class="col-span-1 md:col-span-2 mt-4 bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg"
           >
@@ -318,7 +318,7 @@
             Cliquez les cases pour les découvrir
           </div>
 
-          <!-- Barre de progression -->
+          <!-- Bloc : Barre de progression -->
           <div class="col-span-1 md:col-span-2">
             <div class="flex items-center justify-between mb-2">
               <span class="text-sm font-semibold"
@@ -352,7 +352,7 @@
         </div>
       </div>
 
-      <!-- Tableau -->
+      <!-- Bloc : Tableau de Pythagore -->
       <div
         class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
       >
@@ -424,7 +424,7 @@
           </tbody>
         </table>
       </div>
-      <!-- Légende -->
+      <!-- Bloc : Légende -->
       <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
         <div
           class="bg-orange-100 dark:bg-orange-900/20 p-4 rounded-lg border-l-4 border-orange-600"
@@ -467,7 +467,7 @@
         </div>
       </div>
 
-      <!-- Explication -->
+      <!-- Bloc : Explication -->
       <div class="mt-8 bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
         <h2 class="text-xl font-bold mb-2">💡 Conseils d'utilisation</h2>
         <ul class="space-y-2 text-gray-700 dark:text-gray-300">
@@ -491,7 +491,7 @@
       </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Bloc : Pied de page -->
     <footer
       class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 py-8 mt-12"
     >
@@ -503,7 +503,7 @@
       </div>
     </footer>
 
-    <!-- Alpine.js Local -->
+    <!-- Bloc : Scripts Alpine.js -->
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
     <script src="./js/alpine-store.js?v=202602030600"></script>
 
@@ -776,7 +776,7 @@
       }
     </script>
 
-    <!-- Service Worker Registration pour PWA -->
+    <!-- Bloc : Service Worker -->
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js").then((reg) => {

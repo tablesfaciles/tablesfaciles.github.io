@@ -13,7 +13,7 @@
     />
     <title>Quiz d'opérations mathématiques</title>
 
-    <!-- Favicons & PWA -->
+    <!-- Bloc : Favicons & PWA -->
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -46,7 +46,7 @@
     <meta name="msapplication-TileColor" content="#1e40af" />
     <meta name="theme-color" content="#1e40af" />
 
-    <!-- Tailwind CSS Local -->
+    <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
     <style>
       [x-cloak] {
@@ -58,7 +58,7 @@
   <body
     class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
   >
-    <!-- Navigation Responsive -->
+    <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
       x-data="{ mobileMenuOpen: false }"
@@ -219,13 +219,13 @@
       </div>
     </nav>
 
-    <!-- Contenu Principal -->
+    <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-4xl mx-auto px-4 py-12 w-full"
       x-data="quizComponent()"
       @alpine:init="init()"
     >
-      <!-- Section Accueil -->
+      <!-- Bloc : Configuration du quiz -->
       <div
         x-show="!isStarted"
         x-transition
@@ -236,7 +236,7 @@
         </h1>
 
         <form @submit.prevent="startQuiz" class="space-y-6">
-          <!-- Type d'opération -->
+          <!-- Bloc : Type d'opération -->
           <div class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
             <label
               class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
@@ -269,7 +269,7 @@
             </div>
           </div>
 
-          <!-- Nombre de questions -->
+          <!-- Bloc : Nombre de questions -->
           <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
             <label class="block text-lg font-bold mb-3">
               Nombre de questions :
@@ -287,7 +287,7 @@
             />
           </div>
 
-          <!-- Mode de chrono -->
+          <!-- Bloc : Mode de chrono -->
           <div class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
             <label
               class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
@@ -322,14 +322,14 @@
             </div>
           </div>
 
-          <!-- Durée du chrono -->
+          <!-- Bloc : Durée du chrono -->
           <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
             <label
               class="block text-lg font-bold mb-3"
               x-text="$store.quiz.chronoMode === 'question' ? 'Durée du chrono par question' : 'Durée totale du quiz'"
             ></label>
 
-            <!-- Boutons prédéfinis Mode "par question" -->
+            <!-- Bloc : Présélections chrono (par question) -->
             <template x-if="$store.quiz.chronoMode === 'question'">
               <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
                 <button
@@ -372,7 +372,7 @@
                 </button>
               </div>
             </template>
-            <!-- Boutons prédéfinis Mode "quiz" global -->
+            <!-- Bloc : Présélections chrono (global) -->
             <template x-if="$store.quiz.chronoMode === 'quiz'">
               <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
                 <button
@@ -416,7 +416,7 @@
               </div>
             </template>
 
-            <!-- Barre de sélection avec repères - Mode "par question" -->
+            <!-- Bloc : Sélection chrono personnalisée (par question) -->
             <template x-if="$store.quiz.chronoMode === 'question'">
               <div class="space-y-3">
                 <div class="flex justify-between items-center">
@@ -435,11 +435,9 @@
                 </div>
 
                 <div class="relative pt-8 pb-1">
-                  <!-- Piste avec repères positionnés correctement -->
                   <div
                     class="absolute top-0 left-0 right-0 pointer-events-none"
                   >
-                    <!-- Repère 15s (0%) -->
                     <div
                       class="absolute flex flex-col items-center"
                       style="left: 0%"
@@ -452,7 +450,6 @@
                         >15s</span
                       >
                     </div>
-                    <!-- Repère 30s (33.33%) -->
                     <div
                       class="absolute flex flex-col items-center"
                       style="left: 33.33%; transform: translateX(-50%)"
@@ -464,7 +461,6 @@
                         >30s</span
                       >
                     </div>
-                    <!-- Repère 60s (100%) -->
                     <div
                       class="absolute flex flex-col items-center"
                       style="right: 0%"
@@ -478,7 +474,7 @@
                     </div>
                   </div>
 
-                  <!-- Range input -->
+                  <!-- Bloc : Curseur de sélection -->
                   <input
                     type="range"
                     x-model.number="$store.quiz.secondsChrono"
@@ -492,7 +488,7 @@
               </div>
             </template>
 
-            <!-- Barre de sélection avec repères - Mode "quiz" global -->
+            <!-- Bloc : Sélection chrono personnalisée (global) -->
             <template x-if="$store.quiz.chronoMode === 'quiz'">
               <div class="space-y-3">
                 <div class="flex justify-between items-center">
@@ -507,11 +503,9 @@
                 </div>
 
                 <div class="relative pt-8 pb-1">
-                  <!-- Piste avec repères positionnés correctement -->
                   <div
                     class="absolute top-0 left-0 right-0 pointer-events-none"
                   >
-                    <!-- Repère 120s (0%) -->
                     <div
                       class="absolute flex flex-col items-center"
                       style="left: 0%"
@@ -524,7 +518,6 @@
                         >2 min</span
                       >
                     </div>
-                    <!-- Repère 300s (37.5%) -->
                     <div
                       class="absolute flex flex-col items-center"
                       style="left: 37.5%; transform: translateX(-50%)"
@@ -536,7 +529,6 @@
                         >5 min</span
                       >
                     </div>
-                    <!-- Repère 600s (100%) -->
                     <div
                       class="absolute flex flex-col items-center"
                       style="right: 0%"
@@ -550,7 +542,7 @@
                     </div>
                   </div>
 
-                  <!-- Range input -->
+                  <!-- Bloc : Curseur de sélection -->
                   <input
                     type="range"
                     x-model.number="$store.quiz.secondsChrono"
@@ -565,7 +557,7 @@
             </template>
           </div>
 
-          <!-- Tables à pratiquer -->
+          <!-- Bloc : Tables à pratiquer -->
           <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
             <label class="block text-lg font-bold mb-3"
               >Tables à pratiquer</label
@@ -602,7 +594,7 @@
             </div>
           </div>
 
-          <!-- Options -->
+          <!-- Bloc : Options -->
           <div class="flex items-center space-x-4">
             <label class="flex items-center space-x-2 cursor-pointer">
               <input
@@ -614,7 +606,7 @@
             </label>
           </div>
 
-          <!-- Bouton démarrage -->
+          <!-- Bloc : Bouton démarrage -->
           <button
             type="submit"
             autofocus
@@ -625,17 +617,16 @@
         </form>
       </div>
 
-      <!-- Section Quiz -->
+      <!-- Bloc : Interface de jeu -->
       <div
         x-show="isStarted && !isFinished"
         x-ref="quizSection"
         x-transition
         class="space-y-6"
       >
-        <!-- Chrono et progression -->
+        <!-- Bloc : Statistiques de jeu -->
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <!-- Chrono -->
             <div class="text-center">
               <div
                 class="text-4xl font-bold text-blue-600"
@@ -647,7 +638,6 @@
               </div>
             </div>
 
-            <!-- Progression -->
             <div class="text-center">
               <div
                 class="text-2xl font-bold"
@@ -658,7 +648,6 @@
               </div>
             </div>
 
-            <!-- Score -->
             <div class="text-center">
               <div
                 class="text-2xl font-bold text-green-600"
@@ -670,7 +659,7 @@
             </div>
           </div>
 
-          <!-- Barre de progression question-->
+          <!-- Bloc : Barre de progression (questions) -->
           <div class="mt-4 bg-gray-300 rounded-full h-2 dark:bg-gray-700">
             <div
               class="bg-blue-600 h-2 rounded-full transition-all"
@@ -678,7 +667,7 @@
             ></div>
           </div>
         </div>
-        <!-- Barre de progression temps-->
+        <!-- Bloc : Barre de progression (temps) -->
         <div
           class="mt-6 bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner relative"
         >
@@ -689,7 +678,7 @@
           ></div>
         </div>
 
-        <!-- Question -->
+        <!-- Bloc : Question actuelle -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
           <template x-if="$store.quiz.currentPair">
             <div class="text-center">
@@ -704,7 +693,7 @@
                 <span x-text="$store.quiz.currentPair.factors[1]"></span>
               </div>
 
-              <!-- Formulaire de réponse -->
+              <!-- Bloc : Saisie de la réponse -->
               <form @submit.prevent="submitAnswer" class="mt-8">
                 <div class="flex gap-2 justify-center">
                   <input
@@ -726,7 +715,7 @@
                 </div>
               </form>
 
-              <!-- Feedback visuel (affichage sur grands écrans uniquement) -->
+              <!-- Bloc : Feedback visuel -->
               <div
                 x-show="showFeedback && !shouldShowFeedbackModal() && !isFeedbackModalVisible"
                 x-transition
@@ -776,12 +765,12 @@
         </div>
       </div>
 
-      <!-- Section Résultats -->
+      <!-- Bloc : Résultats finaux -->
       <div x-show="isFinished" x-transition class="space-y-6">
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
           <h2 class="text-3xl font-bold text-center mb-6">Résultats</h2>
 
-          <!-- Informations du quiz -->
+          <!-- Bloc : Informations du quiz -->
           <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-8">
             <h3 class="text-xl font-bold text-center mb-4">
               Informations du quiz
@@ -963,7 +952,7 @@
             </div>
           </div>
 
-          <!-- Détail des réponses -->
+          <!-- Bloc : Détail des réponses -->
           <div class="space-y-2 max-h-96 overflow-y-auto">
             <template x-for="(pair, index) in $store.quiz.pairs" :key="index">
               <div
@@ -1004,7 +993,7 @@
             </template>
           </div>
 
-          <!-- Boutons -->
+          <!-- Bloc : Actions finales -->
           <div class="mt-8 flex gap-4">
             <button
               @click="resetQuiz()"
@@ -1023,7 +1012,7 @@
       </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Bloc : Pied de page -->
     <footer
       class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 py-8 mt-auto"
     >
@@ -1035,7 +1024,7 @@
       </div>
     </footer>
 
-    <!-- Alpine.js Local -->
+    <!-- Bloc : Scripts Alpine.js -->
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
     <script src="./js/alpine-store.js?v=202602030600"></script>
 
@@ -1052,9 +1041,9 @@
           isProcessing: false,
           timePerQuestion: [],
           audioCtx: null,
-          feedbackType: "", // 'correct', 'incorrect', 'noAnswer'
-          isMobileModal: false, // réactive : true si petit écran
-          isFeedbackModalVisible: false, // true si la modal feedback est affichée
+          feedbackType: "",
+          isMobileModal: false,
+          isFeedbackModalVisible: false,
 
           get timeRatio() {
             const total =
@@ -1068,7 +1057,6 @@
             return this.isMobileModal;
           },
 
-          // Retourner la vraie hauteur visible (tient compte du clavier mobile)
           getVisibleHeight() {
             if (window.visualViewport) {
               return window.visualViewport.height;
@@ -1077,10 +1065,8 @@
           },
 
           init() {
-            // Initialiser isMobileModal avec la vraie hauteur visible
             this.isMobileModal = this.getVisibleHeight() < 600;
 
-            // Mettre à jour quand la fenêtre est redimensionnée (clavier mobile, rotation...)
             window.addEventListener("resize", () => {
               this.isMobileModal = this.getVisibleHeight() < 600;
             });
@@ -1128,7 +1114,7 @@
             );
           },
 
-          // --- FONCTION VOIX ---
+          // Fonction de synthèse vocale
           speak(text) {
             if (!window.speechSynthesis) return;
             window.speechSynthesis.cancel();
@@ -1138,7 +1124,7 @@
             window.speechSynthesis.speak(utterance);
           },
 
-          // --- FONCTIONS SÉLECTION TABLES ---
+          // Gestion de la sélection des tables
           toggleTable(num) {
             const index = this.$store.quiz.selectedValues.indexOf(num);
             if (index > -1) {
@@ -1156,7 +1142,7 @@
             this.$store.quiz.selectedValues = [];
           },
 
-          // --- FONCTION SCROLL VERS LE QUIZ ---
+          // Défilement automatique vers le quiz
           scrollToQuiz(delay = 100, behavior = "smooth") {
             setTimeout(() => {
               const quizSection =
@@ -1177,7 +1163,7 @@
             }, delay);
           },
 
-          // --- FONCTION POUR FOCUS INPUT ET SCROLL ---
+          // Focus sur le champ de réponse
           focusAnswerInput() {
             const inputElement =
               document.querySelector('input[inputmode="numeric"]') ||
@@ -1185,10 +1171,8 @@
             if (inputElement) {
               inputElement.focus();
 
-              // Sur mobile, recaler après l'ouverture du clavier
               if (window.visualViewport) {
                 const handleKeyboardOpen = () => {
-                  // Attendre que le clavier soit complètement ouvert
                   setTimeout(() => {
                     this.scrollToQuiz(0, "auto");
                   }, 300);
@@ -1407,7 +1391,7 @@
             oscillator2.stop(this.audioCtx.currentTime + 0.4);
           },
 
-          // --- MODAL FEEDBACK EN JS PUR (hors Alpine) ---
+          // Gestion de la modal de feedback
           showFeedbackModalJS(type) {
             if (!this.isMobileModal) return;
 
@@ -1597,7 +1581,7 @@
       }
     </script>
 
-    <!-- Service Worker Registration pour PWA -->
+    <!-- Bloc : Service Worker -->
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js").then((reg) => {
@@ -1616,7 +1600,7 @@
         });
       }
     </script>
-    <!-- Modal Feedback - contrôlée en JS pur, hors de tout conteneur Alpine -->
+    <!-- Bloc : Modal de feedback (Mobile) -->
     <div
       id="feedbackModal"
       class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
