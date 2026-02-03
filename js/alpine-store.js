@@ -49,6 +49,11 @@ document.addEventListener('alpine:init', () => {
     // Mastery Tracking
     masteryData: {},
 
+    // Learning Path
+    LEARNING_PATH: [[2, 5, 10], [3, 4], [6, 7, 8, 9]],
+    currentLevel: 0,
+    proposedNextLevel: null,
+
     // Table de Pythagore
     pythagoreValues: {},
     highlightMode: null,
@@ -59,6 +64,7 @@ document.addEventListener('alpine:init', () => {
       this.loadQuizPreferences();
       this.initPythagoreValues();
       this.loadMasteryData();
+      this.loadCurrentLevel();
     },
 
     // Charger les données de maîtrise depuis localStorage
@@ -144,11 +150,65 @@ document.addEventListener('alpine:init', () => {
       localStorage.setItem('quizPreferences', JSON.stringify(prefs));
     },
 
+    // Charger le niveau actuel depuis localStorage
+    loadCurrentLevel() {
+      const stored = localStorage.getItem('quiz_current_level');
+      if (stored !== null) {
+        this.currentLevel = parseInt(stored, 10) || 0;
+      }
+    },
+
+    // Sauvegarder le niveau actuel
+    saveCurrentLevel() {
+      localStorage.setItem('quiz_current_level', this.currentLevel);
+    },
+
+    // Accepter le passage au niveau suivant
+    acceptLevelUp() {
+      if (this.proposedNextLevel !== null) {
+        this.currentLevel = this.proposedNextLevel;
+        this.saveCurrentLevel();
+        this.proposedNextLevel = null;
+      }
+    },
+
     // Sauvegarder un résultat
     saveResultData(quizData) {
       if (!this.quizResults) {
         this.quizResults = [];
       }
+
+      // Calcul de la note
+      const total = quizData.quizProperties.numOfQuestions;
+      const correct = quizData.pairs.filter(p => p.isCorrect).length;
+      const accuracy = correct / total;
+      const timeUsed = quizData.quizProperties.timeUsed;
+      const avgTime = timeUsed / total;
+
+      let grade = 'C';
+      if (accuracy === 1) {
+        if (avgTime < 2) grade = 'A+';
+        else if (avgTime < 4) grade = 'A';
+        else grade = 'B';
+      } else if (accuracy > 0.8) {
+        grade = 'B';
+      }
+
+      quizData.quizProperties.grade = grade;
+
+      // Logique de progression de niveau
+      const currentLevelTables = this.LEARNING_PATH[this.currentLevel];
+      if (currentLevelTables) {
+        const sortedSelected = [...this.selectedValues].sort().join(',');
+        const sortedLevel = [...currentLevelTables].sort().join(',');
+
+        if (sortedSelected === sortedLevel && (grade === 'A' || grade === 'A+')) {
+          if (this.currentLevel < this.LEARNING_PATH.length - 1) {
+            this.proposedNextLevel = this.currentLevel + 1;
+          }
+        }
+      }
+
       this.quizResults.push(quizData);
       localStorage.setItem('quizResults', JSON.stringify(this.quizResults));
     },
