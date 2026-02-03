@@ -10,7 +10,7 @@
     />
     <title>Historique de progression</title>
 
-    <!-- Favicons & PWA -->
+    <!-- Bloc : Favicons & PWA -->
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -43,14 +43,14 @@
     <meta name="msapplication-TileColor" content="#1e40af" />
     <meta name="theme-color" content="#1e40af" />
 
-    <!-- Tailwind CSS Local -->
+    <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
   </head>
 
   <body
     class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
   >
-    <!-- Navigation Responsive -->
+    <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
       x-data="{ mobileMenuOpen: false }"
@@ -207,7 +207,7 @@
       </div>
     </nav>
 
-    <!-- Contenu Principal -->
+    <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-12"
       x-data="historyComponent()"
@@ -217,7 +217,7 @@
         Historique de progression
       </h1>
 
-      <!-- Bouton Effacer l'historique -->
+      <!-- Bloc : Effacer l'historique -->
       <div
         class="flex justify-center mb-8"
         x-show="$store.quiz.quizResults.length > 0"
@@ -255,7 +255,7 @@
         </div>
       </div>
 
-      <!-- Message vide -->
+      <!-- Bloc : Message d'absence de données -->
       <template x-if="$store.quiz.quizResults.length === 0">
         <div class="bg-blue-50 dark:bg-blue-900/20 p-12 rounded-lg text-center">
           <svg
@@ -284,10 +284,10 @@
         </div>
       </template>
 
-      <!-- Liste des résultats -->
+      <!-- Bloc : Liste des résultats -->
       <template x-if="$store.quiz.quizResults.length > 0">
         <div class="space-y-6">
-          <!-- Statistiques globales -->
+          <!-- Bloc : Statistiques globales -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
               <div
@@ -326,7 +326,7 @@
               </div>
             </div>
           </div>
-          <!-- Graphique de progression -->
+          <!-- Bloc : Graphique de progression -->
           <div
             class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8"
             x-show="$store.quiz.quizResults.length > 1"
@@ -338,7 +338,7 @@
               <canvas id="progressionChart"></canvas>
             </div>
           </div>
-          <!-- Accordéon des résultats -->
+          <!-- Bloc : Historique des quiz -->
           <div class="space-y-4">
             <template
               x-for="(result, index) in $store.quiz.quizResults"
@@ -347,7 +347,7 @@
               <div
                 class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
               >
-                <!-- En-tête accordéon -->
+                <!-- Bloc : Détails du quiz (en-tête) -->
                 <button
                   @click="toggleAccordion(index)"
                   class="w-full p-6 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition font-semibold"
@@ -396,13 +396,13 @@
                   </div>
                 </button>
 
-                <!-- Contenu accordéon -->
+                <!-- Bloc : Détails du quiz (contenu) -->
                 <div
                   x-show="openAccordions.includes(index)"
                   x-transition
                   class="border-t border-gray-200 dark:border-gray-700 p-6"
                 >
-                  <!-- Informations de chrono -->
+                  <!-- Bloc : Informations de temps -->
                   <div
                     class="mb-6 py-3 px-2 border-b border-gray-100 dark:border-gray-800"
                   >
@@ -573,7 +573,7 @@
                     </div>
                   </div>
 
-                  <!-- Liste des réponses -->
+                  <!-- Bloc : Récapitulatif des réponses -->
                   <div class="space-y-2 max-h-96 overflow-y-auto">
                     <template
                       x-for="(pair, pIndex) in (result.pairs || [])"
@@ -617,7 +617,7 @@
                     </template>
                   </div>
 
-                  <!-- Bouton supprimer -->
+                  <!-- Bloc : Action de suppression -->
                   <div x-data="{ confirming: false }" class="mt-4">
                     <button
                       x-show="!confirming"
@@ -658,7 +658,7 @@
       </template>
     </main>
 
-    <!-- Footer -->
+    <!-- Bloc : Pied de page -->
     <footer
       class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 py-8 mt-12"
     >
@@ -669,7 +669,7 @@
         </p>
       </div>
     </footer>
-    <!-- Bouton flottant Quiz-->
+    <!-- Bloc : Bouton flottant Quiz -->
     <a
       href="quiz.html"
       class="fixed z-[9999] flex items-center bg-blue-600/20 hover:bg-blue-600/30 backdrop-blur-md rounded-full p-1 shadow-2xl transition-all hover:scale-105 group border border-white/20"
@@ -703,7 +703,7 @@
         Lancer un Quiz
       </span>
     </a>
-    <!-- Alpine.js Local -->
+    <!-- Bloc : Scripts Alpine.js et Chart.js -->
     <script defer src="vendor/chart.umd.min.js?v=202602030600"></script>
     <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
@@ -829,7 +829,7 @@
       }
     </script>
 
-    <!-- Service Worker Registration pour PWA -->
+    <!-- Bloc : Service Worker -->
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js").then((reg) => {

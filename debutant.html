@@ -10,7 +10,7 @@
     />
     <title>Pour les Débutants - Tables de 1 à 5</title>
 
-    <!-- Favicons & PWA -->
+    <!-- Bloc : Favicons & PWA -->
     <link
       rel="apple-touch-icon"
       sizes="180x180"
@@ -43,7 +43,7 @@
     <meta name="msapplication-TileColor" content="#1e40af" />
     <meta name="theme-color" content="#1e40af" />
 
-    <!-- Tailwind CSS Local -->
+    <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
     <style>
       @keyframes bounce-soft {
@@ -81,7 +81,7 @@
   <body
     class="bg-gradient-to-br from-pink-100 to-blue-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
   >
-    <!-- Navigation -->
+    <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-br from-pink-500 to-blue-500 text-white shadow-lg font-bold sticky top-0 z-50"
       x-data="{ mobileMenuOpen: false }"
@@ -247,12 +247,12 @@
         </div>
       </div>
     </nav>
-    <!-- Contenu Principal -->
+    <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full"
       x-data="debutantComponent()"
     >
-      <!-- Titre -->
+      <!-- Bloc : Titre -->
       <div class="text-center mb-8">
         <h1
           class="text-4xl md:text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-blue-600"
@@ -264,9 +264,9 @@
         </p>
       </div>
 
-      <!-- Section de sélection -->
+      <!-- Bloc : Section de sélection -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <!-- Sélection des tables -->
+        <!-- Bloc : Sélection des tables -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <h2 class="text-2xl font-bold mb-4 flex items-center">
             <span class="text-3xl mr-2">📚</span> Quelle table veux-tu apprendre
@@ -285,7 +285,7 @@
           </div>
         </div>
 
-        <!-- Infos -->
+        <!-- Bloc : Informations -->
         <div
           class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6"
         >
@@ -302,7 +302,7 @@
         </div>
       </div>
 
-      <!-- Table affichée -->
+      <!-- Bloc : Table affichée -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8">
         <h2 class="text-3xl font-bold mb-6 text-center">
           Table de
@@ -312,7 +312,7 @@
           ></span>
         </h2>
 
-        <!-- Grille de la table -->
+        <!-- Bloc : Grille de la table -->
         <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
             <div
@@ -334,7 +334,7 @@
           </template>
         </div>
 
-        <!-- Boutons d'action -->
+        <!-- Bloc : Boutons d'action -->
         <div class="flex gap-4 justify-center">
           <button
             @click="revealAll()"
@@ -351,7 +351,7 @@
         </div>
       </div>
 
-      <!-- Section Explication -->
+      <!-- Bloc : Section explication -->
       <div
         class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg p-8 mb-8"
       >
@@ -383,7 +383,7 @@
         </div>
       </div>
 
-      <!-- Astuces -->
+      <!-- Bloc : Astuces -->
       <div
         class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg p-8"
       >
@@ -422,6 +422,7 @@
           </li>
         </ul>
       </div>
+      <!-- Bloc : Prochaine étape -->
       <div
         class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg shadow-lg p-8 text-center mt-8"
       >
@@ -443,7 +444,7 @@
       </div>
     </main>
 
-    <!-- Footer -->
+    <!-- Bloc : Pied de page -->
     <footer
       class="bg-gradient-to-r from-pink-500 to-blue-500 text-white py-8 mt-auto"
     >
@@ -452,7 +453,7 @@
       </div>
     </footer>
 
-    <!-- Alpine.js Local -->
+    <!-- Bloc : Scripts Alpine.js -->
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
 
     <script>
@@ -487,7 +488,7 @@
       }
     </script>
 
-    <!-- Service Worker Registration pour PWA -->
+    <!-- Bloc : Service Worker -->
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("./sw.js").then((reg) => {
