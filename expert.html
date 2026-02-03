@@ -45,22 +45,6 @@
 
     <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
-    <style>
-      @keyframes pulse-glow {
-        0%,
-        100% {
-          box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-        }
-
-        50% {
-          box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
-        }
-      }
-
-      .animate-pulse-glow {
-        animation: pulse-glow 2s infinite;
-      }
-    </style>
   </head>
 
   <body
@@ -69,7 +53,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-br from-red-500 to-orange-500 text-white shadow-lg font-bold sticky top-0 z-50"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -79,6 +63,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -90,13 +75,13 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
 
             <a
               href="debutant.html"
@@ -111,12 +96,13 @@
 
             <a
               href="expert.html"
-              class="bg-white/30 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-105 transition-all"
+              class="bg-white/30 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-105 transition-all font-bold"
+              aria-current="page"
             >
               <span class="mr-1">🔥</span> Expert
             </a>
 
-            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
@@ -140,14 +126,17 @@
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
-            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition"
+            @click="toggle()"
+            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -172,6 +161,7 @@
           x-show="mobileMenuOpen"
           x-transition
           class="xl:hidden border-t border-white/20 pb-4"
+          id="mobile-menu"
         >
           <div class="flex flex-col space-y-1 pt-3">
             <a
@@ -236,7 +226,7 @@
     <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full transition-colors duration-300"
-      x-data="expertComponent()"
+      x-data="expertComponent"
     >
       <!-- Bloc : Titre -->
       <div class="text-center mb-8">
@@ -257,7 +247,7 @@
           class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors"
         >
           <h2 class="text-2xl font-bold mb-4 flex items-center dark:text-white">
-            <span class="text-3xl mr-2">🚀</span> Quel défi veux-tu relever ?
+            <span class="text-3xl mr-2" role="img" aria-label="Fusée">🚀</span> Quel défi veux-tu relever ?
           </h2>
           <div class="grid grid-cols-2 gap-3">
             <template x-for="num in [9, 10, 11, 12]" :key="num">
@@ -267,6 +257,8 @@
                                 ? 'bg-gradient-to-br from-red-500 to-orange-500 text-white scale-103 shadow-lg outline-none' 
                                 : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 hover:scale-103 outline-none'"
                 class="p-3 md:p-4 rounded-lg font-bold text-xl transition transform duration-200"
+                :aria-label="'Apprendre la table de ' + num"
+                :aria-pressed="selectedTable === num"
               >
                 <span x-text="num"></span>
               </button>
@@ -279,7 +271,7 @@
           class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6"
         >
           <h2 class="text-2xl font-bold mb-3 flex items-center dark:text-white">
-            <span class="text-3xl mr-2">⚡</span> Astuce Pro
+            <span class="text-3xl mr-2" role="img" aria-label="Eclair">⚡</span> Astuce Pro
           </h2>
           <p class="text-gray-800 dark:text-gray-200 mb-3">
             <strong>Tu es un champion !</strong> La table de 9 a des motifs
@@ -309,10 +301,15 @@
           <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
             <div
               @click="toggleCellReveal(i)"
+              @keydown.enter="toggleCellReveal(i)"
+              @keydown.space.prevent="toggleCellReveal(i)"
               :class="revealedCells.includes(i) 
                             ? 'bg-gradient-to-br from-red-400 to-orange-600' 
                             : 'bg-gradient-to-br from-red-200 to-orange-200 opacity-90'"
               class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center text-white cursor-pointer shadow-red-200 dark:shadow-none"
+              role="button"
+              tabindex="0"
+              :aria-label="'Calcul ' + selectedTable + ' fois ' + i"
             >
               <div class="text-sm font-bold opacity-90">
                 <span x-text="selectedTable"></span> × <span x-text="i"></span>
@@ -356,14 +353,14 @@
         class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg shadow-lg p-8 mb-8"
       >
         <h2 class="text-2xl font-bold mb-6 flex items-center dark:text-white">
-          <span class="text-3xl mr-3">💪</span> Secrets des tables difficiles
+          <span class="text-3xl mr-3" role="img" aria-label="Bras musclé">💪</span> Secrets des tables difficiles
         </h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div
             class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-pink-400"
           >
-            <div class="text-4xl mb-2">9️⃣</div>
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 9">9️⃣</div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 9</h3>
             <p class="text-sm text-gray-700 dark:text-gray-300">
               La somme des chiffres fait toujours 9 ! (ex: 2+7=9).
@@ -373,7 +370,7 @@
           <div
             class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-red-400"
           >
-            <div class="flex text-4xl mb-2 -space-x-2">
+            <div class="flex text-4xl mb-2 -space-x-2" role="img" aria-label="Chiffre 10">
               <span>1️⃣</span><span>0️⃣</span>
             </div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 10</h3>
@@ -386,7 +383,7 @@
           <div
             class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-orange-400"
           >
-            <div class="flex text-4xl mb-2 -space-x-2">
+            <div class="flex text-4xl mb-2 -space-x-2" role="img" aria-label="Chiffre 11">
               <span>1️⃣</span><span>1️⃣</span>
             </div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 11</h3>
@@ -398,7 +395,7 @@
           <div
             class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm border-b-4 border-yellow-400"
           >
-            <div class="flex text-4xl mb-2 -space-x-2">
+            <div class="flex text-4xl mb-2 -space-x-2" role="img" aria-label="Chiffre 12">
               <span>1️⃣</span><span>2️⃣</span>
             </div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 12</h3>
@@ -416,7 +413,7 @@
         <h2
           class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white"
         >
-          <span class="text-3xl mr-2">🏆</span> Prêt pour le Quiz Expert ?
+          <span class="text-3xl mr-2" role="img" aria-label="Trophée">🏆</span> Prêt pour le Quiz Expert ?
         </h2>
         <p class="text-gray-800 dark:text-gray-200 mb-6">
           Maintenant que tu maîtrises les tables les plus difficiles, teste tes
@@ -441,46 +438,8 @@
     </footer>
 
     <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-
-    <script>
-      function expertComponent() {
-        return {
-          selectedTable: 9,
-          revealedCells: [],
-
-          selectTable(num) {
-            this.selectedTable = num;
-            this.revealedCells = [];
-          },
-
-          toggleCellReveal(index) {
-            if (this.revealedCells.includes(index)) {
-              this.revealedCells = this.revealedCells.filter(
-                (i) => i !== index,
-              );
-            } else {
-              this.revealedCells.push(index);
-            }
-          },
-
-          revealAll() {
-            this.revealedCells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-          },
-
-          hideAll() {
-            this.revealedCells = [];
-          },
-
-          aleaTable() {
-            const tables = [9, 10, 11, 12];
-            this.selectedTable =
-              tables[Math.floor(Math.random() * tables.length)];
-            this.revealedCells = [];
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>

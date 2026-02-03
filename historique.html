@@ -53,7 +53,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -63,6 +63,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -74,13 +75,13 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="debutant.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -96,7 +97,7 @@
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🔥 Expert</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -114,20 +115,24 @@
             >
             <a
               href="historique.html"
-              class="bg-blue-800 px-3 py-2 rounded transition"
+              class="bg-blue-800 px-3 py-2 rounded transition shadow-inner"
+              aria-current="page"
               >📈 Historique</a
             >
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
+            @click="toggle()"
             class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -154,11 +159,13 @@
           x-transition:enter-start="opacity-0 transform -translate-y-2"
           x-transition:enter-end="opacity-100 transform translate-y-0"
           class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4"
+          id="mobile-menu"
+          x-cloak
         >
           <div class="flex flex-col space-y-1 pt-2">
             <a
               href="index.html"
-              class="block px-3 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-3 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >🏠 Accueil</a
             >
             <div class="px-3 py-2 text-sm font-semibold text-blue-200">
@@ -166,17 +173,17 @@
             </div>
             <a
               href="debutant.html"
-              class="block px-6 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >👶 Débutants (1-5)</a
             >
             <a
               href="intermediaire.html"
-              class="block px-6 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >📘 Intermédiaire (6-8)</a
             >
             <a
               href="expert.html"
-              class="block px-6 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >🔥 Expert (9+)</a
             >
             <div class="px-3 py-2 text-sm font-semibold text-blue-200">
@@ -184,22 +191,22 @@
             </div>
             <a
               href="operations-aleatoires.html"
-              class="block px-6 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >🎲 Opérations</a
             >
             <a
               href="pythagore.html"
-              class="block px-6 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >📊 Pythagore</a
             >
             <a
               href="quiz.html"
-              class="block px-6 py-2 hover:bg-blue-800 rounded transition"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
               >❓ Quiz</a
             >
             <a
               href="historique.html"
-              class="block px-6 py-2 bg-blue-800 rounded transition"
+              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition shadow-inner"
               >📈 Historique</a
             >
           </div>
@@ -210,8 +217,7 @@
     <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-12"
-      x-data="historyComponent()"
-      @alpine:init="init()"
+      x-data="historyComponent"
     >
       <h1 class="text-4xl font-bold text-center mb-8">
         Historique de progression
@@ -235,6 +241,7 @@
             x-show="confirming"
             x-transition
             class="flex items-center gap-3 bg-red-50 dark:bg-red-900/20 px-6 py-3 rounded-lg border-2 border-red-600"
+            x-cloak
           >
             <span class="text-sm font-bold text-red-600 dark:text-red-400"
               >Êtes-vous sûr ?</span
@@ -263,6 +270,7 @@
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -334,8 +342,8 @@
             <h3 class="text-lg font-bold mb-4 text-center">
               Évolution de vos scores (%)
             </h3>
-            <div class="relative w-full" style="height: 300px">
-              <canvas id="progressionChart"></canvas>
+            <div class="relative w-full h-[300px]">
+              <canvas id="progressionChart" aria-label="Graphique de progression des scores" role="img"></canvas>
             </div>
           </div>
           <!-- Bloc : Historique des quiz -->
@@ -351,6 +359,7 @@
                 <button
                   @click="toggleAccordion(index)"
                   class="w-full p-6 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition font-semibold"
+                  :aria-expanded="openAccordions.includes(index)"
                 >
                   <div class="text-left flex-1">
                     <div class="font-bold">
@@ -385,6 +394,7 @@
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
                       <path
                         stroke-linecap="round"
@@ -401,6 +411,7 @@
                   x-show="openAccordions.includes(index)"
                   x-transition
                   class="border-t border-gray-200 dark:border-gray-700 p-6"
+                  x-cloak
                 >
                   <!-- Bloc : Informations de temps -->
                   <div
@@ -415,6 +426,7 @@
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
+                          aria-hidden="true"
                         >
                           <path
                             stroke-linecap="round"
@@ -441,6 +453,7 @@
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden="true"
                             >
                               <path
                                 stroke-linecap="round"
@@ -463,6 +476,7 @@
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden="true"
                             >
                               <path
                                 stroke-linecap="round"
@@ -494,6 +508,7 @@
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden="true"
                             >
                               <path
                                 stroke-linecap="round"
@@ -516,6 +531,7 @@
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
+                              aria-hidden="true"
                             >
                               <path
                                 stroke-linecap="round"
@@ -591,6 +607,7 @@
                             <span
                               class="mx-2"
                               x-text="result.quizProperties.operationType === 'multiplication' ? '×' : result.quizProperties.operationType === 'division' ? '÷' : result.quizProperties.operationType === 'addition' ? '+' : '−'"
+                              aria-hidden="true"
                             ></span>
                             <span x-text="pair.factors[1]"></span>
                             <span class="mx-2">=</span>
@@ -602,8 +619,8 @@
                             :class="pair.isCorrect ? 'text-green-600' : 'text-red-600'"
                             class="font-bold"
                           >
-                            <span x-show="pair.isCorrect">✓</span>
-                            <span x-show="!pair.isCorrect">✗</span>
+                            <span x-show="pair.isCorrect" aria-label="Correct">✓</span>
+                            <span x-show="!pair.isCorrect" aria-label="Incorrect">✗</span>
                           </span>
                         </div>
                         <div
@@ -631,6 +648,7 @@
                       x-show="confirming"
                       x-transition
                       class="flex items-center gap-3 justify-center bg-red-50 dark:bg-red-900/20 px-4 py-3 rounded-lg border-2 border-red-600"
+                      x-cloak
                     >
                       <span
                         class="text-sm font-bold text-red-600 dark:text-red-400"
@@ -672,12 +690,8 @@
     <!-- Bloc : Bouton flottant Quiz -->
     <a
       href="quiz.html"
-      class="fixed z-[9999] flex items-center bg-blue-600/20 hover:bg-blue-600/30 backdrop-blur-md rounded-full p-1 shadow-2xl transition-all hover:scale-105 group border border-white/20"
-      style="
-        position: fixed !important;
-        bottom: 2rem !important;
-        right: 2rem !important;
-      "
+      class="fixed z-[9999] bottom-8 right-8 flex items-center bg-blue-600/20 hover:bg-blue-600/30 backdrop-blur-md rounded-full p-1 shadow-2xl transition-all hover:scale-105 group border border-white/20"
+      aria-label="Lancer un nouveau Quiz"
     >
       <div
         class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-blue-500 transition-colors flex-shrink-0"
@@ -687,6 +701,7 @@
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -707,127 +722,6 @@
     <script defer src="vendor/chart.umd.min.js?v=202602030600"></script>
     <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-
-    <script>
-      function historyComponent() {
-        return {
-          openAccordions: [],
-          chart: null,
-          init() {
-            this.$store.quiz.loadResults();
-            this.$nextTick(() => {
-              this.renderChart();
-            });
-          },
-          renderChart() {
-            const ctx = document.getElementById("progressionChart");
-            if (!ctx || this.$store.quiz.quizResults.length === 0) return;
-
-            const data = [...this.$store.quiz.quizResults];
-            const labels = data.map((r) => r.quizProperties.date.split(" ")[0]);
-            const scores = data.map((r) =>
-              Math.round(
-                (r.pairs.filter((p) => p.isCorrect).length / r.pairs.length) *
-                  100,
-              ),
-            );
-
-            if (this.chart) this.chart.destroy();
-
-            this.chart = new Chart(ctx, {
-              type: "line",
-              data: {
-                labels: labels,
-                datasets: [
-                  {
-                    label: "Score %",
-                    data: scores,
-                    borderColor: "#2563eb",
-                    backgroundColor: "rgba(37, 99, 235, 0.1)",
-                    fill: true,
-                    tension: 0.2,
-                    pointRadius: 3, // Points bien visibles
-                  },
-                ],
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                layout: {
-                  padding: { top: 20, right: 20, left: 10, bottom: 10 },
-                },
-                scales: {
-                  y: {
-                    beginAtZero: true,
-                    min: 0,
-                    max: 100,
-                    ticks: {
-                      stepSize: 25,
-                      callback: (value) => value + "%",
-                    },
-                  },
-                },
-                plugins: {
-                  legend: { display: false },
-                },
-              },
-            });
-          },
-          toggleAccordion(index) {
-            const idx = this.openAccordions.indexOf(index);
-            if (idx > -1) {
-              this.openAccordions.splice(idx, 1);
-            } else {
-              this.openAccordions.push(index);
-            }
-          },
-
-          getTotalCorrect() {
-            return this.$store.quiz.quizResults.reduce((sum, result) => {
-              return sum + result.pairs.filter((p) => p.isCorrect).length;
-            }, 0);
-          },
-
-          getTotalIncorrect() {
-            return this.$store.quiz.quizResults.reduce((sum, result) => {
-              return sum + result.pairs.filter((p) => !p.isCorrect).length;
-            }, 0);
-          },
-
-          getGlobalScore() {
-            const total = this.getTotalCorrect() + this.getTotalIncorrect();
-            if (total === 0) return 0;
-            return Math.round((this.getTotalCorrect() / total) * 100);
-          },
-
-          getScoreClass(result) {
-            const score = Math.round(
-              (result.pairs.filter((p) => p.isCorrect).length /
-                result.pairs.length) *
-                100,
-            );
-            if (score >= 80) return "text-green-600";
-            if (score >= 60) return "text-yellow-600";
-            return "text-red-600";
-          },
-
-          deleteResult(index) {
-            this.$store.quiz.quizResults.splice(index, 1);
-            localStorage.setItem(
-              "quizResults",
-              JSON.stringify(this.$store.quiz.quizResults),
-            );
-            this.openAccordions = [];
-          },
-
-          clearHistory() {
-            this.$store.quiz.quizResults = [];
-            localStorage.setItem("quizResults", JSON.stringify([]));
-            this.openAccordions = [];
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>

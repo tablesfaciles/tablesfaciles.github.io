@@ -53,7 +53,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -63,6 +63,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -74,13 +75,13 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="debutant.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -96,7 +97,7 @@
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🔥 Expert</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -105,6 +106,7 @@
             <a
               href="pythagore.html"
               class="bg-blue-800 px-3 py-2 rounded shadow-inner"
+              aria-current="page"
               >📊 Pythagore</a
             >
             <a
@@ -120,14 +122,17 @@
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
+            @click="toggle()"
             class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -154,6 +159,8 @@
           x-transition:enter-start="opacity-0 transform -translate-y-2"
           x-transition:enter-end="opacity-100 transform translate-y-0"
           class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4"
+          id="mobile-menu"
+          x-cloak
         >
           <div class="flex flex-col space-y-1 pt-2">
             <a
@@ -193,7 +200,7 @@
             >
             <a
               href="pythagore.html"
-              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition"
+              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition shadow-inner"
               >📊 Pythagore</a
             >
             <a
@@ -212,7 +219,7 @@
     </nav>
 
     <!-- Bloc : Contenu principal -->
-    <main class="max-w-6xl mx-auto px-4 py-12" x-data="pythagoreComponent()">
+    <main class="max-w-6xl mx-auto px-4 py-12" x-data="pythagoreComponent">
       <h1 class="text-4xl font-bold text-center mb-8">
         Table de Pythagore Interactive
       </h1>
@@ -227,6 +234,7 @@
               @click="setMode('complete')"
               :class="mode === 'complete' ? 'bg-blue-700 text-white' : 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100'"
               class="font-bold py-2 px-4 rounded-lg transition hover:scale-105"
+              :aria-pressed="mode === 'complete'"
             >
               📊 Table Complète
             </button>
@@ -234,6 +242,7 @@
               @click="setMode('discover')"
               :class="mode === 'discover' ? 'bg-blue-700 text-white' : 'bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-gray-100'"
               class="font-bold py-2 px-4 rounded-lg transition hover:scale-105"
+              :aria-pressed="mode === 'discover'"
             >
               🔍 À Découvrir
             </button>
@@ -248,6 +257,7 @@
               @click="toggleDuplicates()"
               :class="showDuplicates ? 'bg-orange-600 hover:bg-orange-700' : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-500'"
               class="text-white font-bold py-2 px-4 rounded-lg transition"
+              :aria-pressed="showDuplicates"
             >
               <span
                 x-text="showDuplicates ? '⭐ Doublons (ON)' : 'Trouver doublons'"
@@ -276,11 +286,11 @@
           class="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
           <!-- Bloc : Tables à pratiquer -->
-          <div
-            class="col-span-1 md:col-span-2 mt-4 bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg"
+          <fieldset
+            class="col-span-1 md:col-span-2 mt-4 bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none"
           >
-            <label class="block text-lg font-bold mb-3"
-              >Tables à pratiquer</label
+            <legend class="block text-lg font-bold mb-3"
+              >Tables à pratiquer</legend
             >
             <div class="space-y-3">
               <div class="flex gap-2">
@@ -306,13 +316,14 @@
                     @click="toggleSelectedTable(num)"
                     :class="selectedTablesDiscover.includes(num) ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                     class="p-2 rounded transition font-semibold"
+                    :aria-pressed="selectedTablesDiscover.includes(num)"
                   >
                     <span x-text="num"></span>
                   </button>
                 </template>
               </div>
             </div>
-          </div>
+          </fieldset>
 
           <div class="text-sm text-gray-600 dark:text-gray-400">
             Cliquez les cases pour les découvrir
@@ -334,6 +345,10 @@
             </div>
             <div
               class="w-full bg-gray-300 dark:bg-gray-700 rounded-full h-4 overflow-hidden"
+              role="progressbar"
+              :aria-valuenow="Math.round(getProgressPercentage())"
+              aria-valuemin="0"
+              aria-valuemax="100"
             >
               <div
                 class="bg-gradient-to-r from-orange-500 to-red-500 h-full transition-all duration-300"
@@ -358,7 +373,6 @@
       >
         <table
           class="w-full border-collapse table-fixed"
-          style="table-layout: fixed"
         >
           <thead>
             <tr class="bg-blue-600 text-white">
@@ -391,12 +405,16 @@
                   :key="`${row}-${col}`"
                 >
                   <td
-                    class="border-2 border-gray-300 dark:border-gray-700 p-0 text-center font-semibold cursor-pointer transition-all duration-300 relative"
+                    class="border-2 border-gray-300 dark:border-gray-700 p-0 text-center font-semibold cursor-pointer transition-all duration-300 relative aspect-square"
                     @click="highlightRowColumn(row, col)"
+                    @keydown.enter="highlightRowColumn(row, col)"
+                    @keydown.space.prevent="highlightRowColumn(row, col)"
                     :class="getCellClass(row, col)"
-                    style="aspect-ratio: 1 / 1"
+                    role="button"
+                    tabindex="0"
+                    :aria-label="'Case ' + row + ' par ' + col + ', résultat ' + (row * col)"
                   >
-                    <div class="w-full h-full flex items-center justify-center">
+                    <div class="w-full h-full flex items-center justify-center pointer-events-none">
                       <template x-if="mode === 'discover'">
                         <div
                           class="w-full h-full flex items-center justify-center"
@@ -430,7 +448,7 @@
           class="bg-orange-100 dark:bg-orange-900/20 p-4 rounded-lg border-l-4 border-orange-600"
         >
           <div class="flex items-center space-x-2">
-            <div class="w-6 h-6 bg-orange-500 rounded"></div>
+            <div class="w-6 h-6 bg-orange-500 rounded" aria-hidden="true"></div>
             <span class="font-semibold"
               >Apparaît 3 fois<br /><span
                 class="text-sm text-gray-600 dark:text-gray-400"
@@ -443,7 +461,7 @@
           class="bg-red-100 dark:bg-red-900/20 p-4 rounded-lg border-l-4 border-red-600"
         >
           <div class="flex items-center space-x-2">
-            <div class="w-6 h-6 bg-red-500 rounded"></div>
+            <div class="w-6 h-6 bg-red-500 rounded" aria-hidden="true"></div>
             <span class="font-semibold"
               >Apparaît 4+ fois<br /><span
                 class="text-sm text-gray-600 dark:text-gray-400"
@@ -456,7 +474,7 @@
           class="bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-700"
         >
           <div class="flex items-center space-x-2">
-            <div class="w-6 h-6 bg-blue-700 rounded"></div>
+            <div class="w-6 h-6 bg-blue-700 rounded" aria-hidden="true"></div>
             <span class="font-semibold"
               >Cellule cliquée<br /><span
                 class="text-sm text-gray-600 dark:text-gray-400"
@@ -504,277 +522,8 @@
     </footer>
 
     <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-    <script src="./js/alpine-store.js?v=202602030600"></script>
-
-    <script>
-      function pythagoreComponent() {
-        return {
-          mode: "complete", // 'complete' ou 'discover'
-          showDuplicates: true,
-          highlightMode: null,
-          selectedRow: null,
-          selectedCol: null,
-          cellValues: {}, // Stocke les positions des valeurs
-          discoveredCells: [], // Cellules découvertes en mode découvrir
-          selectedTablesDiscover: [2, 3, 4, 5, 6, 7, 8, 9], // Tables à pratiquer en mode découvrir
-
-          init() {
-            // Initialiser les valeurs des cellules et compter les occurrences
-            for (let row = 2; row <= 9; row++) {
-              for (let col = 2; col <= 9; col++) {
-                const value = row * col;
-                if (!this.cellValues[value]) {
-                  this.cellValues[value] = [];
-                }
-                this.cellValues[value].push({ row, col });
-              }
-            }
-            // Charger les découvertes et préférences depuis localStorage
-            this.loadDiscovered();
-            this.loadTablePreferences();
-            this.loadDuplicatesPreference();
-            this.loadModePreference();
-          },
-
-          loadDiscovered() {
-            const saved = localStorage.getItem("pythagoreDiscovered");
-            if (saved) {
-              this.discoveredCells = JSON.parse(saved);
-            }
-          },
-
-          saveDiscovered() {
-            localStorage.setItem(
-              "pythagoreDiscovered",
-              JSON.stringify(this.discoveredCells),
-            );
-          },
-
-          loadTablePreferences() {
-            const saved = localStorage.getItem("pythagoreTablePreferences");
-            if (saved) {
-              try {
-                this.selectedTablesDiscover = JSON.parse(saved);
-              } catch (e) {
-                this.selectedTablesDiscover = [2, 3, 4, 5, 6, 7, 8, 9];
-              }
-            }
-          },
-
-          saveTablePreferences() {
-            localStorage.setItem(
-              "pythagoreTablePreferences",
-              JSON.stringify(this.selectedTablesDiscover),
-            );
-          },
-
-          loadDuplicatesPreference() {
-            const saved = localStorage.getItem("pythagoreDuplicates");
-            if (saved !== null) {
-              this.showDuplicates = JSON.parse(saved);
-            }
-          },
-
-          saveDuplicatesPreference() {
-            localStorage.setItem(
-              "pythagoreDuplicates",
-              JSON.stringify(this.showDuplicates),
-            );
-          },
-
-          setMode(newMode) {
-            this.mode = newMode;
-            this.highlightMode = null;
-            this.selectedRow = null;
-            this.selectedCol = null;
-            this.saveModePreference();
-          },
-
-          saveModePreference() {
-            localStorage.setItem("pythagoreMode", this.mode);
-          },
-
-          loadModePreference() {
-            const saved = localStorage.getItem("pythagoreMode");
-            if (saved) {
-              this.mode = saved;
-            }
-          },
-
-          resetDiscovery() {
-            this.discoveredCells = [];
-            localStorage.removeItem("pythagoreDiscovered");
-            this.highlightMode = null;
-          },
-
-          toggleDuplicates() {
-            this.showDuplicates = !this.showDuplicates;
-            this.saveDuplicatesPreference();
-          },
-
-          toggleSelectedTable(num) {
-            const index = this.selectedTablesDiscover.indexOf(num);
-            if (index > -1) {
-              this.selectedTablesDiscover.splice(index, 1);
-            } else {
-              this.selectedTablesDiscover.push(num);
-              this.selectedTablesDiscover.sort((a, b) => a - b);
-            }
-            this.saveTablePreferences();
-          },
-
-          selectAllTableDiscover() {
-            this.selectedTablesDiscover = [2, 3, 4, 5, 6, 7, 8, 9];
-            this.saveTablePreferences();
-          },
-
-          deselectAllTableDiscover() {
-            this.selectedTablesDiscover = [];
-            this.saveTablePreferences();
-          },
-
-          getTotalCellsToDiscover() {
-            if (this.selectedTablesDiscover.length === 0) {
-              return 0;
-            }
-            let count = 0;
-            for (let row = 2; row <= 9; row++) {
-              for (let col = 2; col <= 9; col++) {
-                if (
-                  this.selectedTablesDiscover.includes(row) ||
-                  this.selectedTablesDiscover.includes(col)
-                ) {
-                  count++;
-                }
-              }
-            }
-            return count;
-          },
-
-          getProgressPercentage() {
-            const total = this.getTotalCellsToDiscover();
-            if (total === 0) return 0;
-
-            let discovered = 0;
-            for (const cell of this.discoveredCells) {
-              if (
-                this.selectedTablesDiscover.includes(cell.row) ||
-                this.selectedTablesDiscover.includes(cell.col)
-              ) {
-                discovered++;
-              }
-            }
-            return (discovered / total) * 100;
-          },
-
-          isCellDiscovered(row, col) {
-            return this.discoveredCells.some(
-              (cell) => cell.row === row && cell.col === col,
-            );
-          },
-
-          addDiscoveredCell(row, col) {
-            if (!this.isCellDiscovered(row, col)) {
-              this.discoveredCells.push({ row, col });
-              this.saveDiscovered();
-            }
-          },
-
-          isDuplicate(value) {
-            const occurrences = this.cellValues[value]?.length || 0;
-            return occurrences >= 3;
-          },
-
-          isHeaderRowHighlighted(row) {
-            return this.highlightMode === "rowcol" && this.selectedRow === row;
-          },
-
-          isHeaderColHighlighted(col) {
-            return this.highlightMode === "rowcol" && this.selectedCol === col;
-          },
-
-          getCellClass(row, col) {
-            const value = row * col;
-
-            // Mode Découvrir
-            if (this.mode === "discover") {
-              // Déterminer si cette cellule fait partie des tables à pratiquer
-              const inSelectedTable =
-                this.selectedTablesDiscover.length === 0 ||
-                this.selectedTablesDiscover.includes(row) ||
-                this.selectedTablesDiscover.includes(col);
-
-              if (this.isCellDiscovered(row, col)) {
-                // Cellule découverte
-                if (this.showDuplicates && this.isDuplicate(value)) {
-                  const occ = this.cellValues[value].length;
-                  return occ === 3
-                    ? "bg-orange-500 text-white font-bold scale-105"
-                    : "bg-red-500 text-white font-bold scale-105";
-                }
-                return "bg-blue-500 text-white font-bold scale-105";
-              }
-
-              // Cellule non découverte
-              if (inSelectedTable) {
-                // Cellule à découvrir - mise en surbrillance jaune
-                return "bg-yellow-200 dark:bg-yellow-900/40 text-gray-900 dark:text-gray-200 cursor-pointer hover:bg-yellow-300 dark:hover:bg-yellow-900/60 font-semibold";
-              }
-              // Cellule hors des tables sélectionnées
-              return "bg-gray-200 dark:bg-gray-700 text-transparent cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600";
-            }
-
-            // Mode Complète
-            // Surligner seulement la cellule cliquée (pas la ligne/colonne entière)
-            if (this.highlightMode === "rowcol") {
-              if (row === this.selectedRow && col === this.selectedCol) {
-                return "bg-blue-700 text-white font-bold scale-105";
-              }
-              // Pas de surligne du reste, retourner normal
-              if (this.showDuplicates && this.isDuplicate(value)) {
-                const occ = this.cellValues[value].length;
-                return occ === 3
-                  ? "bg-orange-500 text-white font-bold"
-                  : "bg-red-500 text-white font-bold";
-              }
-              return "hover:bg-gray-100 dark:hover:bg-gray-700";
-            }
-
-            // Pas de surbrillance active
-            if (this.showDuplicates && this.isDuplicate(value)) {
-              const occ = this.cellValues[value].length;
-              return occ === 3
-                ? "bg-orange-500 text-white font-bold"
-                : "bg-red-500 text-white font-bold";
-            }
-
-            return "hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer";
-          },
-
-          highlightRowColumn(row, col) {
-            // Mode Découvrir
-            if (this.mode === "discover") {
-              this.addDiscoveredCell(row, col);
-              return;
-            }
-
-            // Mode Complète - Surligner seulement la cellule cliquée
-            if (
-              this.highlightMode === "rowcol" &&
-              this.selectedRow === row &&
-              this.selectedCol === col
-            ) {
-              this.highlightMode = null;
-            } else {
-              this.highlightMode = "rowcol";
-              this.selectedRow = row;
-              this.selectedCol = col;
-            }
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>

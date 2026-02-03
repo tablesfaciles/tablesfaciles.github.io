@@ -45,22 +45,6 @@
 
     <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
-    <style>
-      @keyframes bounce-soft {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-
-      .animate-bounce-soft {
-        animation: bounce-soft 1s infinite;
-      }
-    </style>
   </head>
 
   <body
@@ -69,7 +53,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg font-bold sticky top-0 z-50"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -79,6 +63,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -90,13 +75,13 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
 
             <a
               href="debutant.html"
@@ -106,7 +91,8 @@
 
             <a
               href="intermediaire.html"
-              class="bg-white/20 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-110 transition-all"
+              class="bg-white/20 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-110 transition-all font-bold"
+              aria-current="page"
             >
               <span class="mr-1">📘</span> Intermédiaire
             </a>
@@ -117,7 +103,7 @@
               >🔥 Expert</a
             >
 
-            <div class="w-px h-6 bg-white/20 mx-1"></div>
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
@@ -141,14 +127,17 @@
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
-            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition"
+            @click="toggle()"
+            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -173,6 +162,7 @@
           x-show="mobileMenuOpen"
           x-transition
           class="xl:hidden border-t border-white/20 pb-4"
+          id="mobile-menu"
         >
           <div class="flex flex-col space-y-1 pt-3">
             <a
@@ -238,7 +228,7 @@
     <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full transition-colors duration-300"
-      x-data="niveauComponent()"
+      x-data="niveauComponent"
     >
       <!-- Bloc : Titre -->
       <div class="text-center mb-8">
@@ -259,7 +249,7 @@
           class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors"
         >
           <h2 class="text-2xl font-bold mb-4 flex items-center dark:text-white">
-            <span class="text-3xl mr-2">📚</span> Quelle table maîtriser ?
+            <span class="text-3xl mr-2" role="img" aria-label="Livres">📚</span> Quelle table maîtriser ?
           </h2>
           <div class="grid grid-cols-3 gap-3">
             <template x-for="num in [6, 7, 8]" :key="num">
@@ -269,6 +259,8 @@
                                 ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white scale-105 shadow-lg outline-none' 
                                 : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:scale-105 outline-none'"
                 class="p-3 md:p-4 rounded-lg font-bold text-xl transition transform duration-200"
+                :aria-label="'Apprendre la table de ' + num"
+                :aria-pressed="selectedTable === num"
               >
                 <span x-text="num"></span>
               </button>
@@ -281,7 +273,7 @@
           class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6"
         >
           <h2 class="text-2xl font-bold mb-3 flex items-center dark:text-white">
-            <span class="text-3xl mr-2">💡</span> Conseil
+            <span class="text-3xl mr-2" role="img" aria-label="Ampoule">💡</span> Conseil
           </h2>
           <p class="text-gray-800 dark:text-gray-200 mb-3">
             <strong>Tu progresses bien !</strong> Les tables 6 et 7 sont un peu
@@ -311,10 +303,15 @@
           <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
             <div
               @click="toggleCellReveal(i)"
+              @keydown.enter="toggleCellReveal(i)"
+              @keydown.space.prevent="toggleCellReveal(i)"
               :class="revealedCells.includes(i) 
                             ? 'bg-gradient-to-br from-green-400 to-blue-500' 
                             : 'bg-gradient-to-br from-green-300 to-blue-300 opacity-90'"
               class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center text-white cursor-pointer shadow-blue-100 dark:shadow-none"
+              role="button"
+              tabindex="0"
+              :aria-label="'Calcul ' + selectedTable + ' fois ' + i"
             >
               <div class="text-sm font-bold opacity-90">
                 <span x-text="selectedTable"></span> × <span x-text="i"></span>
@@ -358,25 +355,25 @@
         class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg shadow-lg p-8 mb-8"
       >
         <h2 class="text-2xl font-bold mb-4 flex items-center dark:text-white">
-          <span class="text-3xl mr-2">🎓</span> Astuces pour cette progression
+          <span class="text-3xl mr-2" role="img" aria-label="Diplôme">🎓</span> Astuces pour cette progression
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm">
-            <div class="text-4xl mb-2">6️⃣</div>
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 6">6️⃣</div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 6</h3>
             <p class="text-sm text-gray-700 dark:text-gray-300">
               Tous les résultats sont pairs. Astuce : 6×8 = 48 (ça rime !).
             </p>
           </div>
           <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm">
-            <div class="text-4xl mb-2">7️⃣</div>
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 7">7️⃣</div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 7</h3>
             <p class="text-sm text-gray-700 dark:text-gray-300">
               7×8 = 56. Imagine l'ordre : 5, 6, 7, 8 !
             </p>
           </div>
           <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm">
-            <div class="text-4xl mb-2">8️⃣</div>
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 8">8️⃣</div>
             <h3 class="font-bold mb-2 dark:text-white">Table de 8</h3>
             <p class="text-sm text-gray-700 dark:text-gray-300">
               C'est le double de la table de 4. Toujours pair !
@@ -392,7 +389,7 @@
         <h2
           class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white"
         >
-          <span class="text-3xl mr-2">🚀</span> Prêt à devenir Expert ?
+          <span class="text-3xl mr-2" role="img" aria-label="Fusée">🚀</span> Prêt à devenir Expert ?
         </h2>
         <p class="text-gray-800 dark:text-gray-200 mb-6">
           Une fois que tu maîtrises ces tables, le niveau Expert t'attend avec
@@ -417,46 +414,8 @@
     </footer>
 
     <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-
-    <script>
-      function niveauComponent() {
-        return {
-          selectedTable: 6,
-          revealedCells: [],
-
-          selectTable(num) {
-            this.selectedTable = num;
-            this.revealedCells = [];
-          },
-
-          toggleCellReveal(index) {
-            if (this.revealedCells.includes(index)) {
-              this.revealedCells = this.revealedCells.filter(
-                (i) => i !== index,
-              );
-            } else {
-              this.revealedCells.push(index);
-            }
-          },
-
-          revealAll() {
-            this.revealedCells = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-          },
-
-          hideAll() {
-            this.revealedCells = [];
-          },
-
-          aleaTable() {
-            const tables = [6, 7, 8];
-            this.selectedTable =
-              tables[Math.floor(Math.random() * tables.length)];
-            this.revealedCells = [];
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>

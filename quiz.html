@@ -48,11 +48,6 @@
 
     <!-- Bloc : Styles Tailwind -->
     <link rel="stylesheet" href="vendor/tailwind.min.css?v=202602030600" />
-    <style>
-      [x-cloak] {
-        display: none !important;
-      }
-    </style>
   </head>
 
   <body
@@ -61,7 +56,7 @@
     <!-- Bloc : Navigation -->
     <nav
       class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
-      x-data="{ mobileMenuOpen: false }"
+      x-data="$store.nav"
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16 gap-4">
@@ -71,6 +66,7 @@
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 stroke-linecap="round"
@@ -82,13 +78,13 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden xl:flex space-x-1 items-center text-sm">
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
             <a
               href="index.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="debutant.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -104,7 +100,7 @@
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🔥 Expert</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20"></div>
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -118,6 +114,7 @@
             <a
               href="quiz.html"
               class="bg-blue-800 px-3 py-2 rounded shadow-inner"
+              aria-current="page"
               >❓ Quiz</a
             >
             <a
@@ -128,14 +125,17 @@
           </div>
 
           <button
-            @click="mobileMenuOpen = !mobileMenuOpen"
+            @click="toggle()"
             class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
           >
             <svg
               class="w-6 h-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
+              aria-hidden="true"
             >
               <path
                 x-show="!mobileMenuOpen"
@@ -162,6 +162,8 @@
           x-transition:enter-start="opacity-0 transform -translate-y-2"
           x-transition:enter-end="opacity-100 transform translate-y-0"
           class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4"
+          id="mobile-menu"
+          x-cloak
         >
           <div class="flex flex-col space-y-1 pt-2">
             <a
@@ -206,7 +208,7 @@
             >
             <a
               href="quiz.html"
-              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition"
+              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition shadow-inner"
               >❓ Quiz</a
             >
             <a
@@ -222,8 +224,7 @@
     <!-- Bloc : Contenu principal -->
     <main
       class="flex-grow max-w-4xl mx-auto px-4 py-12 w-full"
-      x-data="quizComponent()"
-      @alpine:init="init()"
+      x-data="quizComponent"
     >
       <!-- Bloc : Configuration du quiz -->
       <div
@@ -237,10 +238,10 @@
 
         <form @submit.prevent="startQuiz" class="space-y-6">
           <!-- Bloc : Type d'opération -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
-            <label
+          <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+            <legend
               class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
-              >Type d'opération</label
+              >Type d'opération</legend
             >
             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
               <template
@@ -252,10 +253,12 @@
                   @click="$store.quiz.operationType = op"
                   :class="$store.quiz.operationType === op ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm"
+                  :aria-pressed="$store.quiz.operationType === op"
                 >
                   <span
                     class="text-2xl sm:text-3xl mb-1"
                     x-text="op === 'multiplication' ? '×' : op === 'division' ? '÷' : op === 'addition' ? '+' : '−'"
+                    aria-hidden="true"
                   >
                   </span>
 
@@ -267,11 +270,11 @@
                 </button>
               </template>
             </div>
-          </div>
+          </fieldset>
 
           <!-- Bloc : Nombre de questions -->
           <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-            <label class="block text-lg font-bold mb-3">
+            <label class="block text-lg font-bold mb-3" for="num-questions">
               Nombre de questions :
               <span
                 x-text="$store.quiz.numOfQuestions"
@@ -279,6 +282,7 @@
               ></span>
             </label>
             <input
+              id="num-questions"
               type="range"
               min="5"
               max="50"
@@ -288,10 +292,10 @@
           </div>
 
           <!-- Bloc : Mode de chrono -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg">
-            <label
+          <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+            <legend
               class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
-              >Mode du chrono</label
+              >Mode du chrono</legend
             >
             <div class="grid grid-cols-2 gap-3">
               <button
@@ -299,8 +303,9 @@
                 @click="$store.quiz.chronoMode = 'question'"
                 :class="$store.quiz.chronoMode === 'question' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                 class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                :aria-pressed="$store.quiz.chronoMode === 'question'"
               >
-                <span class="text-2xl mb-1">⏱️</span>
+                <span class="text-2xl mb-1" role="img" aria-label="Chronomètre">⏱️</span>
                 <span class="text-[10px] sm:text-xs uppercase opacity-80"
                   >Temps limité</span
                 >
@@ -312,22 +317,23 @@
                 @click="$store.quiz.chronoMode = 'quiz'"
                 :class="$store.quiz.chronoMode === 'quiz' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                 class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                :aria-pressed="$store.quiz.chronoMode === 'quiz'"
               >
-                <span class="text-2xl mb-1">⏲️</span>
+                <span class="text-2xl mb-1" role="img" aria-label="Sablier">⏲️</span>
                 <span class="text-[10px] sm:text-xs uppercase opacity-80"
                   >Chrono global</span
                 >
                 <span class="text-xs sm:text-sm">Pour le quiz</span>
               </button>
             </div>
-          </div>
+          </fieldset>
 
           <!-- Bloc : Durée du chrono -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-            <label
+          <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+            <legend
               class="block text-lg font-bold mb-3"
               x-text="$store.quiz.chronoMode === 'question' ? 'Durée du chrono par question' : 'Durée totale du quiz'"
-            ></label>
+            ></legend>
 
             <!-- Bloc : Présélections chrono (par question) -->
             <template x-if="$store.quiz.chronoMode === 'question'">
@@ -337,8 +343,9 @@
                   @click="$store.quiz.secondsChrono = 15"
                   :class="$store.quiz.secondsChrono === 15 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                  aria-label="Rapide : 15 secondes"
                 >
-                  <span class="text-lg sm:text-xl mb-1">⚡</span>
+                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
                   <span class="text-[10px] sm:text-xs uppercase opacity-80"
                     >Rapide</span
                   >
@@ -350,8 +357,9 @@
                   @click="$store.quiz.secondsChrono = 30"
                   :class="$store.quiz.secondsChrono === 30 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                  aria-label="Standard : 30 secondes"
                 >
-                  <span class="text-lg sm:text-xl mb-1">⏱️</span>
+                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
                   <span class="text-[10px] sm:text-xs uppercase opacity-80"
                     >Standard</span
                   >
@@ -363,8 +371,9 @@
                   @click="$store.quiz.secondsChrono = 60"
                   :class="$store.quiz.secondsChrono === 60 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                  aria-label="Zen : 60 secondes"
                 >
-                  <span class="text-lg sm:text-xl mb-1">🐢</span>
+                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
                   <span class="text-[10px] sm:text-xs uppercase opacity-80"
                     >Zen</span
                   >
@@ -380,8 +389,9 @@
                   @click="$store.quiz.secondsChrono = 120"
                   :class="$store.quiz.secondsChrono === 120 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                  aria-label="Courte : 2 minutes"
                 >
-                  <span class="text-lg sm:text-xl mb-1">⚡</span>
+                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
                   <span class="text-[10px] sm:text-xs uppercase opacity-80"
                     >Courte</span
                   >
@@ -393,8 +403,9 @@
                   @click="$store.quiz.secondsChrono = 300"
                   :class="$store.quiz.secondsChrono === 300 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                  aria-label="Moyenne : 5 minutes"
                 >
-                  <span class="text-lg sm:text-xl mb-1">⏱️</span>
+                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
                   <span class="text-[10px] sm:text-xs uppercase opacity-80"
                     >Moyenne</span
                   >
@@ -406,8 +417,9 @@
                   @click="$store.quiz.secondsChrono = 600"
                   :class="$store.quiz.secondsChrono === 600 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                   class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                  aria-label="Longue : 10 minutes"
                 >
-                  <span class="text-lg sm:text-xl mb-1">🐢</span>
+                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
                   <span class="text-[10px] sm:text-xs uppercase opacity-80"
                     >Longue</span
                   >
@@ -439,8 +451,7 @@
                     class="absolute top-0 left-0 right-0 pointer-events-none"
                   >
                     <div
-                      class="absolute flex flex-col items-center"
-                      style="left: 0%"
+                      class="absolute flex flex-col items-center left-0"
                     >
                       <div
                         class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
@@ -451,8 +462,7 @@
                       >
                     </div>
                     <div
-                      class="absolute flex flex-col items-center"
-                      style="left: 33.33%; transform: translateX(-50%)"
+                      class="absolute flex flex-col items-center left-[33.33%] -translateX-1/2"
                     >
                       <div
                         class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
@@ -462,8 +472,7 @@
                       >
                     </div>
                     <div
-                      class="absolute flex flex-col items-center"
-                      style="right: 0%"
+                      class="absolute flex flex-col items-center right-0"
                     >
                       <div
                         class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
@@ -481,8 +490,8 @@
                     min="15"
                     max="60"
                     step="1"
-                    class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                    style="height: 6px"
+                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    aria-label="Affinage du temps par question"
                   />
                 </div>
               </div>
@@ -507,8 +516,7 @@
                     class="absolute top-0 left-0 right-0 pointer-events-none"
                   >
                     <div
-                      class="absolute flex flex-col items-center"
-                      style="left: 0%"
+                      class="absolute flex flex-col items-center left-0"
                     >
                       <div
                         class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
@@ -519,8 +527,7 @@
                       >
                     </div>
                     <div
-                      class="absolute flex flex-col items-center"
-                      style="left: 37.5%; transform: translateX(-50%)"
+                      class="absolute flex flex-col items-center left-[37.5%] -translateX-1/2"
                     >
                       <div
                         class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
@@ -530,8 +537,7 @@
                       >
                     </div>
                     <div
-                      class="absolute flex flex-col items-center"
-                      style="right: 0%"
+                      class="absolute flex flex-col items-center right-0"
                     >
                       <div
                         class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
@@ -549,18 +555,18 @@
                     min="120"
                     max="600"
                     step="5"
-                    class="w-full h-2 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600"
-                    style="height: 6px"
+                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    aria-label="Affinage du temps total du quiz"
                   />
                 </div>
               </div>
             </template>
-          </div>
+          </fieldset>
 
           <!-- Bloc : Tables à pratiquer -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-            <label class="block text-lg font-bold mb-3"
-              >Tables à pratiquer</label
+          <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+            <legend class="block text-lg font-bold mb-3"
+              >Tables à pratiquer</legend
             >
             <div class="space-y-3">
               <div class="flex gap-2">
@@ -586,13 +592,14 @@
                     @click="toggleTable(num)"
                     :class="$store.quiz.selectedValues.includes(num) ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
                     class="p-2 rounded transition font-semibold"
+                    :aria-pressed="$store.quiz.selectedValues.includes(num)"
                   >
                     <span x-text="num"></span>
                   </button>
                 </template>
               </div>
             </div>
-          </div>
+          </fieldset>
 
           <!-- Bloc : Options -->
           <div class="flex items-center space-x-4">
@@ -623,6 +630,7 @@
         x-ref="quizSection"
         x-transition
         class="space-y-6"
+        x-cloak
       >
         <!-- Bloc : Statistiques de jeu -->
         <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
@@ -660,10 +668,14 @@
           </div>
 
           <!-- Bloc : Barre de progression (questions) -->
-          <div class="mt-4 bg-gray-300 rounded-full h-2 dark:bg-gray-700">
+          <div class="mt-4 bg-gray-300 rounded-full h-2 dark:bg-gray-700 overflow-hidden">
             <div
-              class="bg-blue-600 h-2 rounded-full transition-all"
+              class="bg-blue-600 h-2 transition-all duration-300"
               :style="`width: ${($store.quiz.currentQuestionIndex / $store.quiz.numOfQuestions) * 100}%`"
+              role="progressbar"
+              :aria-valuenow="Math.round(($store.quiz.currentQuestionIndex / $store.quiz.numOfQuestions) * 100)"
+              aria-valuemin="0"
+              aria-valuemax="100"
             ></div>
           </div>
         </div>
@@ -675,6 +687,10 @@
             class="h-full transition-all ease-linear"
             :class="timeRatio > 0.5 ? 'bg-green-500' : (timeRatio > 0.2 ? 'bg-orange-500' : 'bg-red-500 animate-pulse')"
             :style="`width: ${timeRatio * 100}%; transition: width 1s linear;`"
+            role="progressbar"
+            :aria-valuenow="Math.round(timeRatio * 100)"
+            aria-valuemin="0"
+            aria-valuemax="100"
           ></div>
         </div>
 
@@ -689,6 +705,7 @@
                 <span
                   x-text="$store.quiz.operatorSymbols[$store.quiz.operationType].string"
                   class="text-blue-600 mx-4"
+                  aria-hidden="true"
                 ></span>
                 <span x-text="$store.quiz.currentPair.factors[1]"></span>
               </div>
@@ -705,6 +722,7 @@
                     placeholder="?"
                     autofocus
                     inputmode="numeric"
+                    aria-label="Votre réponse"
                   />
                   <button
                     type="submit"
@@ -717,23 +735,25 @@
 
               <!-- Bloc : Feedback visuel -->
               <div
-                x-show="showFeedback && !shouldShowFeedbackModal() && !isFeedbackModalVisible"
+                x-show="showFeedback && !isFeedbackModalVisible"
                 x-transition
                 class="mt-8"
               >
                 <template x-if="feedbackType === 'correct'">
                   <div
                     class="bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-l-4 border-green-600 p-6 rounded-lg text-center"
+                    role="alert"
                   >
-                    <div class="text-5xl mb-3">✓</div>
+                    <div class="text-5xl mb-3" aria-hidden="true">✓</div>
                     <div class="text-2xl font-bold">Correct ! Bravo !</div>
                   </div>
                 </template>
                 <template x-if="feedbackType === 'incorrect'">
                   <div
                     class="bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-l-4 border-red-600 p-6 rounded-lg text-center"
+                    role="alert"
                   >
-                    <div class="text-5xl mb-3">✗</div>
+                    <div class="text-5xl mb-3" aria-hidden="true">✗</div>
                     <div class="text-2xl font-bold mb-4">Mauvaise réponse</div>
                     <div class="mt-4 text-lg">
                       La bonne réponse est :
@@ -747,8 +767,9 @@
                 <template x-if="feedbackType === 'noAnswer'">
                   <div
                     class="bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border-l-4 border-orange-600 p-6 rounded-lg text-center"
+                    role="alert"
                   >
-                    <div class="text-5xl mb-3">⏱️</div>
+                    <div class="text-5xl mb-3" aria-hidden="true">⏱️</div>
                     <div class="text-2xl font-bold mb-4">Temps écoulé</div>
                     <div class="mt-4 text-lg">
                       La bonne réponse était :
@@ -766,7 +787,7 @@
       </div>
 
       <!-- Bloc : Résultats finaux -->
-      <div x-show="isFinished" x-transition class="space-y-6">
+      <div x-show="isFinished" x-transition class="space-y-6" x-cloak>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
           <h2 class="text-3xl font-bold text-center mb-6">Résultats</h2>
 
@@ -783,6 +804,7 @@
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       stroke-linecap="round"
@@ -805,6 +827,7 @@
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           stroke-linecap="round"
@@ -827,6 +850,7 @@
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           stroke-linecap="round"
@@ -854,6 +878,7 @@
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           stroke-linecap="round"
@@ -876,6 +901,7 @@
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           stroke-linecap="round"
@@ -898,6 +924,7 @@
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           stroke-linecap="round"
@@ -967,6 +994,7 @@
                     <span
                       x-text="$store.quiz.operatorSymbols[$store.quiz.operationType].string"
                       class="mx-2"
+                      aria-hidden="true"
                     ></span>
                     <span x-text="pair.factors[1]"></span>
                     <span class="mx-2">=</span>
@@ -978,8 +1006,8 @@
                     :class="pair.isCorrect ? 'text-green-600' : 'text-red-600'"
                     class="font-bold"
                   >
-                    <span x-show="pair.isCorrect">✓</span>
-                    <span x-show="!pair.isCorrect">✗</span>
+                    <span x-show="pair.isCorrect" aria-label="Correct">✓</span>
+                    <span x-show="!pair.isCorrect" aria-label="Incorrect">✗</span>
                   </span>
                 </div>
                 <div
@@ -1010,6 +1038,41 @@
           </div>
         </div>
       </div>
+
+      <!-- Bloc : Modal de feedback (Mobile) -->
+      <div
+        x-show="isFeedbackModalVisible"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 h-screen w-screen"
+        aria-modal="true"
+        role="dialog"
+        x-cloak
+      >
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-md w-11/12"
+        >
+          <template x-if="feedbackType === 'correct'">
+            <div class="bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-l-4 border-green-600 p-6 rounded-lg text-center">
+                <div class="text-5xl mb-3" aria-hidden="true">✓</div>
+                <div class="text-2xl font-bold">Correct !</div>
+                <div class="text-lg mt-2">Bravo !</div>
+            </div>
+          </template>
+          <template x-if="feedbackType === 'incorrect'">
+            <div class="bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-l-4 border-red-600 p-6 rounded-lg text-center">
+                <div class="text-5xl mb-3" aria-hidden="true">✗</div>
+                <div class="text-2xl font-bold mb-4">Mauvaise réponse</div>
+                <div class="mt-4 text-lg">La bonne réponse est :<div class="text-3xl font-bold mt-3" x-text="$store.quiz.getCorrectAnswer($store.quiz.currentPair.factors[0], $store.quiz.currentPair.factors[1])"></div></div>
+            </div>
+          </template>
+          <template x-if="feedbackType === 'noAnswer'">
+            <div class="bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border-l-4 border-orange-600 p-6 rounded-lg text-center">
+                <div class="text-5xl mb-3" aria-hidden="true">⏱️</div>
+                <div class="text-2xl font-bold mb-4">Temps écoulé</div>
+                <div class="mt-4 text-lg">La bonne réponse était :<div class="text-3xl font-bold mt-3" x-text="$store.quiz.getCorrectAnswer($store.quiz.currentPair.factors[0], $store.quiz.currentPair.factors[1])"></div></div>
+            </div>
+          </template>
+        </div>
+      </div>
     </main>
 
     <!-- Bloc : Pied de page -->
@@ -1025,561 +1088,8 @@
     </footer>
 
     <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202602030600"></script>
     <script defer src="vendor/alpinejs.min.js?v=202602030600"></script>
-    <script src="./js/alpine-store.js?v=202602030600"></script>
-
-    <script>
-      function quizComponent() {
-        return {
-          isStarted: false,
-          isFinished: false,
-          userAnswer: "",
-          remainingTime: 0,
-          showFeedback: false,
-          isLastAnswerCorrect: false,
-          timerInterval: null,
-          isProcessing: false,
-          timePerQuestion: [],
-          audioCtx: null,
-          feedbackType: "",
-          isMobileModal: false,
-          isFeedbackModalVisible: false,
-
-          get timeRatio() {
-            const total =
-              this.$store.quiz.chronoMode === "question"
-                ? this.$store.quiz.secondsChrono
-                : this.$store.quiz.totalSecondsAllocated;
-            return this.remainingTime / total;
-          },
-
-          shouldShowFeedbackModal() {
-            return this.isMobileModal;
-          },
-
-          getVisibleHeight() {
-            if (window.visualViewport) {
-              return window.visualViewport.height;
-            }
-            return window.innerHeight;
-          },
-
-          init() {
-            this.isMobileModal = this.getVisibleHeight() < 600;
-
-            window.addEventListener("resize", () => {
-              this.isMobileModal = this.getVisibleHeight() < 600;
-            });
-            if (window.visualViewport) {
-              window.visualViewport.addEventListener("resize", () => {
-                this.isMobileModal = this.getVisibleHeight() < 600;
-              });
-            }
-            if (
-              !this.$store.quiz.secondsChrono ||
-              this.$store.quiz.secondsChrono === 0
-            ) {
-              if (this.$store.quiz.chronoMode === "question") {
-                this.$store.quiz.secondsChrono = 30;
-              } else {
-                this.$store.quiz.secondsChrono = 300;
-              }
-            }
-            this.remainingTime = this.$store.quiz.secondsChrono;
-
-            this.$watch("$store.quiz.operationType", () => {
-              this.$store.quiz.saveQuizPreferences();
-            });
-            this.$watch("$store.quiz.secondsChrono", () => {
-              this.$store.quiz.saveQuizPreferences();
-            });
-            this.$watch("$store.quiz.chronoMode", (newMode) => {
-              if (newMode === "question") {
-                this.$store.quiz.secondsChrono = 30;
-              } else {
-                this.$store.quiz.secondsChrono = 300;
-              }
-              this.$store.quiz.saveQuizPreferences();
-              this.remainingTime = this.$store.quiz.secondsChrono;
-            });
-            this.$watch("$store.quiz.numOfQuestions", () => {
-              this.$store.quiz.saveQuizPreferences();
-            });
-            this.$watch(
-              "$store.quiz.selectedValues",
-              () => {
-                this.$store.quiz.saveQuizPreferences();
-              },
-              { deep: true },
-            );
-          },
-
-          // Fonction de synthèse vocale
-          speak(text) {
-            if (!window.speechSynthesis) return;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = "fr-FR";
-            utterance.rate = 1.1;
-            window.speechSynthesis.speak(utterance);
-          },
-
-          // Gestion de la sélection des tables
-          toggleTable(num) {
-            const index = this.$store.quiz.selectedValues.indexOf(num);
-            if (index > -1) {
-              this.$store.quiz.selectedValues.splice(index, 1);
-            } else {
-              this.$store.quiz.selectedValues.push(num);
-            }
-          },
-
-          selectAllTables() {
-            this.$store.quiz.selectedValues = [2, 3, 4, 5, 6, 7, 8, 9];
-          },
-
-          deselectAllTables() {
-            this.$store.quiz.selectedValues = [];
-          },
-
-          // Défilement automatique vers le quiz
-          scrollToQuiz(delay = 100, behavior = "smooth") {
-            setTimeout(() => {
-              const quizSection =
-                this.$refs.quizSection ||
-                document.querySelector('[x-ref="quizSection"]');
-
-              if (quizSection && quizSection.offsetParent !== null) {
-                const rect = quizSection.getBoundingClientRect();
-                const scrollTop =
-                  window.pageYOffset || document.documentElement.scrollTop;
-                const targetPosition = scrollTop + rect.top;
-
-                window.scrollTo({
-                  top: Math.max(0, targetPosition),
-                  behavior: behavior,
-                });
-              }
-            }, delay);
-          },
-
-          // Focus sur le champ de réponse
-          focusAnswerInput() {
-            const inputElement =
-              document.querySelector('input[inputmode="numeric"]') ||
-              document.querySelector('input[type="text"]');
-            if (inputElement) {
-              inputElement.focus();
-
-              if (window.visualViewport) {
-                const handleKeyboardOpen = () => {
-                  setTimeout(() => {
-                    this.scrollToQuiz(0, "auto");
-                  }, 300);
-                };
-                window.visualViewport.addEventListener(
-                  "resize",
-                  handleKeyboardOpen,
-                  { once: true },
-                );
-              }
-            }
-          },
-
-          startQuiz() {
-            if (!this.audioCtx) {
-              this.audioCtx = new (
-                window.AudioContext || window.webkitAudioContext
-              )();
-            }
-            this.audioCtx.resume();
-
-            if (this.$store.quiz.selectedValues.length === 0) {
-              alert("Veuillez sélectionner au moins une table");
-              return;
-            }
-
-            this.$store.quiz.pairs = this.$store.quiz.generatePairs();
-            this.$store.quiz.currentQuestionIndex = 0;
-            this.$store.quiz.numCorrectAnswers = 0;
-            this.$store.quiz.numIncorrectAnswers = 0;
-            this.$store.quiz.currentPair = this.$store.quiz.pairs[0];
-
-            this.isStarted = true;
-            this.isFinished = false;
-            this.timePerQuestion = [];
-            this.userAnswer = "";
-            this.isProcessing = false;
-            this.showFeedback = false;
-            this.hideFeedbackModalJS();
-
-            this.$store.quiz.quizModeUsed = this.$store.quiz.chronoMode;
-            const baseTime = this.$store.quiz.secondsChrono;
-
-            if (this.$store.quiz.chronoMode === "quiz") {
-              this.remainingTime = baseTime;
-              this.$store.quiz.totalSecondsAllocated = baseTime;
-            } else {
-              this.remainingTime = baseTime;
-              this.$store.quiz.totalSecondsAllocated =
-                baseTime * this.$store.quiz.numOfQuestions;
-            }
-
-            // Utiliser $nextTick pour s'assurer que le template x-if est rendu AVANT de démarrer le timer
-            this.$nextTick(() => {
-              // 1. Démarrer le timer juste après l'affichage du template
-              this.startTimer();
-
-              // 2. Puis l'énoncé vocal
-              if (
-                this.$store.quiz.currentPair &&
-                this.$store.quiz.currentPair.factors
-              ) {
-                this.speak(
-                  `${this.$store.quiz.currentPair.factors[0]} fois ${this.$store.quiz.currentPair.factors[1]}`,
-                );
-              }
-
-              // 3. Focus l'input et scroll
-              this.focusAnswerInput();
-              this.scrollToQuiz(100);
-            });
-          },
-
-          startTimer() {
-            if (this.timerInterval) {
-              clearInterval(this.timerInterval);
-            }
-            this.timerInterval = setInterval(() => {
-              this.remainingTime--;
-
-              // Bip à chaque seconde pour les 5 dernières secondes
-              if (this.remainingTime <= 5 && this.remainingTime > 0) {
-                this.playTickSound();
-              }
-
-              if (this.remainingTime <= 0) {
-                clearInterval(this.timerInterval);
-                if (this.userAnswer !== "") {
-                  this.submitAnswer();
-                } else {
-                  this.$store.quiz.checkAnswer("");
-                  this.isLastAnswerCorrect = false;
-                  this.feedbackType = "noAnswer";
-                  this.showFeedback = true;
-                  this.showFeedbackModalJS("noAnswer");
-
-                  if (
-                    this.$store.quiz.currentPair &&
-                    this.$store.quiz.currentPair.factors
-                  ) {
-                    const result = this.$store.quiz.getCorrectAnswer(
-                      this.$store.quiz.currentPair.factors[0],
-                      this.$store.quiz.currentPair.factors[1],
-                    );
-                    this.speak(`Temps écoulé, le résultat était ${result}`);
-                    // Son d'erreur après la voix
-                    setTimeout(() => {
-                      this.playErrorSound();
-                    }, 100);
-                  }
-
-                  setTimeout(() => {
-                    this.nextQuestion();
-                  }, 3000);
-                }
-              }
-            }, 1000);
-          },
-
-          playAlertSound() {
-            if (!this.audioCtx) {
-              this.audioCtx = new (
-                window.AudioContext || window.webkitAudioContext
-              )();
-            }
-            if (this.audioCtx.state === "suspended") {
-              this.audioCtx.resume();
-            }
-            if ("vibrate" in navigator) {
-              navigator.vibrate(200);
-            }
-            const oscillator = this.audioCtx.createOscillator();
-            const gainNode = this.audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(this.audioCtx.destination);
-            oscillator.frequency.value = 800;
-            gainNode.gain.setValueAtTime(0.3, this.audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(
-              0.01,
-              this.audioCtx.currentTime + 0.5,
-            );
-            oscillator.start();
-            oscillator.stop(this.audioCtx.currentTime + 0.5);
-          },
-
-          playTickSound() {
-            if (!this.audioCtx) {
-              this.audioCtx = new (
-                window.AudioContext || window.webkitAudioContext
-              )();
-            }
-            if (this.audioCtx.state === "suspended") {
-              this.audioCtx.resume();
-            }
-
-            // Vibration courte
-            if ("vibrate" in navigator) {
-              navigator.vibrate(50);
-            }
-
-            // Bip court
-            const oscillator = this.audioCtx.createOscillator();
-            const gainNode = this.audioCtx.createGain();
-            oscillator.connect(gainNode);
-            gainNode.connect(this.audioCtx.destination);
-            oscillator.frequency.value = 600;
-            gainNode.gain.setValueAtTime(0.2, this.audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(
-              0.01,
-              this.audioCtx.currentTime + 0.1,
-            );
-            oscillator.start();
-            oscillator.stop(this.audioCtx.currentTime + 0.1);
-          },
-
-          playErrorSound() {
-            if (!this.audioCtx) {
-              this.audioCtx = new (
-                window.AudioContext || window.webkitAudioContext
-              )();
-            }
-            if (this.audioCtx.state === "suspended") {
-              this.audioCtx.resume();
-            }
-
-            // Double vibration pour l'erreur
-            if ("vibrate" in navigator) {
-              navigator.vibrate([100, 100, 100]);
-            }
-
-            // Son d'erreur (deux bips descendants)
-            const oscillator1 = this.audioCtx.createOscillator();
-            const gainNode1 = this.audioCtx.createGain();
-            oscillator1.connect(gainNode1);
-            gainNode1.connect(this.audioCtx.destination);
-            oscillator1.frequency.value = 400;
-            gainNode1.gain.setValueAtTime(0.3, this.audioCtx.currentTime);
-            gainNode1.gain.exponentialRampToValueAtTime(
-              0.01,
-              this.audioCtx.currentTime + 0.15,
-            );
-            oscillator1.start();
-            oscillator1.stop(this.audioCtx.currentTime + 0.15);
-
-            const oscillator2 = this.audioCtx.createOscillator();
-            const gainNode2 = this.audioCtx.createGain();
-            oscillator2.connect(gainNode2);
-            gainNode2.connect(this.audioCtx.destination);
-            oscillator2.frequency.value = 300;
-            gainNode2.gain.setValueAtTime(0.3, this.audioCtx.currentTime + 0.2);
-            gainNode2.gain.exponentialRampToValueAtTime(
-              0.01,
-              this.audioCtx.currentTime + 0.4,
-            );
-            oscillator2.start(this.audioCtx.currentTime + 0.2);
-            oscillator2.stop(this.audioCtx.currentTime + 0.4);
-          },
-
-          // Gestion de la modal de feedback
-          showFeedbackModalJS(type) {
-            if (!this.isMobileModal) return;
-
-            const modal = document.getElementById("feedbackModal");
-            const content = document.getElementById("feedbackModalContent");
-            if (!modal || !content) return;
-
-            const correctAnswer =
-              this.$store.quiz.currentPair &&
-              this.$store.quiz.currentPair.factors
-                ? this.$store.quiz.getCorrectAnswer(
-                    this.$store.quiz.currentPair.factors[0],
-                    this.$store.quiz.currentPair.factors[1],
-                  )
-                : "?";
-
-            if (type === "correct") {
-              content.innerHTML = `
-                            <div class="bg-green-100 text-green-800 border-l-4 border-green-600 p-6 rounded-lg text-center">
-                                <div class="text-5xl mb-3">✓</div>
-                                <div class="text-2xl font-bold">Correct !</div>
-                                <div class="text-lg mt-2">Bravo !</div>
-                            </div>`;
-            } else if (type === "incorrect") {
-              content.innerHTML = `
-                            <div class="bg-red-100 text-red-800 border-l-4 border-red-600 p-6 rounded-lg text-center">
-                                <div class="text-5xl mb-3">✗</div>
-                                <div class="text-2xl font-bold mb-4">Mauvaise réponse</div>
-                                <div class="mt-4 text-lg">La bonne réponse est :<div class="text-3xl font-bold mt-3">${correctAnswer}</div></div>
-                            </div>`;
-            } else if (type === "noAnswer") {
-              content.innerHTML = `
-                            <div class="bg-orange-100 text-orange-800 border-l-4 border-orange-600 p-6 rounded-lg text-center">
-                                <div class="text-5xl mb-3">⏱️</div>
-                                <div class="text-2xl font-bold mb-4">Temps écoulé</div>
-                                <div class="mt-4 text-lg">La bonne réponse était :<div class="text-3xl font-bold mt-3">${correctAnswer}</div></div>
-                            </div>`;
-            }
-
-            modal.style.display = "flex";
-            this.isFeedbackModalVisible = true;
-          },
-
-          hideFeedbackModalJS() {
-            const modal = document.getElementById("feedbackModal");
-            if (modal) modal.style.display = "none";
-            this.isFeedbackModalVisible = false;
-          },
-
-          nextQuestion() {
-            if (this.$store.quiz.chronoMode === "question") {
-              const timeUsedForThisQuestion =
-                this.$store.quiz.secondsChrono - this.remainingTime;
-              this.timePerQuestion.push(timeUsedForThisQuestion);
-            }
-
-            this.$store.quiz.currentQuestionIndex++;
-            if (
-              this.$store.quiz.currentQuestionIndex >=
-              this.$store.quiz.numOfQuestions
-            ) {
-              clearInterval(this.timerInterval);
-              this.finishQuiz();
-            } else {
-              this.$store.quiz.currentPair =
-                this.$store.quiz.pairs[this.$store.quiz.currentQuestionIndex];
-              this.userAnswer = "";
-              this.showFeedback = false;
-              this.hideFeedbackModalJS();
-              if (this.$store.quiz.chronoMode === "question") {
-                this.remainingTime = this.$store.quiz.secondsChrono;
-              }
-              this.isProcessing = false;
-
-              this.$nextTick(() => {
-                // 1. Démarrer le timer juste après l'affichage du nouveau template
-                this.startTimer();
-
-                // 2. Annonce la nouvelle question
-                if (
-                  this.$store.quiz.currentPair &&
-                  this.$store.quiz.currentPair.factors
-                ) {
-                  this.speak(
-                    `${this.$store.quiz.currentPair.factors[0]} fois ${this.$store.quiz.currentPair.factors[1]}`,
-                  );
-                }
-
-                // 3. Focus l'input et scroll
-                this.focusAnswerInput();
-                this.scrollToQuiz(50);
-              });
-            }
-          },
-
-          submitAnswer() {
-            if (this.userAnswer === "" || this.isProcessing || this.isFinished)
-              return;
-
-            this.isProcessing = true;
-
-            // 1ère action : arrêter le chrono immédiatement
-            clearInterval(this.timerInterval);
-
-            // 2ème action : vérifier la réponse
-            this.isLastAnswerCorrect = this.$store.quiz.checkAnswer(
-              this.userAnswer,
-            );
-            this.feedbackType = this.isLastAnswerCorrect
-              ? "correct"
-              : "incorrect";
-            this.showFeedback = true;
-            this.showFeedbackModalJS(this.feedbackType);
-
-            // 3ème action : afficher et annoncer le résultat
-            if (
-              this.$store.quiz.currentPair &&
-              this.$store.quiz.currentPair.factors
-            ) {
-              const result = this.$store.quiz.getCorrectAnswer(
-                this.$store.quiz.currentPair.factors[0],
-                this.$store.quiz.currentPair.factors[1],
-              );
-              if (this.isLastAnswerCorrect) {
-                this.speak(`Bravo, ${result}`);
-              } else {
-                this.speak(`Faux, ${result}`);
-                setTimeout(() => {
-                  this.playErrorSound();
-                }, 100);
-              }
-            }
-
-            setTimeout(() => {
-              this.nextQuestion();
-            }, 3000);
-          },
-
-          finishQuiz() {
-            if (this.isFinished) return;
-            clearInterval(this.timerInterval);
-            this.isFinished = true;
-            this.speak(
-              `Quiz terminé. Score final : ${this.$store.quiz.numCorrectAnswers} sur ${this.$store.quiz.numOfQuestions}`,
-            );
-            this.hideFeedbackModalJS(); // Fermer la modal JS à la fin du quiz
-
-            if (
-              this.$store.quiz.shouldSaveResult &&
-              this.$store.quiz.numCorrectAnswers +
-                this.$store.quiz.numIncorrectAnswers >
-                0
-            ) {
-              let timeUsed =
-                this.$store.quiz.quizModeUsed === "quiz"
-                  ? this.$store.quiz.totalSecondsAllocated - this.remainingTime
-                  : this.timePerQuestion.reduce((sum, time) => sum + time, 0);
-
-              const quizData = {
-                pairs: this.$store.quiz.pairs.filter((p) => p.answer !== null),
-                quizProperties: {
-                  operationType: this.$store.quiz.operationType,
-                  countdownMode: "all",
-                  secondsChrono: this.$store.quiz.secondsChrono,
-                  numOfQuestions: this.$store.quiz.numOfQuestions,
-                  chronoMode: this.$store.quiz.quizModeUsed,
-                  totalSecondsAllocated: this.$store.quiz.totalSecondsAllocated,
-                  timeUsed: timeUsed,
-                  date: new Date().toLocaleString(),
-                  id: Date.now(),
-                },
-              };
-              this.$store.quiz.saveResultData(quizData);
-            }
-          },
-
-          resetQuiz() {
-            this.isStarted = false;
-            this.isFinished = false;
-            this.userAnswer = "";
-            this.showFeedback = false;
-            this.hideFeedbackModalJS();
-            this.isProcessing = false;
-            this.$store.quiz.currentQuestionIndex = 0;
-          },
-        };
-      }
-    </script>
 
     <!-- Bloc : Service Worker -->
     <script>
@@ -1600,17 +1110,5 @@
         });
       }
     </script>
-    <!-- Bloc : Modal de feedback (Mobile) -->
-    <div
-      id="feedbackModal"
-      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-      style="display: none; height: 100vh; width: 100vw"
-    >
-      <div
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-md w-11/12"
-      >
-        <div id="feedbackModalContent"></div>
-      </div>
-    </div>
   </body>
 </html>
