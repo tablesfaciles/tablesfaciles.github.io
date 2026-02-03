@@ -237,6 +237,10 @@
             <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
             Niveau : <span x-text="$store.quiz.currentLevel + 1"></span>
           </div>
+          <div x-show="$store.quiz.modeApprentissage" class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-lg flex items-center gap-2 animate-bounce-soft">
+            <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+            <span>Mode Apprentissage Actif : Paramètres optimisés par l'IA</span>
+          </div>
           <h1 class="text-3xl font-bold text-center">
             Quiz d'opération mathématique
           </h1>
@@ -293,7 +297,8 @@
               min="5"
               max="50"
               x-model.number="$store.quiz.numOfQuestions"
-              class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer"
+              :disabled="$store.quiz.modeApprentissage"
+              class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
             />
           </div>
 
@@ -307,8 +312,9 @@
               <button
                 type="button"
                 @click="$store.quiz.chronoMode = 'question'"
+                :disabled="$store.quiz.modeApprentissage"
                 :class="$store.quiz.chronoMode === 'question' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
                 :aria-pressed="$store.quiz.chronoMode === 'question'"
               >
                 <span class="text-2xl mb-1" role="img" aria-label="Chronomètre">⏱️</span>
@@ -321,8 +327,9 @@
               <button
                 type="button"
                 @click="$store.quiz.chronoMode = 'quiz'"
+                :disabled="$store.quiz.modeApprentissage"
                 :class="$store.quiz.chronoMode === 'quiz' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
                 :aria-pressed="$store.quiz.chronoMode === 'quiz'"
               >
                 <span class="text-2xl mb-1" role="img" aria-label="Sablier">⏲️</span>
@@ -347,8 +354,9 @@
                 <button
                   type="button"
                   @click="$store.quiz.secondsChrono = 15"
+                  :disabled="$store.quiz.modeApprentissage"
                   :class="$store.quiz.secondsChrono === 15 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Rapide : 15 secondes"
                 >
                   <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
@@ -361,8 +369,9 @@
                 <button
                   type="button"
                   @click="$store.quiz.secondsChrono = 30"
+                  :disabled="$store.quiz.modeApprentissage"
                   :class="$store.quiz.secondsChrono === 30 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Standard : 30 secondes"
                 >
                   <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
@@ -375,8 +384,9 @@
                 <button
                   type="button"
                   @click="$store.quiz.secondsChrono = 60"
+                  :disabled="$store.quiz.modeApprentissage"
                   :class="$store.quiz.secondsChrono === 60 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Zen : 60 secondes"
                 >
                   <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
@@ -393,8 +403,9 @@
                 <button
                   type="button"
                   @click="$store.quiz.secondsChrono = 120"
+                  :disabled="$store.quiz.modeApprentissage"
                   :class="$store.quiz.secondsChrono === 120 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Courte : 2 minutes"
                 >
                   <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
@@ -407,8 +418,9 @@
                 <button
                   type="button"
                   @click="$store.quiz.secondsChrono = 300"
+                  :disabled="$store.quiz.modeApprentissage"
                   :class="$store.quiz.secondsChrono === 300 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Moyenne : 5 minutes"
                 >
                   <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
@@ -421,8 +433,9 @@
                 <button
                   type="button"
                   @click="$store.quiz.secondsChrono = 600"
+                  :disabled="$store.quiz.modeApprentissage"
                   :class="$store.quiz.secondsChrono === 600 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
                   aria-label="Longue : 10 minutes"
                 >
                   <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
@@ -496,7 +509,8 @@
                     min="15"
                     max="60"
                     step="1"
-                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    :disabled="$store.quiz.modeApprentissage"
+                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Affinage du temps par question"
                   />
                 </div>
@@ -561,7 +575,8 @@
                     min="120"
                     max="600"
                     step="5"
-                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                    :disabled="$store.quiz.modeApprentissage"
+                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     aria-label="Affinage du temps total du quiz"
                   />
                 </div>
@@ -631,8 +646,7 @@
             </button>
             <button
               type="submit"
-              autofocus
-              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-blue-200 dark:shadow-none hover:scale-[1.02] active:scale-95"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg hover:scale-[1.02] active:scale-95"
             >
               Lancer un Quiz Libre
             </button>

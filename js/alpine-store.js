@@ -76,6 +76,15 @@ document.addEventListener('alpine:init', () => {
       this.loadLevel();
     },
 
+    setModeApprentissage(val) {
+      this.modeApprentissage = val;
+      if (val) {
+        this.numOfQuestions = 20;
+        this.secondsChrono = 5;
+        this.chronoMode = 'question';
+      }
+    },
+
     // Charger le niveau actuel
     loadLevel() {
       const stored = localStorage.getItem('quiz_current_level');
@@ -224,7 +233,9 @@ document.addEventListener('alpine:init', () => {
       // Objectif : ~30% de rappels de succès, 70% de défis ou nouveautés
       const targetReminders = Math.floor(numToSelect * 0.3);
 
-      while (selected.length < numToSelect) {
+      let safetyCounter = 0;
+      while (selected.length < numToSelect && safetyCounter < 1000) {
+        safetyCounter++;
         const pool = allPossible.filter(p => !selected.some(s => s[0] === p[0] && s[1] === p[1]));
         if (pool.length === 0) break;
 
@@ -620,6 +631,23 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    beep(freq = 440, duration = 0.1) {
+      if (!this.audioCtx) return;
+      try {
+        const osc = this.audioCtx.createOscillator();
+        const gain = this.audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.1, this.audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + duration);
+        osc.start();
+        osc.stop(this.audioCtx.currentTime + duration);
+      } catch (e) {
+        console.warn("Audio beep failed", e);
+      }
+    },
+
     toggleTable(n) {
       const i = Alpine.store('quiz').selectedValues.indexOf(n);
       if (i > -1) Alpine.store('quiz').selectedValues.splice(i, 1);
@@ -636,9 +664,10 @@ document.addEventListener('alpine:init', () => {
 
     // Démarrer le parcours d'apprentissage intelligent
     startLearningPath() {
-      Alpine.store('quiz').modeApprentissage = true;
-      Alpine.store('quiz').selectedValues = Alpine.store('quiz').getLevelTables();
-      Alpine.store('quiz').operationType = 'multiplication';
+      const store = Alpine.store('quiz');
+      store.setModeApprentissage(true);
+      store.selectedValues = store.getLevelTables();
+      store.operationType = 'multiplication';
       this.startQuiz();
     },
 
@@ -673,8 +702,19 @@ document.addEventListener('alpine:init', () => {
       if (this.timerInterval) clearInterval(this.timerInterval);
       this.timerInterval = setInterval(() => {
         this.remainingTime--;
+        // Signal sonore pour les 3 dernières secondes
+        if (this.remainingTime > 0 && this.remainingTime <= 3) {
+          this.beep(880, 0.1);
+        }
         if (this.remainingTime <= 0) {
           clearInterval(this.timerInterval);
+
+          // Fin immédiate si chrono global expiré
+          if (Alpine.store('quiz').chronoMode === 'quiz') {
+            this.finishQuiz();
+            return;
+          }
+
           if (this.userAnswer !== "") {
             this.submitAnswer();
           } else {
@@ -758,7 +798,7 @@ document.addEventListener('alpine:init', () => {
 
       if (Alpine.store('quiz').shouldSaveResult) {
         Alpine.store('quiz').saveResultData({
-          pairs: Alpine.store('quiz').pairs.filter(p => p.answer !== null),
+          pairs: Alpine.store('quiz').pairs,
           quizProperties: {
             date: new Date().toLocaleString(),
             grade: Alpine.store('quiz').latestGrade,
