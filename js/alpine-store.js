@@ -993,6 +993,16 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
+    markRemainingAsUnanswered() {
+      Alpine.store('quiz').pairs.forEach(pair => {
+        if (pair.answer === null) {
+          pair.answer = "";
+          pair.isCorrect = false;
+          Alpine.store('quiz').numIncorrectAnswers++;
+        }
+      });
+    },
+
     startQuiz() {
       if (!this.audioCtx) {
         this.audioCtx = new (
@@ -1057,6 +1067,7 @@ document.addEventListener('alpine:init', () => {
     startTimer() {
       if (this.timerInterval) {
         clearInterval(this.timerInterval);
+        this.timerInterval = null;
       }
       this.timerInterval = setInterval(() => {
         this.remainingTime--;
@@ -1068,6 +1079,7 @@ document.addEventListener('alpine:init', () => {
 
         if (this.remainingTime <= 0) {
           clearInterval(this.timerInterval);
+          this.timerInterval = null;
           if (this.userAnswer !== "") {
             this.submitAnswer();
           } else {
@@ -1101,7 +1113,12 @@ document.addEventListener('alpine:init', () => {
             }
 
             setTimeout(() => {
-              this.nextQuestion();
+              if (Alpine.store('quiz').chronoMode === "quiz") {
+                this.markRemainingAsUnanswered();
+                this.finishQuiz();
+              } else {
+                this.nextQuestion();
+              }
             }, 3000);
           }
         }
@@ -1219,7 +1236,10 @@ document.addEventListener('alpine:init', () => {
         Alpine.store('quiz').currentQuestionIndex >=
         Alpine.store('quiz').numOfQuestions
       ) {
-        clearInterval(this.timerInterval);
+        if (this.timerInterval) {
+          clearInterval(this.timerInterval);
+          this.timerInterval = null;
+        }
         this.finishQuiz();
       } else {
         Alpine.store('quiz').currentPair =
@@ -1235,7 +1255,9 @@ document.addEventListener('alpine:init', () => {
 
         this.$nextTick(() => {
           // 1. Démarrer le timer juste après l'affichage du nouveau template
-          this.startTimer();
+          if (Alpine.store('quiz').chronoMode !== "quiz" || this.remainingTime > 0) {
+            this.startTimer();
+          }
 
           // 2. Annonce la nouvelle question
           if (
@@ -1261,7 +1283,10 @@ document.addEventListener('alpine:init', () => {
       this.isProcessing = true;
 
       // 1ère action : arrêter le chrono immédiatement
-      clearInterval(this.timerInterval);
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+      }
 
       // 2ème action : vérifier la réponse
       this.isLastAnswerCorrect = Alpine.store('quiz').checkAnswer(
@@ -1307,7 +1332,10 @@ document.addEventListener('alpine:init', () => {
 
     finishQuiz() {
       if (this.isFinished) return;
-      clearInterval(this.timerInterval);
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+      }
       this.isFinished = true;
       this.speak(
         `Quiz terminé. Score final : ${Alpine.store('quiz').numCorrectAnswers} sur ${Alpine.store('quiz').numOfQuestions}`,
@@ -1326,7 +1354,7 @@ document.addEventListener('alpine:init', () => {
             : this.timePerQuestion.reduce((sum, time) => sum + time, 0);
 
         const quizData = {
-          pairs: Alpine.store('quiz').pairs.filter((p) => p.answer !== null),
+          pairs: Alpine.store('quiz').pairs,
           quizProperties: {
             operationType: Alpine.store('quiz').operationType,
             countdownMode: "all",
