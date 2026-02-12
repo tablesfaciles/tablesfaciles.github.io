@@ -176,6 +176,9 @@ document.addEventListener('alpine:init', () => {
     },
 
     saveResultData(quizData) {
+      if (this.modeApprentissage) {
+        quizData.quizProperties.level = this.currentLevel;
+      }
       if (!this.quizResults) {
         this.quizResults = [];
       }
@@ -329,16 +332,33 @@ document.addEventListener('alpine:init', () => {
     },
 
     getBeteNoire() {
+      let candidatePairs = [];
+      if (this.modeApprentissage) {
+        const tables = this.getLevelTables();
+        for (let t of tables) {
+          for (let i = 1; i <= 10; i++) {
+            candidatePairs.push([t, i]);
+          }
+        }
+      } else {
+        candidatePairs = this.pairs.map(p => p.factors);
+      }
+
       let worst = null;
       let maxFailRatio = -1;
-      for (let pair of this.pairs) {
-        const key = `${pair.factors[0]}x${pair.factors[1]}`;
+      for (let factors of candidatePairs) {
+        const key = `${factors[0]}x${factors[1]}`;
         const stats = this.masteryData[key];
         if (stats) {
           const ratio = stats.failure / (stats.success + stats.failure || 1);
-          if (ratio > maxFailRatio) { maxFailRatio = ratio; worst = pair.factors; }
-          else if (ratio === maxFailRatio && worst) {
-             if (stats.avgTime > (this.masteryData[`${worst[0]}x${worst[1]}`]?.avgTime || 0)) worst = pair.factors;
+          if (ratio > maxFailRatio) {
+            maxFailRatio = ratio;
+            worst = factors;
+          } else if (ratio === maxFailRatio && worst) {
+            const worstKey = `${worst[0]}x${worst[1]}`;
+            if (stats.avgTime > (this.masteryData[worstKey]?.avgTime || 0)) {
+              worst = factors;
+            }
           }
         }
       }
@@ -747,11 +767,20 @@ document.addEventListener('alpine:init', () => {
     resetQuiz() {
       this.isStarted = false;
       this.isFinished = false;
-      Alpine.store('quiz').modeApprentissage = false;
-      this.selectedStartMode = 'choose';
+      if (Alpine.store('quiz').modeApprentissage) {
+        this.startLearningPath();
+      } else {
+        this.selectedStartMode = 'free';
+      }
     },
 
-    acceptLevelUp() { Alpine.store('quiz').acceptLevelUp(); this.resetQuiz(); }
+    acceptLevelUp() {
+      Alpine.store('quiz').acceptLevelUp();
+      this.selectedStartMode = 'learning';
+      this.isStarted = false;
+      this.isFinished = false;
+      Alpine.store('quiz').loadLevel();
+    }
   }));
 
   Alpine.data('historyComponent', () => ({

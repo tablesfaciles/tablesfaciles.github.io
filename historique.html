@@ -363,11 +363,12 @@
                 >
                   <div class="text-left flex-1">
                     <div class="font-bold">
-                      Quiz
-                      <span
-                        class="capitalize"
-                        x-text="result.quizProperties.operationType"
-                      ></span>
+                      <template x-if="result.quizProperties.modeApprentissage && typeof result.quizProperties.level !== 'undefined'">
+                        <span>Parcours (Niveau <span x-text="result.quizProperties.level + 1"></span>)</span>
+                      </template>
+                      <template x-else>
+                        <span>Quiz <span class="capitalize" x-text="result.quizProperties.operationType"></span> Libre</span>
+                      </template>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                       <span x-text="result.quizProperties.date"></span>
