@@ -226,432 +226,506 @@
       class="flex-grow max-w-4xl mx-auto px-4 py-12 w-full"
       x-data="quizComponent"
     >
-      <!-- Bloc : Configuration du quiz -->
+      <!-- Bloc : Écran de sélection du mode de démarrage -->
       <div
-        x-show="!isStarted"
+        x-show="!isStarted && selectedStartMode === 'choose'"
         x-transition
-        class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8"
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 text-center"
       >
-        <div class="flex flex-col items-center mb-6">
-          <div class="bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-1.5 rounded-full text-sm font-bold mb-4 border border-indigo-200 dark:border-indigo-800 flex items-center gap-2">
-            <span class="w-2 h-2 bg-indigo-500 rounded-full animate-pulse"></span>
-            Niveau : <span x-text="$store.quiz.currentLevel + 1"></span>
+        <div class="mb-8">
+          <div class="inline-block bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-1.5 rounded-full text-sm font-bold mb-4 border border-indigo-200 dark:border-indigo-800">
+            Niveau Actuel : <span x-text="$store.quiz.currentLevel + 1"></span>
           </div>
-          <div x-show="$store.quiz.modeApprentissage" class="bg-indigo-600 text-white px-4 py-1.5 rounded-full text-xs font-bold mb-4 shadow-lg flex items-center gap-2 animate-bounce-soft">
-            <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-            <span>Mode Apprentissage Actif : Paramètres optimisés par l'IA</span>
-          </div>
-          <h1 class="text-3xl font-bold text-center">
-            Quiz d'opération mathématique
-          </h1>
+          <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-4">Choisissez votre mode</h1>
+          <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto">Voulez-vous suivre votre parcours pédagogique ou configurer un exercice libre ?</p>
         </div>
 
-        <form @submit.prevent="startQuiz" class="space-y-6">
-          <!-- Bloc : Type d'opération -->
-          <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
-            <legend
-              class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
-              >Type d'opération</legend
-            >
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-              <template
-                x-for="op in ['multiplication', 'division', 'addition', 'soustraction']"
-                :key="op"
-              >
-                <button
-                  type="button"
-                  @click="$store.quiz.operationType = op"
-                  :class="$store.quiz.operationType === op ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm"
-                  :aria-pressed="$store.quiz.operationType === op"
-                >
-                  <span
-                    class="text-2xl sm:text-3xl mb-1"
-                    x-text="op === 'multiplication' ? '×' : op === 'division' ? '÷' : op === 'addition' ? '+' : '−'"
-                    aria-hidden="true"
-                  >
-                  </span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <button
+            @click="selectStartMode('learning')"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white p-8 rounded-3xl transition shadow-xl flex flex-col items-center group"
+          >
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎓</div>
+            <span class="text-xl font-bold mb-2">Mon Parcours</span>
+            <span class="text-xs opacity-80 leading-tight">Progression pédagogique guidée et intelligente</span>
+          </button>
 
-                  <span
-                    class="text-[10px] sm:text-xs uppercase opacity-90 break-all"
-                    x-text="op"
-                  >
-                  </span>
-                </button>
-              </template>
+          <button
+            @click="selectStartMode('free')"
+            class="bg-blue-600 hover:bg-blue-700 text-white p-8 rounded-3xl transition shadow-xl flex flex-col items-center group"
+          >
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎲</div>
+            <span class="text-xl font-bold mb-2">Quiz Libre</span>
+            <span class="text-xs opacity-80 leading-tight">Configurez vos propres règles et exercices</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bloc : Aperçu du parcours d'apprentissage -->
+      <div
+        x-show="!isStarted && selectedStartMode === 'learning'"
+        x-transition
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden"
+      >
+        <div class="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600 flex justify-between items-center">
+          <button @click="selectedStartMode = 'choose'" class="text-gray-500 hover:text-indigo-600 font-bold flex items-center gap-1 transition">
+            ← Retour
+          </button>
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Parcours Pédagogique</span>
+        </div>
+
+        <div class="p-8">
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <div class="flex-grow space-y-6">
+              <div>
+                <div class="text-indigo-600 font-black text-xl mb-1 uppercase tracking-tighter">Niveau <span x-text="$store.quiz.currentLevel + 1"></span></div>
+                <h2 class="text-4xl font-black text-gray-900 dark:text-white leading-none" x-text="LEARNING_PATH[$store.quiz.currentLevel]?.name"></h2>
+              </div>
+
+              <p class="text-lg text-gray-600 dark:text-gray-400 italic" x-text="LEARNING_PATH[$store.quiz.currentLevel]?.description"></p>
+
+              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-800/30">
+                <h3 class="font-bold text-indigo-900 dark:text-indigo-200 mb-3 flex items-center gap-2">
+                  <span class="text-xl">📚</span> Tables à pratiquer
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <template x-for="table in $store.quiz.getLevelTables()" :key="table">
+                    <span class="bg-white dark:bg-indigo-800 px-4 py-2 rounded-xl shadow-sm font-bold text-indigo-600 dark:text-indigo-100" x-text="'Table de ' + table"></span>
+                  </template>
+                </div>
+              </div>
             </div>
-          </fieldset>
 
-          <!-- Bloc : Nombre de questions -->
-          <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-            <label class="block text-lg font-bold mb-3" for="num-questions">
-              Nombre de questions :
-              <span
-                x-text="$store.quiz.numOfQuestions"
-                class="text-blue-600"
-              ></span>
-            </label>
-            <input
-              id="num-questions"
-              type="range"
-              min="5"
-              max="50"
-              x-model.number="$store.quiz.numOfQuestions"
-              :disabled="$store.quiz.modeApprentissage"
-              class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-            />
+            <div class="w-full md:w-64 flex-shrink-0 bg-gray-50 dark:bg-gray-700/50 p-6 rounded-3xl space-y-4">
+              <h3 class="text-xs font-black uppercase text-gray-400 tracking-widest text-center">Paramètres du défi</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Questions</span>
+                  <span class="font-bold" x-text="LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.numOfQuestions"></span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Vitesse</span>
+                  <span class="font-bold" x-text="LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.secondsChrono + 's/q'"></span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Opération</span>
+                  <span class="font-bold capitalize" x-text="LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.operationType"></span>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- Bloc : Mode de chrono -->
-          <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
-            <legend
-              class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
-              >Mode du chrono</legend
-            >
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                @click="$store.quiz.chronoMode = 'question'"
-                :disabled="$store.quiz.modeApprentissage"
-                :class="$store.quiz.chronoMode === 'question' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                :aria-pressed="$store.quiz.chronoMode === 'question'"
+          <button
+            @click="startLearningPath()"
+            class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 text-white font-black py-5 rounded-2xl transition shadow-xl shadow-indigo-200 dark:shadow-none transform hover:scale-[1.02] active:scale-95 text-xl"
+          >
+            Lancer mon Parcours 🚀
+          </button>
+        </div>
+      </div>
+
+      <!-- Bloc : Configuration du quiz libre -->
+      <div
+        x-show="!isStarted && selectedStartMode === 'free'"
+        x-transition
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden"
+      >
+        <div class="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600 flex justify-between items-center">
+          <button @click="selectedStartMode = 'choose'" class="text-gray-500 hover:text-blue-600 font-bold flex items-center gap-1 transition">
+            ← Retour
+          </button>
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Exercice Personnalisé</span>
+        </div>
+
+        <div class="p-8">
+          <form @submit.prevent="startQuiz" class="space-y-6">
+            <!-- Bloc : Type d'opération -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+              <legend
+                class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
+                >Type d'opération</legend
               >
-                <span class="text-2xl mb-1" role="img" aria-label="Chronomètre">⏱️</span>
-                <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                  >Temps limité</span
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <template
+                  x-for="op in ['multiplication', 'division', 'addition', 'soustraction']"
+                  :key="op"
                 >
-                <span class="text-xs sm:text-sm">Par question</span>
-              </button>
-
-              <button
-                type="button"
-                @click="$store.quiz.chronoMode = 'quiz'"
-                :disabled="$store.quiz.modeApprentissage"
-                :class="$store.quiz.chronoMode === 'quiz' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                :aria-pressed="$store.quiz.chronoMode === 'quiz'"
-              >
-                <span class="text-2xl mb-1" role="img" aria-label="Sablier">⏲️</span>
-                <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                  >Chrono global</span
-                >
-                <span class="text-xs sm:text-sm">Pour le quiz</span>
-              </button>
-            </div>
-          </fieldset>
-
-          <!-- Bloc : Durée du chrono -->
-          <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
-            <legend
-              class="block text-lg font-bold mb-3"
-              x-text="$store.quiz.chronoMode === 'question' ? 'Durée du chrono par question' : 'Durée totale du quiz'"
-            ></legend>
-
-            <!-- Bloc : Présélections chrono (par question) -->
-            <template x-if="$store.quiz.chronoMode === 'question'">
-              <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                <button
-                  type="button"
-                  @click="$store.quiz.secondsChrono = 15"
-                  :disabled="$store.quiz.modeApprentissage"
-                  :class="$store.quiz.secondsChrono === 15 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Rapide : 15 secondes"
-                >
-                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
-                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                    >Rapide</span
-                  >
-                  <span class="text-xs sm:text-sm">15 sec</span>
-                </button>
-
-                <button
-                  type="button"
-                  @click="$store.quiz.secondsChrono = 30"
-                  :disabled="$store.quiz.modeApprentissage"
-                  :class="$store.quiz.secondsChrono === 30 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Standard : 30 secondes"
-                >
-                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
-                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                    >Standard</span
-                  >
-                  <span class="text-xs sm:text-sm">30 sec</span>
-                </button>
-
-                <button
-                  type="button"
-                  @click="$store.quiz.secondsChrono = 60"
-                  :disabled="$store.quiz.modeApprentissage"
-                  :class="$store.quiz.secondsChrono === 60 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Zen : 60 secondes"
-                >
-                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
-                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                    >Zen</span
-                  >
-                  <span class="text-xs sm:text-sm">60 sec</span>
-                </button>
-              </div>
-            </template>
-            <!-- Bloc : Présélections chrono (global) -->
-            <template x-if="$store.quiz.chronoMode === 'quiz'">
-              <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
-                <button
-                  type="button"
-                  @click="$store.quiz.secondsChrono = 120"
-                  :disabled="$store.quiz.modeApprentissage"
-                  :class="$store.quiz.secondsChrono === 120 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Courte : 2 minutes"
-                >
-                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
-                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                    >Courte</span
-                  >
-                  <span class="text-xs sm:text-sm">2 min</span>
-                </button>
-
-                <button
-                  type="button"
-                  @click="$store.quiz.secondsChrono = 300"
-                  :disabled="$store.quiz.modeApprentissage"
-                  :class="$store.quiz.secondsChrono === 300 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Moyenne : 5 minutes"
-                >
-                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
-                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                    >Moyenne</span
-                  >
-                  <span class="text-xs sm:text-sm">5 min</span>
-                </button>
-
-                <button
-                  type="button"
-                  @click="$store.quiz.secondsChrono = 600"
-                  :disabled="$store.quiz.modeApprentissage"
-                  :class="$store.quiz.secondsChrono === 600 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                  class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px] disabled:opacity-50 disabled:cursor-not-allowed"
-                  aria-label="Longue : 10 minutes"
-                >
-                  <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
-                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
-                    >Longue</span
-                  >
-                  <span class="text-xs sm:text-sm">10 min</span>
-                </button>
-              </div>
-            </template>
-
-            <!-- Bloc : Sélection chrono personnalisée (par question) -->
-            <template x-if="$store.quiz.chronoMode === 'question'">
-              <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                  <span
-                    class="text-sm font-medium text-gray-600 dark:text-gray-300"
-                    >Affinage :</span
-                  >
-                  <span
-                    class="text-lg font-bold text-blue-600 dark:text-blue-400"
-                    x-text="$store.quiz.secondsChrono"
-                  ></span>
-                  <span
-                    class="text-sm font-medium text-gray-600 dark:text-gray-300"
-                    >secondes</span
-                  >
-                </div>
-
-                <div class="relative pt-8 pb-1">
-                  <div
-                    class="absolute top-0 left-0 right-0 pointer-events-none"
-                  >
-                    <div
-                      class="absolute flex flex-col items-center left-0"
-                    >
-                      <div
-                        class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
-                      ></div>
-                      <span
-                        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
-                        >15s</span
-                      >
-                    </div>
-                    <div
-                      class="absolute flex flex-col items-center left-[33.33%] -translateX-1/2"
-                    >
-                      <div
-                        class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
-                      ></div>
-                      <span class="text-xs text-gray-500 dark:text-gray-400"
-                        >30s</span
-                      >
-                    </div>
-                    <div
-                      class="absolute flex flex-col items-center right-0"
-                    >
-                      <div
-                        class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
-                      ></div>
-                      <span class="text-xs text-gray-500 dark:text-gray-400"
-                        >60s</span
-                      >
-                    </div>
-                  </div>
-
-                  <!-- Bloc : Curseur de sélection -->
-                  <input
-                    type="range"
-                    x-model.number="$store.quiz.secondsChrono"
-                    min="15"
-                    max="60"
-                    step="1"
-                    :disabled="$store.quiz.modeApprentissage"
-                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Affinage du temps par question"
-                  />
-                </div>
-              </div>
-            </template>
-
-            <!-- Bloc : Sélection chrono personnalisée (global) -->
-            <template x-if="$store.quiz.chronoMode === 'quiz'">
-              <div class="space-y-3">
-                <div class="flex justify-between items-center">
-                  <span
-                    class="text-sm font-medium text-gray-600 dark:text-gray-300"
-                    >Affinage :</span
-                  >
-                  <span
-                    class="text-lg font-bold text-blue-600 dark:text-blue-400"
-                    x-text="Math.floor($store.quiz.secondsChrono / 60) + 'min ' + ($store.quiz.secondsChrono % 60) + 's'"
-                  ></span>
-                </div>
-
-                <div class="relative pt-8 pb-1">
-                  <div
-                    class="absolute top-0 left-0 right-0 pointer-events-none"
-                  >
-                    <div
-                      class="absolute flex flex-col items-center left-0"
-                    >
-                      <div
-                        class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
-                      ></div>
-                      <span
-                        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
-                        >2 min</span
-                      >
-                    </div>
-                    <div
-                      class="absolute flex flex-col items-center left-[37.5%] -translateX-1/2"
-                    >
-                      <div
-                        class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
-                      ></div>
-                      <span class="text-xs text-gray-500 dark:text-gray-400"
-                        >5 min</span
-                      >
-                    </div>
-                    <div
-                      class="absolute flex flex-col items-center right-0"
-                    >
-                      <div
-                        class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
-                      ></div>
-                      <span class="text-xs text-gray-500 dark:text-gray-400"
-                        >10 min</span
-                      >
-                    </div>
-                  </div>
-
-                  <!-- Bloc : Curseur de sélection -->
-                  <input
-                    type="range"
-                    x-model.number="$store.quiz.secondsChrono"
-                    min="120"
-                    max="600"
-                    step="5"
-                    :disabled="$store.quiz.modeApprentissage"
-                    class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    aria-label="Affinage du temps total du quiz"
-                  />
-                </div>
-              </div>
-            </template>
-          </fieldset>
-
-          <!-- Bloc : Tables à pratiquer -->
-          <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
-            <legend class="block text-lg font-bold mb-3"
-              >Tables à pratiquer</legend
-            >
-            <div class="space-y-3">
-              <div class="flex gap-2">
-                <button
-                  type="button"
-                  @click="selectAllTables()"
-                  class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded transition text-sm"
-                >
-                  ✓ Tout sélectionner
-                </button>
-                <button
-                  type="button"
-                  @click="deselectAllTables()"
-                  class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded transition text-sm"
-                >
-                  ✗ Tout désélectionner
-                </button>
-              </div>
-              <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
-                <template x-for="num in [2, 3, 4, 5, 6, 7, 8, 9]" :key="num">
                   <button
                     type="button"
-                    @click="toggleTable(num)"
-                    :class="$store.quiz.selectedValues.includes(num) ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
-                    class="p-2 rounded transition font-semibold"
-                    :aria-pressed="$store.quiz.selectedValues.includes(num)"
+                    @click="$store.quiz.operationType = op"
+                    :class="$store.quiz.operationType === op ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm"
+                    :aria-pressed="$store.quiz.operationType === op"
                   >
-                    <span x-text="num"></span>
+                    <span
+                      class="text-2xl sm:text-3xl mb-1"
+                      x-text="op === 'multiplication' ? '×' : op === 'division' ? '÷' : op === 'addition' ? '+' : '−'"
+                      aria-hidden="true"
+                    >
+                    </span>
+
+                    <span
+                      class="text-[10px] sm:text-xs uppercase opacity-90 break-all"
+                      x-text="op"
+                    >
+                    </span>
                   </button>
                 </template>
               </div>
-            </div>
-          </fieldset>
+            </fieldset>
 
-          <!-- Bloc : Options -->
-          <div class="flex items-center space-x-4">
-            <label class="flex items-center space-x-2 cursor-pointer">
+            <!-- Bloc : Nombre de questions -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+              <label class="block text-lg font-bold mb-3" for="num-questions">
+                Nombre de questions :
+                <span
+                  x-text="$store.quiz.numOfQuestions"
+                  class="text-blue-600"
+                ></span>
+              </label>
               <input
-                type="checkbox"
-                x-model="$store.quiz.shouldSaveResult"
-                class="w-4 h-4"
+                id="num-questions"
+                type="range"
+                min="5"
+                max="50"
+                x-model.number="$store.quiz.numOfQuestions"
+                class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               />
-              <span>Sauvegarder les résultats</span>
-            </label>
-          </div>
+            </div>
 
-          <!-- Bloc : Bouton démarrage -->
-          <div class="flex flex-col sm:flex-row gap-4">
-            <button
-              type="button"
-              @click="startLearningPath()"
-              class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition shadow-lg shadow-indigo-200 dark:shadow-none hover:scale-[1.02] active:scale-95 flex flex-col items-center justify-center leading-tight"
-            >
-              <span>Démarrer mon Parcours</span>
-              <span class="text-[10px] opacity-80 font-normal mt-1">Mode Intelligent & Progression</span>
-            </button>
-            <button
-              type="submit"
-              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition shadow-lg hover:scale-[1.02] active:scale-95"
-            >
-              Lancer un Quiz Libre
-            </button>
-          </div>
-        </form>
+            <!-- Bloc : Mode de chrono -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+              <legend
+                class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
+                >Mode du chrono</legend
+              >
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  @click="$store.quiz.chronoMode = 'question'"
+                  :class="$store.quiz.chronoMode === 'question' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                  :aria-pressed="$store.quiz.chronoMode === 'question'"
+                >
+                  <span class="text-2xl mb-1" role="img" aria-label="Chronomètre">⏱️</span>
+                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                    >Temps limité</span
+                  >
+                  <span class="text-xs sm:text-sm">Par question</span>
+                </button>
+
+                <button
+                  type="button"
+                  @click="$store.quiz.chronoMode = 'quiz'"
+                  :class="$store.quiz.chronoMode === 'quiz' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                  :aria-pressed="$store.quiz.chronoMode === 'quiz'"
+                >
+                  <span class="text-2xl mb-1" role="img" aria-label="Sablier">⏲️</span>
+                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                    >Chrono global</span
+                  >
+                  <span class="text-xs sm:text-sm">Pour le quiz</span>
+                </button>
+              </div>
+            </fieldset>
+
+            <!-- Bloc : Durée du chrono -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+              <legend
+                class="block text-lg font-bold mb-3"
+                x-text="$store.quiz.chronoMode === 'question' ? 'Durée du chrono par question' : 'Durée totale du quiz'"
+              ></legend>
+
+              <!-- Bloc : Présélections chrono (par question) -->
+              <template x-if="$store.quiz.chronoMode === 'question'">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 15"
+                    :class="$store.quiz.secondsChrono === 15 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                    aria-label="Rapide : 15 secondes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Rapide</span
+                    >
+                    <span class="text-xs sm:text-sm">15 sec</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 30"
+                    :class="$store.quiz.secondsChrono === 30 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                    aria-label="Standard : 30 secondes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Standard</span
+                    >
+                    <span class="text-xs sm:text-sm">30 sec</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 60"
+                    :class="$store.quiz.secondsChrono === 60 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                    aria-label="Zen : 60 secondes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Zen</span
+                    >
+                    <span class="text-xs sm:text-sm">60 sec</span>
+                  </button>
+                </div>
+              </template>
+              <!-- Bloc : Présélections chrono (global) -->
+              <template x-if="$store.quiz.chronoMode === 'quiz'">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 120"
+                    :class="$store.quiz.secondsChrono === 120 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                    aria-label="Courte : 2 minutes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Courte</span
+                    >
+                    <span class="text-xs sm:text-sm">2 min</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 300"
+                    :class="$store.quiz.secondsChrono === 300 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                    aria-label="Moyenne : 5 minutes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Moyenne</span
+                    >
+                    <span class="text-xs sm:text-sm">5 min</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 600"
+                    :class="$store.quiz.secondsChrono === 600 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                    aria-label="Longue : 10 minutes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Longue</span
+                    >
+                    <span class="text-xs sm:text-sm">10 min</span>
+                  </button>
+                </div>
+              </template>
+
+              <!-- Bloc : Sélection chrono personnalisée (par question) -->
+              <template x-if="$store.quiz.chronoMode === 'question'">
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span
+                      class="text-sm font-medium text-gray-600 dark:text-gray-300"
+                      >Affinage :</span
+                    >
+                    <span
+                      class="text-lg font-bold text-blue-600 dark:text-blue-400"
+                      x-text="$store.quiz.secondsChrono"
+                    ></span>
+                    <span
+                      class="text-sm font-medium text-gray-600 dark:text-gray-300"
+                      >secondes</span
+                    >
+                  </div>
+
+                  <div class="relative pt-8 pb-1">
+                    <div
+                      class="absolute top-0 left-0 right-0 pointer-events-none"
+                    >
+                      <div
+                        class="absolute flex flex-col items-center left-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span
+                          class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                          >15s</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center left-[33.33%] -translateX-1/2"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >30s</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center right-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >60s</span
+                        >
+                      </div>
+                    </div>
+
+                    <!-- Bloc : Curseur de sélection -->
+                    <input
+                      type="range"
+                      x-model.number="$store.quiz.secondsChrono"
+                      min="15"
+                      max="60"
+                      step="1"
+                      class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      aria-label="Affinage du temps par question"
+                    />
+                  </div>
+                </div>
+              </template>
+
+              <!-- Bloc : Sélection chrono personnalisée (global) -->
+              <template x-if="$store.quiz.chronoMode === 'quiz'">
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span
+                      class="text-sm font-medium text-gray-600 dark:text-gray-300"
+                      >Affinage :</span
+                    >
+                    <span
+                      class="text-lg font-bold text-blue-600 dark:text-blue-400"
+                      x-text="Math.floor($store.quiz.secondsChrono / 60) + 'min ' + ($store.quiz.secondsChrono % 60) + 's'"
+                    ></span>
+                  </div>
+
+                  <div class="relative pt-8 pb-1">
+                    <div
+                      class="absolute top-0 left-0 right-0 pointer-events-none"
+                    >
+                      <div
+                        class="absolute flex flex-col items-center left-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span
+                          class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                          >2 min</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center left-[37.5%] -translateX-1/2"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >5 min</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center right-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >10 min</span
+                        >
+                      </div>
+                    </div>
+
+                    <!-- Bloc : Curseur de sélection -->
+                    <input
+                      type="range"
+                      x-model.number="$store.quiz.secondsChrono"
+                      min="120"
+                      max="600"
+                      step="5"
+                      class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      aria-label="Affinage du temps total du quiz"
+                    />
+                  </div>
+                </div>
+              </template>
+            </fieldset>
+
+            <!-- Bloc : Tables à pratiquer -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+              <legend class="block text-lg font-bold mb-3"
+                >Tables à pratiquer</legend
+              >
+              <div class="space-y-3">
+                <div class="flex gap-2">
+                  <button
+                    type="button"
+                    @click="selectAllTables()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded transition text-sm"
+                  >
+                    ✓ Tout sélectionner
+                  </button>
+                  <button
+                    type="button"
+                    @click="deselectAllTables()"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded transition text-sm"
+                  >
+                    ✗ Tout désélectionner
+                  </button>
+                </div>
+                <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
+                  <template x-for="num in [2, 3, 4, 5, 6, 7, 8, 9]" :key="num">
+                    <button
+                      type="button"
+                      @click="toggleTable(num)"
+                      :class="$store.quiz.selectedValues.includes(num) ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                      class="p-2 rounded transition font-semibold"
+                      :aria-pressed="$store.quiz.selectedValues.includes(num)"
+                    >
+                      <span x-text="num"></span>
+                    </button>
+                  </template>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Bloc : Options -->
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  x-model="$store.quiz.shouldSaveResult"
+                  class="w-4 h-4"
+                />
+                <span>Sauvegarder les résultats</span>
+              </label>
+            </div>
+
+            <!-- Bloc : Bouton démarrage -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl transition shadow-xl transform hover:scale-[1.02] active:scale-95 text-xl"
+              >
+                Lancer l'exercice 🎲
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- Bloc : Interface de jeu -->
