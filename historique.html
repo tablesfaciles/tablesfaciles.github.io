@@ -364,7 +364,7 @@
                   <div class="text-left flex-1">
                     <div class="font-bold">
                       <template x-if="result.quizProperties.modeApprentissage && typeof result.quizProperties.level !== 'undefined'">
-                        <span>Parcours (Niveau <span x-text="result.quizProperties.level + 1"></span>)</span>
+                        <span>Parcours (Niveau <span x-text="result.quizProperties.level + 1"></span> : <span x-text="window.LEARNING_PATH[result.quizProperties.level]?.name || 'Niveau inconnu'"></span>)</span>
                       </template>
                       <template x-else>
                         <span>Quiz <span class="capitalize" x-text="result.quizProperties.operationType"></span> Libre</span>

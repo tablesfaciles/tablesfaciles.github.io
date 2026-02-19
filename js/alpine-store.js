@@ -106,7 +106,7 @@ document.addEventListener('alpine:init', () => {
     },
 
     getLevelTables() {
-      return LEARNING_PATH[this.currentLevel]?.tables || [2, 3, 4, 5, 6, 7, 8, 9];
+      return LEARNING_PATH[this.currentLevel]?.tables || [];
     },
 
     loadResults() {
@@ -176,14 +176,16 @@ document.addEventListener('alpine:init', () => {
     },
 
     saveResultData(quizData) {
-      if (this.modeApprentissage) {
-        quizData.quizProperties.level = this.currentLevel;
+      if (this.shouldSaveResult) {
+        if (this.modeApprentissage) {
+          quizData.quizProperties.level = this.currentLevel;
+        }
+        if (!this.quizResults) {
+          this.quizResults = [];
+        }
+        this.quizResults.push(quizData);
+        localStorage.setItem('quizResults', JSON.stringify(this.quizResults));
       }
-      if (!this.quizResults) {
-        this.quizResults = [];
-      }
-      this.quizResults.push(quizData);
-      localStorage.setItem('quizResults', JSON.stringify(this.quizResults));
     },
 
     formatTime(seconds) {
@@ -332,33 +334,36 @@ document.addEventListener('alpine:init', () => {
     },
 
     getBeteNoire() {
-      let candidatePairs = [];
+      let worst = null;
+      let maxFailRatio = -1;
+      let worstAvgTime = 0;
+
+      let pairsToConsider = [];
+
       if (this.modeApprentissage) {
-        const tables = this.getLevelTables();
-        for (let t of tables) {
+        const currentTables = this.getLevelTables();
+        for (let table of currentTables) {
           for (let i = 1; i <= 10; i++) {
-            candidatePairs.push([t, i]);
+            pairsToConsider.push([table, i]);
           }
         }
       } else {
-        candidatePairs = this.pairs.map(p => p.factors);
+        pairsToConsider = this.pairs.map(p => p.factors);
       }
 
-      let worst = null;
-      let maxFailRatio = -1;
-      for (let factors of candidatePairs) {
-        const key = `${factors[0]}x${factors[1]}`;
+      for (let pair of pairsToConsider) {
+        const key = `${pair[0]}x${pair[1]}`;
         const stats = this.masteryData[key];
-        if (stats) {
-          const ratio = stats.failure / (stats.success + stats.failure || 1);
+
+        if (stats && (stats.success > 0 || stats.failure > 0)) {
+          const ratio = stats.failure / (stats.success + stats.failure);
           if (ratio > maxFailRatio) {
             maxFailRatio = ratio;
-            worst = factors;
-          } else if (ratio === maxFailRatio && worst) {
-            const worstKey = `${worst[0]}x${worst[1]}`;
-            if (stats.avgTime > (this.masteryData[worstKey]?.avgTime || 0)) {
-              worst = factors;
-            }
+            worst = pair;
+            worstAvgTime = stats.avgTime;
+          } else if (ratio === maxFailRatio && stats.avgTime > worstAvgTime) {
+            worst = pair;
+            worstAvgTime = stats.avgTime;
           }
         }
       }
@@ -367,7 +372,12 @@ document.addEventListener('alpine:init', () => {
 
     checkLevelProgression(grade) {
       if (this.modeApprentissage && (grade === 'A' || grade === 'A+')) {
-        if (this.currentLevel < LEARNING_PATH.length - 1) this.proposedNextLevel = true;
+        if (this.currentLevel < LEARNING_PATH.length - 1) {
+          this.proposedNextLevel = true;
+        } else {
+          this.proposedNextLevel = false;
+          console.log("Tous les niveaux d'apprentissage terminés !");
+        }
       }
     },
 
@@ -644,6 +654,7 @@ document.addEventListener('alpine:init', () => {
 
     startLearningPath() {
       if (Alpine.store('quiz').currentLevel >= LEARNING_PATH.length) {
+        alert("Félicitations ! Vous avez terminé tous les niveaux d'apprentissage. Continuez à pratiquer en mode libre !");
         this.selectedStartMode = 'choose';
         return;
       }
@@ -659,6 +670,7 @@ document.addEventListener('alpine:init', () => {
     },
 
     startQuiz() {
+      this.isProcessing = false;
       if (!this.audioCtx) this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (!Alpine.store('quiz').modeApprentissage && Alpine.store('quiz').selectedValues.length === 0) return alert("Sélectionnez au moins une table");
       Alpine.store('quiz').pairs = Alpine.store('quiz').generatePairs();
@@ -767,8 +779,10 @@ document.addEventListener('alpine:init', () => {
     resetQuiz() {
       this.isStarted = false;
       this.isFinished = false;
+      this.isProcessing = false;
       if (Alpine.store('quiz').modeApprentissage) {
-        this.startLearningPath();
+        this.selectedStartMode = 'learning';
+        Alpine.store('quiz').modeApprentissage = false;
       } else {
         this.selectedStartMode = 'free';
       }
@@ -776,10 +790,10 @@ document.addEventListener('alpine:init', () => {
 
     acceptLevelUp() {
       Alpine.store('quiz').acceptLevelUp();
-      this.selectedStartMode = 'learning';
       this.isStarted = false;
       this.isFinished = false;
-      Alpine.store('quiz').loadLevel();
+      this.isProcessing = false;
+      this.selectedStartMode = 'learning';
     }
   }));
 
