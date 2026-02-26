@@ -279,20 +279,51 @@
             <div class="flex-grow space-y-6">
               <div>
                 <div class="text-indigo-600 font-black text-xl mb-1 uppercase tracking-tighter">Niveau <span x-text="$store.quiz.currentLevel + 1"></span></div>
-                <h2 class="text-4xl font-black text-gray-900 dark:text-white leading-none" x-text="LEARNING_PATH[$store.quiz.currentLevel]?.name"></h2>
+                <h2 class="text-4xl font-black text-gray-900 dark:text-white leading-none" x-text="window.LEARNING_PATH[$store.quiz.currentLevel]?.name"></h2>
               </div>
 
-              <p class="text-lg text-gray-600 dark:text-gray-400 italic" x-text="LEARNING_PATH[$store.quiz.currentLevel]?.description"></p>
+              <p class="text-lg text-gray-600 dark:text-gray-400 italic" x-text="window.LEARNING_PATH[$store.quiz.currentLevel]?.description"></p>
+
+              <!-- BLOC : Liens vers les pages d'apprentissage -->
+              <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/30"
+                   x-show="window.LEARNING_PATH[$store.quiz.currentLevel]?.links">
+                <h3 class="font-bold text-blue-900 dark:text-blue-200 mb-3 flex items-center gap-2">
+                  <span class="text-xl">💡</span> Pour t'aider à apprendre
+                </h3>
+                <div class="flex flex-wrap gap-3">
+                  <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.debutant">
+                    <a href="debutant.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-blue-800 text-blue-600 dark:text-blue-100 font-semibold shadow-sm hover:bg-blue-50 hover:dark:bg-blue-700 transition">👶 Tables Faciles</a>
+                  </template>
+                  <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.intermediaire">
+                    <a href="intermediaire.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-blue-800 text-blue-600 dark:text-blue-100 font-semibold shadow-sm hover:bg-blue-50 hover:dark:bg-blue-700 transition">📘 Tables Moyennes</a>
+                  </template>
+                  <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.expert">
+                    <a href="expert.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-blue-800 text-blue-600 dark:text-blue-100 font-semibold shadow-sm hover:bg-blue-50 hover:dark:bg-blue-700 transition">🔥 Tables Difficiles</a>
+                  </template>
+                </div>
+              </div>
 
               <div class="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-800/30">
                 <h3 class="font-bold text-indigo-900 dark:text-indigo-200 mb-3 flex items-center gap-2">
-                  <span class="text-xl">📚</span> Tables à pratiquer
+                  <span class="text-xl">📚</span> Tables à pratiquer dans ce niveau
                 </h3>
                 <div class="flex flex-wrap gap-2">
-                  <template x-for="table in $store.quiz.getLevelTables()" :key="table">
+                  <template x-for="table in window.LEARNING_PATH[$store.quiz.currentLevel]?.cumulativeTables" :key="table">
                     <span class="bg-white dark:bg-indigo-800 px-4 py-2 rounded-xl shadow-sm font-bold text-indigo-600 dark:text-indigo-100" x-text="'Table de ' + table"></span>
                   </template>
                 </div>
+              </div>
+
+              <!-- BLOC : Astuces des tables -->
+              <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-2xl border border-yellow-100 dark:border-yellow-800/30">
+                <h3 class="font-bold text-yellow-900 dark:text-yellow-200 mb-3 flex items-center gap-2">
+                  <span class="text-xl">🌟</span> Mes petites astuces
+                </h3>
+                <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
+                  <template x-for="table in window.LEARNING_PATH[$store.quiz.currentLevel]?.cumulativeTables" :key="'tip-' + table">
+                    <li x-text="$store.quiz.tableTips[table] || `Pas d'astuce spéciale pour la table de ${table} pour le moment.`"></li>
+                  </template>
+                </ul>
               </div>
             </div>
 
@@ -301,15 +332,19 @@
               <div class="space-y-3">
                 <div class="flex justify-between items-center text-sm">
                   <span class="text-gray-500">Questions</span>
-                  <span class="font-bold" x-text="LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.numOfQuestions"></span>
+                  <span class="font-bold" x-text="window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.numOfQuestions"></span>
                 </div>
                 <div class="flex justify-between items-center text-sm">
                   <span class="text-gray-500">Vitesse</span>
-                  <span class="font-bold" x-text="LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.secondsChrono + 's/q'"></span>
+                  <span class="font-bold" x-text="window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.secondsChrono + 's/q'"></span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Révision</span>
+                  <span class="font-bold" x-text="(window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.revisionPercentage * 100).toFixed(0) + '%'"></span>
                 </div>
                 <div class="flex justify-between items-center text-sm">
                   <span class="text-gray-500">Opération</span>
-                  <span class="font-bold capitalize" x-text="LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.operationType"></span>
+                  <span class="font-bold capitalize" x-text="window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.operationType"></span>
                 </div>
               </div>
             </div>

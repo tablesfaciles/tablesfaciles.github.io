@@ -13,30 +13,100 @@ document.addEventListener('alpine:init', () => {
 
   // Définition du parcours d'apprentissage par niveaux détaillés et pédagogiques
   const LEARNING_PATH = [
-    { level: 1, name: "Découverte des Bases", tables: [2, 5, 10], description: "Familiarisation avec les tables de 2, 5 et 10. Prenez votre temps pour comprendre les concepts." },
-    { level: 2, name: "Maîtrise des Bases", tables: [2, 5, 10], description: "Pratiquez les tables de 2, 5 et 10 pour améliorer votre précision et votre vitesse." },
-    { level: 3, name: "Rapidité des Bases", tables: [2, 5, 10], description: "Défiez votre rapidité sur les tables de 2, 5 et 10. L'objectif est l'automatisation." },
-    { level: 4, name: "Introduction aux Moyennes", tables: [3, 4], description: "Découvrez les tables de 3 et 4. Concentrez-vous sur la compréhension des nouvelles tables." },
-    { level: 5, name: "Renforcement des Moyennes", tables: [3, 4], description: "Consolidez votre connaissance des tables de 3 et 4, tout en révisant les bases." },
-    { level: 6, name: "Automatisation des Moyennes", tables: [3, 4], description: "Travaillez l'automatisation des tables de 3 et 4 pour des réponses rapides et justes." },
-    { level: 7, name: "Défi des Premières Difficiles", tables: [6, 7], description: "Attaquez les tables de 6 et 7. Elles demandent plus de concentration !" },
-    { level: 8, name: "Conquête des Dernières Difficiles", tables: [8, 9], description: "Maîtrisez les tables de 8 et 9. C'est ici que les plus grands progrès se font." },
-    { level: 9, name: "Excellence des Difficiles", tables: [6, 7, 8, 9], description: "Devenez un expert des tables complexes. La régularité est la clé de la réussite." },
-    { level: 10, name: "Grand Maître", tables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], description: "Révision intensive de TOUTES les tables. Prouvez que vous êtes un Grand Maître de la multiplication !" }
+    {
+      level: 1,
+      name: "Mes premières tables : les gentilles (2, 5, 10)",
+      currentLevelTables: [2, 5, 10],
+      cumulativeTables: [2, 5, 10],
+      description: "Bienvenue ! Commençons doucement avec les tables de 2, 5 et 10. Elles sont faciles et amusantes ! Concentre-toi bien pour les mémoriser.",
+      links: { debutant: true, intermediaire: false, expert: false }
+    },
+    {
+      level: 2,
+      name: "Je deviens plus fort (2, 5, 10) !",
+      currentLevelTables: [2, 5, 10],
+      cumulativeTables: [2, 5, 10],
+      description: "Super ! Tu commences à bien connaître ces tables. Entraîne-toi pour que tes réponses deviennent très rapides. La répétition est la clé !",
+      links: { debutant: true, intermediaire: false, expert: false }
+    },
+    {
+      level: 3,
+      name: "Champion des bases (2, 5, 10) : Vitesse !",
+      currentLevelTables: [2, 5, 10],
+      cumulativeTables: [2, 5, 10],
+      description: "Impressionnant ! Le but maintenant est d'être rapide comme l'éclair, sans faire d'erreurs. Sois le plus rapide pour devenir un vrai champion !",
+      links: { debutant: true, intermediaire: false, expert: false }
+    },
+    {
+      level: 4,
+      name: "Les tables secrètes (3 et 4) et les anciennes amies",
+      currentLevelTables: [3, 4],
+      cumulativeTables: [2, 3, 4, 5, 10],
+      description: "Nouveau défi ! Apprenons les tables de 3 et 4. Ne t'inquiète pas, nous allons aussi revoir un peu les tables faciles pour ne rien oublier.",
+      links: { debutant: true, intermediaire: true, expert: false }
+    },
+    {
+      level: 5,
+      name: "Le magicien des nombres (3 et 4 + révisions)",
+      currentLevelTables: [3, 4],
+      cumulativeTables: [2, 3, 4, 5, 10],
+      description: "Tu es un vrai magicien des nombres ! Tes tables de 3 et 4 s'améliorent, et les anciennes sont toujours là pour s'entraîner. Continue comme ça !",
+      links: { debutant: true, intermediaire: true, expert: false }
+    },
+    {
+      level: 6,
+      name: "L'explorateur rapide (3, 4 et toutes les autres)",
+      currentLevelTables: [3, 4],
+      cumulativeTables: [2, 3, 4, 5, 10],
+      description: "Prêt à explorer plus vite ? Montre-nous que tu maîtrises parfaitement les tables de 3 et 4, et que les bases sont toujours solides !",
+      links: { debutant: true, intermediaire: true, expert: false }
+    },
+    {
+      level: 7,
+      name: "Les grands chiffres (6 et 7) : courage !",
+      currentLevelTables: [6, 7],
+      cumulativeTables: [2, 3, 4, 5, 6, 7, 10],
+      description: "Attention, ça devient intéressant avec les tables de 6 et 7 ! Elles demandent un peu plus de concentration, mais tu es capable de les relever.",
+      links: { debutant: false, intermediaire: true, expert: false }
+    },
+    {
+      level: 8,
+      name: "Les dernières (8 et 9) : la victoire approche !",
+      currentLevelTables: [8, 9],
+      cumulativeTables: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+      description: "C'est le dernier effort ! Les tables de 8 et 9 sont à portée de main. Avec de la pratique, elles deviendront aussi faciles que les autres.",
+      links: { debutant: false, intermediaire: true, expert: true }
+    },
+    {
+      level: 9,
+      name: "Le défi ultime (toutes les difficiles) : Deviens un pro !",
+      currentLevelTables: [6, 7, 8, 9],
+      cumulativeTables: [2, 3, 4, 5, 6, 7, 8, 9, 10],
+      description: "Félicitations ! Tu es presque un maître. Ce niveau est pour t'assurer que tu connais toutes les tables 'difficiles' sur le bout des doigts, très rapidement !",
+      links: { debutant: false, intermediaire: true, expert: true }
+    },
+    {
+      level: 10,
+      name: "Le Grand Maître des multiplications !",
+      currentLevelTables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      cumulativeTables: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      description: "INCROYABLE ! Tu es maintenant le Grand Maître des multiplications ! Ce quiz est un test final pour prouver que tu es le meilleur. Bravo !",
+      links: { debutant: true, intermediaire: true, expert: true }
+    }
   ];
 
   // Paramètres évolutifs pour chaque niveau du parcours d'apprentissage
   const LEARNING_PATH_SETTINGS = [
-    { numOfQuestions: 10, secondsChrono: 45, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 12, secondsChrono: 40, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 15, secondsChrono: 30, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 12, secondsChrono: 40, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 15, secondsChrono: 35, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 18, secondsChrono: 25, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 15, secondsChrono: 30, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 20, secondsChrono: 25, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 25, secondsChrono: 20, chronoMode: 'question', operationType: 'multiplication' },
-    { numOfQuestions: 20, secondsChrono: 20, chronoMode: 'question', operationType: 'multiplication' }
+    { numOfQuestions: 10, secondsChrono: 45, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0 },
+    { numOfQuestions: 12, secondsChrono: 40, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.10 },
+    { numOfQuestions: 15, secondsChrono: 35, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.20 },
+    { numOfQuestions: 12, secondsChrono: 40, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.30 },
+    { numOfQuestions: 15, secondsChrono: 35, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.40 },
+    { numOfQuestions: 18, secondsChrono: 30, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.50 },
+    { numOfQuestions: 15, secondsChrono: 35, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.40 },
+    { numOfQuestions: 20, secondsChrono: 30, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.50 },
+    { numOfQuestions: 25, secondsChrono: 25, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.60 },
+    { numOfQuestions: 20, secondsChrono: 20, chronoMode: 'question', operationType: 'multiplication', revisionPercentage: 0.70 }
   ];
 
   window.LEARNING_PATH = LEARNING_PATH;
@@ -91,6 +161,20 @@ document.addEventListener('alpine:init', () => {
     pythagoreValues: {},
     highlightMode: null,
 
+    // Astuces
+    tableTips: {
+      1: "Multiplier par 1 est facile : le nombre ne change pas !",
+      2: "Multiplier par 2, c'est comme calculer le double.",
+      3: "Astuce : La somme des chiffres du résultat est toujours 3, 6 ou 9.",
+      4: "Multiplier par 4, c'est comme doubler deux fois (x2 puis encore x2).",
+      5: "Le résultat se termine toujours par 0 ou 5.",
+      6: "Multiplier par 6, c'est multiplier par 3 puis par 2.",
+      7: "C'est souvent la plus difficile, apprends-la bien par cœur !",
+      8: "Multiplier par 8, c'est doubler trois fois (x2, x2, x2).",
+      9: "Astuce des doigts : baisse le doigt correspondant au nombre multiplié !",
+      10: "Ajoute simplement un 0 à la fin du nombre."
+    },
+
     // Initialisation
     init() {
       this.loadResults();
@@ -106,7 +190,11 @@ document.addEventListener('alpine:init', () => {
     },
 
     getLevelTables() {
-      return LEARNING_PATH[this.currentLevel]?.tables || [];
+      return LEARNING_PATH[this.currentLevel]?.cumulativeTables || [];
+    },
+
+    getCurrentLevelFocusTables() {
+      return LEARNING_PATH[this.currentLevel]?.currentLevelTables || [];
     },
 
     loadResults() {
@@ -215,43 +303,93 @@ document.addEventListener('alpine:init', () => {
     },
 
     generateIntelligentPairs() {
-      const tables = this.getLevelTables();
-      const allPossible = [];
-      for (let t of tables) {
+      const currentLevelIndex = this.currentLevel;
+      const levelSettings = LEARNING_PATH_SETTINGS[currentLevelIndex];
+      const numToSelect = this.numOfQuestions;
+
+      // 1. Déterminer les tables focales du niveau actuel
+      const focusTables = this.getCurrentLevelFocusTables();
+      let focusPairsPool = [];
+      for (let t of focusTables) {
         for (let i = 1; i <= 10; i++) {
-          allPossible.push([t, i]);
+          focusPairsPool.push([t, i]);
         }
       }
 
-      const selected = [];
-      const numToSelect = Math.min(this.numOfQuestions, allPossible.length);
-      let pool = [...allPossible];
+      // 2. Déterminer les tables de révision
+      const allPreviouslyLearnedTables = new Set();
+      for (let i = 0; i < currentLevelIndex; i++) {
+        LEARNING_PATH[i].currentLevelTables.forEach(table => allPreviouslyLearnedTables.add(table));
+      }
+      focusTables.forEach(table => allPreviouslyLearnedTables.delete(table));
 
-      while (selected.length < numToSelect) {
-        let totalWeight = 0;
-        const weightedPool = pool.map(p => {
-          const key = `${p[0]}x${p[1]}`;
-          const stats = this.masteryData[key] || { failure: 0, success: 0, avgTime: 0 };
-          let weight = 1;
-          if (stats.failure > stats.success) weight += 10;
-          if (stats.avgTime > 4000) weight += 5;
-          if (stats.success === 0 && stats.failure === 0) weight += 3;
-          totalWeight += weight;
-          return { pair: p, weight };
-        });
+      let revisionPairsPool = [];
+      for (let t of Array.from(allPreviouslyLearnedTables)) {
+        for (let i = 1; i <= 10; i++) {
+          revisionPairsPool.push([t, i]);
+        }
+      }
+      revisionPairsPool = revisionPairsPool.filter(p => !focusTables.includes(p[0]));
 
-        let r = Math.random() * totalWeight;
-        let cumulativeWeight = 0;
-        for (let entry of weightedPool) {
-          cumulativeWeight += entry.weight;
-          if (r <= cumulativeWeight) {
-            selected.push(entry.pair);
-            pool = pool.filter(p => p !== entry.pair);
-            break;
+      // 3. Calculer le nombre de questions pour chaque catégorie
+      const numRevisionQuestions = Math.round(numToSelect * levelSettings.revisionPercentage);
+      const numFocusQuestions = numToSelect - numRevisionQuestions;
+
+      const selectWeightedPairs = (pool, count) => {
+        const result = [];
+        let availablePool = [...pool];
+        if (availablePool.length === 0) return [];
+        if (availablePool.length < count) {
+            for (let i = 0; i < count; i++) {
+                result.push(availablePool[Math.floor(Math.random() * availablePool.length)]);
+            }
+            return result;
+        }
+
+        while (result.length < count && availablePool.length > 0) {
+          let totalWeight = 0;
+          const weightedOptions = availablePool.map(p => {
+            const key = `${p[0]}x${p[1]}`;
+            const stats = this.masteryData[key] || { failure: 0, success: 0, avgTime: 0 };
+            let weight = 1;
+            if (stats.failure > stats.success) weight += 10;
+            if (stats.avgTime > 4000) weight += 5;
+            if (stats.success === 0 && stats.failure === 0) weight += 3;
+            totalWeight += weight;
+            return { pair: p, weight };
+          });
+
+          let r = Math.random() * totalWeight;
+          let cumulativeWeight = 0;
+          let selectedPair = null;
+          for (let entry of weightedOptions) {
+            cumulativeWeight += entry.weight;
+            if (r <= cumulativeWeight) {
+              selectedPair = entry.pair;
+              break;
+            }
+          }
+          if (selectedPair) {
+            result.push(selectedPair);
+            availablePool = availablePool.filter(p => p !== selectedPair);
+          } else {
+            result.push(availablePool[Math.floor(Math.random() * availablePool.length)]);
+            availablePool.splice(Math.floor(Math.random() * availablePool.length), 1);
           }
         }
+        return result;
+      };
+
+      let focusQ = selectWeightedPairs(focusPairsPool, numFocusQuestions);
+      let revisionQ = selectWeightedPairs(revisionPairsPool, numRevisionQuestions);
+      let selectedQuestions = this.shuffle([...focusQ, ...revisionQ]);
+
+      while (selectedQuestions.length < numToSelect) {
+          const allPossibleFallback = [...focusPairsPool, ...revisionPairsPool];
+          if (allPossibleFallback.length === 0) break;
+          selectedQuestions.push(allPossibleFallback[Math.floor(Math.random() * allPossibleFallback.length)]);
       }
-      return this.shuffle(selected);
+      return selectedQuestions.slice(0, numToSelect);
     },
 
     getAllPossiblePairs() {
@@ -337,7 +475,6 @@ document.addEventListener('alpine:init', () => {
       let worst = null;
       let maxFailRatio = -1;
       let worstAvgTime = 0;
-
       let pairsToConsider = [];
 
       if (this.modeApprentissage) {
@@ -354,7 +491,6 @@ document.addEventListener('alpine:init', () => {
       for (let pair of pairsToConsider) {
         const key = `${pair[0]}x${pair[1]}`;
         const stats = this.masteryData[key];
-
         if (stats && (stats.success > 0 || stats.failure > 0)) {
           const ratio = stats.failure / (stats.success + stats.failure);
           if (ratio > maxFailRatio) {
@@ -754,7 +890,7 @@ document.addEventListener('alpine:init', () => {
       const totalTime = this.timePerQuestion.reduce((a, b) => a + b, 0) * 1000;
       const avgTime = totalTime / Alpine.store('quiz').numOfQuestions;
       const accuracy = (Alpine.store('quiz').numCorrectAnswers / Alpine.store('quiz').numOfQuestions) * 100;
-      Alpine.store('quiz').latestGrade = Alpine.store('quiz').calculateGrade(accuracy, avgTime);
+       Alpine.store('quiz').latestGrade = Alpine.store('quiz').calculateGrade(accuracy, avgTime);
       Alpine.store('quiz').beteNoire = Alpine.store('quiz').getBeteNoire();
       Alpine.store('quiz').checkLevelProgression(Alpine.store('quiz').latestGrade);
       this.speak(`Terminé. Note : ${Alpine.store('quiz').latestGrade}`);
