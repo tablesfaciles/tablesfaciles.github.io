@@ -223,7 +223,8 @@ document.addEventListener('alpine:init', () => {
       }
     },
 
-    updateStats(pairKey, isCorrect, time) {
+    updateStats(pair, isCorrect, time) {
+      const pairKey = `${pair.factors[0]}x${pair.factors[1]}`;
       if (!this.masteryData[pairKey]) {
         this.masteryData[pairKey] = { success: 0, failure: 0, avgTime: 0 };
       }
@@ -841,7 +842,7 @@ document.addEventListener('alpine:init', () => {
           if (this.userAnswer !== "") { this.submitAnswer(); }
           else {
             const pair = Alpine.store('quiz').currentPair;
-            Alpine.store('quiz').updateStats(`${pair.factors[0]}x${pair.factors[1]}`, false, Date.now() - this.questionStartTime);
+            Alpine.store('quiz').updateStats(pair, false, Date.now() - this.questionStartTime);
             Alpine.store('quiz').checkAnswer("");
             this.feedbackType = "noAnswer";
             this.showFeedback = true;
@@ -858,7 +859,7 @@ document.addEventListener('alpine:init', () => {
       const respTime = Date.now() - this.questionStartTime;
       const pair = Alpine.store('quiz').currentPair;
       this.isLastAnswerCorrect = Alpine.store('quiz').checkAnswer(this.userAnswer);
-      Alpine.store('quiz').updateStats(`${pair.factors[0]}x${pair.factors[1]}`, this.isLastAnswerCorrect, respTime);
+      Alpine.store('quiz').updateStats(pair, this.isLastAnswerCorrect, respTime);
       this.feedbackType = this.isLastAnswerCorrect ? "correct" : "incorrect";
       this.showFeedback = true;
       this.speak(this.isLastAnswerCorrect ? `Bravo, ${this.userAnswer}` : `Faux, le résultat était ${Alpine.store('quiz').getCorrectAnswer(pair.factors[0], pair.factors[1])}`);
