@@ -223,10 +223,35 @@
         Historique de progression
       </h1>
 
+      <!-- Bloc : Navigation par onglets -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8">
+        <button
+          @click="setTab('all')"
+          :class="{ 'bg-blue-600 text-white shadow-md': activeTab === 'all', 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200': activeTab !== 'all' }"
+          class="py-2 px-5 rounded-full font-semibold transition-colors"
+        >
+          Tous les Quiz
+        </button>
+        <button
+          @click="setTab('parcours')"
+          :class="{ 'bg-indigo-600 text-white shadow-md': activeTab === 'parcours', 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200': activeTab !== 'parcours' }"
+          class="py-2 px-5 rounded-full font-semibold transition-colors"
+        >
+          Parcours
+        </button>
+        <button
+          @click="setTab('libre')"
+          :class="{ 'bg-blue-600 text-white shadow-md': activeTab === 'libre', 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200': activeTab !== 'libre' }"
+          class="py-2 px-5 rounded-full font-semibold transition-colors"
+        >
+          Quiz Libre
+        </button>
+      </div>
+
       <!-- Bloc : Effacer l'historique -->
       <div
         class="flex justify-center mb-8"
-        x-show="$store.quiz.quizResults.length > 0"
+        x-show="filteredAndSortedResults.length > 0"
       >
         <div x-data="{ confirming: false }">
           <button
@@ -263,7 +288,7 @@
       </div>
 
       <!-- Bloc : Message d'absence de données -->
-      <template x-if="$store.quiz.quizResults.length === 0">
+      <template x-if="filteredAndSortedResults.length === 0">
         <div class="bg-blue-50 dark:bg-blue-900/20 p-12 rounded-lg text-center">
           <svg
             class="w-16 h-16 mx-auto text-blue-600 mb-4"
@@ -293,14 +318,14 @@
       </template>
 
       <!-- Bloc : Liste des résultats -->
-      <template x-if="$store.quiz.quizResults.length > 0">
+      <template x-if="filteredAndSortedResults.length > 0">
         <div class="space-y-6">
           <!-- Bloc : Statistiques globales -->
           <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
               <div
                 class="text-3xl font-bold text-blue-600"
-                x-text="$store.quiz.quizResults.length"
+                x-text="filteredAndSortedResults.length"
               ></div>
               <div class="text-sm text-gray-600 dark:text-gray-400">
                 Quiz complétés
@@ -337,7 +362,7 @@
           <!-- Bloc : Graphique de progression -->
           <div
             class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8"
-            x-show="$store.quiz.quizResults.length > 1"
+            x-show="filteredAndSortedResults.length > 1"
           >
             <h3 class="text-lg font-bold mb-4 text-center">
               Évolution de vos scores (%)
@@ -349,7 +374,7 @@
           <!-- Bloc : Historique des quiz -->
           <div class="space-y-4">
             <template
-              x-for="(result, index) in $store.quiz.quizResults"
+              x-for="(result, index) in filteredAndSortedResults"
               :key="`${result.quizProperties.id}-${index}`"
             >
               <div
@@ -363,10 +388,10 @@
                 >
                   <div class="text-left flex-1">
                     <div class="font-bold">
-                      <template x-if="result.quizProperties.modeApprentissage && typeof result.quizProperties.level !== 'undefined'">
+                      <template x-if="result.quizProperties.modeApprentissage === true">
                         <span>Parcours (Niveau <span x-text="result.quizProperties.level + 1"></span> : <span x-text="window.LEARNING_PATH[result.quizProperties.level]?.name || 'Niveau inconnu'"></span>)</span>
                       </template>
-                      <template x-else>
+                      <template x-if="result.quizProperties.modeApprentissage === false">
                         <span>Quiz <span class="capitalize" x-text="result.quizProperties.operationType"></span> Libre</span>
                       </template>
                     </div>

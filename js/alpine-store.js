@@ -798,19 +798,61 @@ document.addEventListener('alpine:init', () => {
   }));
 
   Alpine.data('historyComponent', () => ({
-    openAccordions: [], chart: null,
-    init() { Alpine.store('quiz').loadResults(); this.$nextTick(() => this.renderChart()); },
+    openAccordions: [],
+    chart: null,
+    activeTab: 'parcours',
+
+    init() {
+      Alpine.store('quiz').loadResults();
+      this.$nextTick(() => this.renderChart());
+    },
+
+    setTab(tabName) {
+      this.activeTab = tabName;
+      this.openAccordions = [];
+      this.$nextTick(() => this.renderChart());
+    },
+
+    get filteredAndSortedResults() {
+      let results = [...Alpine.store('quiz').quizResults];
+
+      if (this.activeTab === 'parcours') {
+        results = results.filter(r => r.quizProperties.modeApprentissage === true);
+      } else if (this.activeTab === 'libre') {
+        results = results.filter(r => r.quizProperties.modeApprentissage === false);
+      }
+
+      return results.sort((a, b) => {
+        // Parse "DD/MM/YYYY, HH:MM:SS" to a sortable format
+        const parseDate = (dateStr) => {
+          const [date, time] = dateStr.split(', ');
+          const [day, month, year] = date.split('/');
+          return new Date(`${year}-${month}-${day}T${time || '00:00:00'}`);
+        };
+        return parseDate(b.quizProperties.date) - parseDate(a.quizProperties.date);
+      });
+    },
+
     renderChart() {
       const ctx = document.getElementById("progressionChart");
-      if (!ctx || Alpine.store('quiz').quizResults.length === 0) return;
+      const resultsToChart = [...this.filteredAndSortedResults].reverse();
+
+      if (!ctx || resultsToChart.length === 0) {
+        if (this.chart) {
+          this.chart.destroy();
+          this.chart = null;
+        }
+        return;
+      }
+
       if (this.chart) this.chart.destroy();
       this.chart = new Chart(ctx, {
         type: "line",
         data: {
-          labels: Alpine.store('quiz').quizResults.map(r => r.quizProperties.date.split(" ")[0]),
+          labels: resultsToChart.map(r => r.quizProperties.date.split(" ")[0]),
           datasets: [{
             label: "Score %",
-            data: Alpine.store('quiz').quizResults.map(r => Math.round((r.pairs.filter(p => p.isCorrect).length / r.pairs.length) * 100)),
+            data: resultsToChart.map(r => Math.round((r.pairs.filter(p => p.isCorrect).length / r.pairs.length) * 100)),
             borderColor: "#2563eb",
             fill: false
           }]
@@ -818,32 +860,45 @@ document.addEventListener('alpine:init', () => {
         options: { responsive: true, maintainAspectRatio: false }
       });
     },
+
     toggleAccordion(index) {
       const idx = this.openAccordions.indexOf(index);
       if (idx > -1) this.openAccordions.splice(idx, 1);
       else this.openAccordions.push(index);
     },
-    getTotalCorrect() { return Alpine.store('quiz').quizResults.reduce((sum, r) => sum + r.pairs.filter(p => p.isCorrect).length, 0); },
-    getTotalIncorrect() { return Alpine.store('quiz').quizResults.reduce((sum, r) => sum + r.pairs.filter(p => !p.isCorrect).length, 0); },
+
+    getTotalCorrect() { return this.filteredAndSortedResults.reduce((sum, r) => sum + r.pairs.filter(p => p.isCorrect).length, 0); },
+    getTotalIncorrect() { return this.filteredAndSortedResults.reduce((sum, r) => sum + r.pairs.filter(p => !p.isCorrect).length, 0); },
     getGlobalScore() {
       const total = this.getTotalCorrect() + this.getTotalIncorrect();
       return total === 0 ? 0 : Math.round((this.getTotalCorrect() / total) * 100);
     },
+
     getScoreClass(result) {
       const score = Math.round((result.pairs.filter(p => p.isCorrect).length / result.pairs.length) * 100);
       if (score >= 80) return "text-green-600";
       if (score >= 60) return "text-yellow-600";
       return "text-red-600";
     },
+
     deleteResult(index) {
-      Alpine.store('quiz').quizResults.splice(index, 1);
-      localStorage.setItem("quizResults", JSON.stringify(Alpine.store('quiz').quizResults));
-      this.openAccordions = [];
+      const originalIndex = Alpine.store('quiz').quizResults.findIndex(
+        r => r.quizProperties.id === this.filteredAndSortedResults[index].quizProperties.id
+      );
+
+      if (originalIndex > -1) {
+        Alpine.store('quiz').quizResults.splice(originalIndex, 1);
+        localStorage.setItem("quizResults", JSON.stringify(Alpine.store('quiz').quizResults));
+        this.openAccordions = [];
+        this.$nextTick(() => this.renderChart());
+      }
     },
+
     clearHistory() {
       Alpine.store('quiz').quizResults = [];
       localStorage.setItem("quizResults", JSON.stringify([]));
       this.openAccordions = [];
+      this.$nextTick(() => this.renderChart());
     }
   }));
 
