@@ -163,16 +163,16 @@ document.addEventListener('alpine:init', () => {
 
     // Astuces
     tableTips: {
-      1: "Multiplier par 1 est facile : le nombre ne change pas !",
-      2: "Multiplier par 2, c'est comme calculer le double.",
-      3: "Astuce : La somme des chiffres du résultat est toujours 3, 6 ou 9.",
-      4: "Multiplier par 4, c'est comme doubler deux fois (x2 puis encore x2).",
-      5: "Le résultat se termine toujours par 0 ou 5.",
-      6: "Multiplier par 6, c'est multiplier par 3 puis par 2.",
-      7: "C'est souvent la plus difficile, apprends-la bien par cœur !",
-      8: "Multiplier par 8, c'est doubler trois fois (x2, x2, x2).",
-      9: "Astuce des doigts : baisse le doigt correspondant au nombre multiplié !",
-      10: "Ajoute simplement un 0 à la fin du nombre."
+      1: "La table de 1, c'est facile ! Chaque nombre reste lui-même. C'est comme un miroir magique !",
+      2: "Multiplier par 2, c'est faire le DOUBLE ! Imagine deux fois la même chose. 🍎+🍎 = 2🍎",
+      3: "La table de 3 a un petit secret : si tu comptes 3 par 3, tu verras les résultats ! 3, 6, 9...",
+      4: "Pour la table de 4, tu peux faire 'le double du double' ! C'est super rapide ! 😎",
+      5: "La table de 5 est géniale : tous les résultats finissent par 0 ou 5. Regarde bien ! 🖐️",
+      6: "Les résultats de la table de 6 finissent souvent par le même chiffre que le nombre que tu multiplies, si ce nombre est pair (ex: 6x2=12, 6x4=24) !",
+      7: "La table de 7 est un petit défi ! Entraîne-toi souvent sur 7x6=42, 7x7=49 et 7x8=56. Tu es un champion !",
+      8: "Pour la table de 8, tu peux faire 'le double, puis encore le double, puis encore le double' ! 🌟",
+      9: "La table de 9 est magique ! Si tu multiplies 9 par un nombre, puis tu additionnes les chiffres du résultat, tu trouveras toujours 9 ! (ex: 9x2=18, 1+8=9)",
+      10: "La table de 10 est la plus simple : il suffit d'ajouter un ZÉRO à la fin du nombre. Un tour de passe-passe ! 🪄"
     },
 
     // Initialisation
@@ -247,6 +247,7 @@ document.addEventListener('alpine:init', () => {
           this.chronoMode = prefs.chronoMode || 'question';
           this.numOfQuestions = prefs.numOfQuestions || 10;
           this.selectedValues = prefs.selectedValues || [2, 3, 4, 5, 6, 7, 8, 9];
+          this.proposedNextLevel = prefs.proposedNextLevel || false;
         } catch (e) {
           console.error('Erreur chargement préférences:', e);
         }
@@ -259,7 +260,8 @@ document.addEventListener('alpine:init', () => {
         secondsChrono: this.secondsChrono,
         chronoMode: this.chronoMode,
         numOfQuestions: this.numOfQuestions,
-        selectedValues: this.selectedValues
+        selectedValues: this.selectedValues,
+        proposedNextLevel: this.proposedNextLevel
       };
       localStorage.setItem('quizPreferences', JSON.stringify(prefs));
     },
@@ -515,6 +517,7 @@ document.addEventListener('alpine:init', () => {
           this.proposedNextLevel = false;
           console.log("Tous les niveaux d'apprentissage terminés !");
         }
+        this.saveQuizPreferences();
       }
     },
 
@@ -522,6 +525,7 @@ document.addEventListener('alpine:init', () => {
       this.currentLevel++;
       localStorage.setItem('quiz_current_level', this.currentLevel);
       this.proposedNextLevel = false;
+      this.saveQuizPreferences();
     },
 
     initPythagoreValues() {
@@ -826,6 +830,7 @@ document.addEventListener('alpine:init', () => {
 
       this.$nextTick(() => {
         this.startTimer();
+        if (this.$refs.answerInput) this.$refs.answerInput.focus();
         this.questionStartTime = Date.now();
         this.speak(`${Alpine.store('quiz').currentPair.factors[0]} fois ${Alpine.store('quiz').currentPair.factors[1]}`);
       });
@@ -878,6 +883,7 @@ document.addEventListener('alpine:init', () => {
         if (Alpine.store('quiz').chronoMode === "question") this.remainingTime = Alpine.store('quiz').secondsChrono;
         this.$nextTick(() => {
           this.startTimer();
+          if (this.$refs.answerInput) this.$refs.answerInput.focus();
           this.questionStartTime = Date.now();
           this.speak(`${Alpine.store('quiz').currentPair.factors[0]} fois ${Alpine.store('quiz').currentPair.factors[1]}`);
         });

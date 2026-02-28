@@ -292,13 +292,13 @@
                 </h3>
                 <div class="flex flex-wrap gap-3">
                   <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.debutant">
-                    <a href="debutant.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-blue-800 text-blue-600 dark:text-blue-100 font-semibold shadow-sm hover:bg-blue-50 hover:dark:bg-blue-700 transition">👶 Tables Faciles</a>
+                    <a href="debutant.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200 font-semibold shadow-sm hover:bg-indigo-200 hover:dark:bg-indigo-600 transition">👶 Tables Faciles</a>
                   </template>
                   <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.intermediaire">
-                    <a href="intermediaire.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-blue-800 text-blue-600 dark:text-blue-100 font-semibold shadow-sm hover:bg-blue-50 hover:dark:bg-blue-700 transition">📘 Tables Moyennes</a>
+                    <a href="intermediaire.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200 font-semibold shadow-sm hover:bg-indigo-200 hover:dark:bg-indigo-600 transition">📘 Tables Moyennes</a>
                   </template>
                   <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.expert">
-                    <a href="expert.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-white dark:bg-blue-800 text-blue-600 dark:text-blue-100 font-semibold shadow-sm hover:bg-blue-50 hover:dark:bg-blue-700 transition">🔥 Tables Difficiles</a>
+                    <a href="expert.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200 font-semibold shadow-sm hover:bg-indigo-200 hover:dark:bg-indigo-600 transition">🔥 Tables Difficiles</a>
                   </template>
                 </div>
               </div>
@@ -855,6 +855,7 @@
                   <input
                     type="text"
                     x-model="userAnswer"
+                    x-ref="answerInput"
                     @input="userAnswer = userAnswer.replace(/[^0-9]/g, '')"
                     @keyup.enter="submitAnswer()"
                     class="text-2xl p-3 border-2 border-blue-600 rounded-lg text-center w-24 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-blue-700"
