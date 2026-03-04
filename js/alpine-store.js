@@ -247,7 +247,7 @@ document.addEventListener('alpine:init', () => {
           this.chronoMode = prefs.chronoMode || 'question';
           this.numOfQuestions = prefs.numOfQuestions || 10;
           this.selectedValues = prefs.selectedValues || [2, 3, 4, 5, 6, 7, 8, 9];
-          this.proposedNextLevel = prefs.proposedNextLevel || false;
+          this.proposedNextLevel = typeof prefs.proposedNextLevel !== 'undefined' ? prefs.proposedNextLevel : false; // Charge l'état
         } catch (e) {
           console.error('Erreur chargement préférences:', e);
         }
@@ -517,8 +517,12 @@ document.addEventListener('alpine:init', () => {
           this.proposedNextLevel = false;
           console.log("Tous les niveaux d'apprentissage terminés !");
         }
-        this.saveQuizPreferences();
+      } else {
+        // IMPORTANT : Si le quiz ne propose pas de passer au niveau supérieur, s'assurer que le flag est à false
+        this.proposedNextLevel = false;
       }
+      // Sauvegarder l'état mis à jour
+      this.saveQuizPreferences();
     },
 
     acceptLevelUp() {
