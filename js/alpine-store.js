@@ -182,6 +182,11 @@ document.addEventListener('alpine:init', () => {
       this.initPythagoreValues();
       this.loadMasteryData();
       this.loadLevel();
+
+      // Après avoir chargé toutes les données pertinentes, réévaluer la progression au niveau supérieur
+      // Utiliser un grade par défaut si latestGrade n'est pas encore défini (par exemple, au tout premier chargement)
+      const gradeForReevaluation = this.latestGrade || 'C'; // Utilisez 'C' comme grade par défaut si non trouvé
+      this.checkLevelProgression(gradeForReevaluation, true);
     },
 
     loadLevel() {
@@ -509,7 +514,7 @@ document.addEventListener('alpine:init', () => {
       return worst;
     },
 
-    checkLevelProgression(grade) {
+    checkLevelProgression(grade, isInit = false) {
       if (this.modeApprentissage && (grade === 'A' || grade === 'A+')) {
         if (this.currentLevel < LEARNING_PATH.length - 1) {
           this.proposedNextLevel = true;
@@ -517,8 +522,9 @@ document.addEventListener('alpine:init', () => {
           this.proposedNextLevel = false;
           console.log("Tous les niveaux d'apprentissage terminés !");
         }
-      } else {
+      } else if (!isInit) {
         // IMPORTANT : Si le quiz ne propose pas de passer au niveau supérieur, s'assurer que le flag est à false
+        // Mais ne pas réinitialiser si on est en phase d'initialisation du store (persistance)
         this.proposedNextLevel = false;
       }
       // Sauvegarder l'état mis à jour
