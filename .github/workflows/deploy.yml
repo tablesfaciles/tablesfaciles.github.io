@@ -1,33 +1,60 @@
-name: Build and Deploy
+name: Build and Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  build-deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Setup Node
+    steps:
+      - name: 📁 Checkout du code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Configuration de Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
+          cache: "npm"
 
-      - name: Install dependencies
+      - name: 📦 Installation des dépendances
         run: npm ci
 
-      - name: Build
-        run: npm run build
-
-      - name: Update version
+      - name: 🏗️ Build (Tailwind & JS)
         run: |
-          VERSION=$(date +%Y%m%d%H%M)
-          sed -i "s/\?v=[^\"]*/?v=$VERSION/g" *.html
+          npm run prod
+          # On vérifie que le dossier vendor a bien été créé
+          ls -la vendor/
 
-      - name: Deploy to gh-pages
+      - name: 🔖 Versioning & Cache Busting
+        run: |
+          # Création d'une variable unique pour tout le build
+          VERSION=$(date +%Y%m%d%H%M)
+          echo "Version choisie : $VERSION"
+
+          # 1. Mise à jour du Service Worker (sw.js)
+          # On cherche la ligne CACHE_NAME et on remplace tout le numéro
+          sed -i "s/const CACHE_NAME = 'multiplication-app-[^']*'/const CACHE_NAME = 'multiplication-app-$VERSION'/g" sw.js
+
+          # 2. Mise à jour de tous les fichiers HTML
+          # On remplace ?v=... par le nouveau numéro
+          sed -i "s/\?v=[0-9]*/?v=$VERSION/g" *.html
+
+          # 3. Vérification (optionnel, pour voir dans les logs)
+          grep "CACHE_NAME" sw.js
+          grep "?v=" index.html | head -n 3
+
+      - name: 🚀 Déploiement sur GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
+          publish_branch: gh-pages
+          # IMPORTANT : On force l'inclusion de vendor même s'il est dans .gitignore
+          exclude_assets: ".github,node_modules"
