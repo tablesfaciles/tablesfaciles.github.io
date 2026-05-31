@@ -37,24 +37,21 @@ jobs:
           VERSION=$(date +%Y%m%d%H%M)
           echo "Nouvelle version : $VERSION"
 
-          # Remplacement de la version dans les HTML (format v=chiffres)
-          sed -i "s/v=[0-9]*/v=$VERSION/g" *.html
+          # Remplacement dans tous les HTML
+          find . -name "*.html" -exec sed -i "s/v=[0-9]\+/v=$VERSION/g" {} \;
 
-          # Remplacement de la version dans le Service Worker
-          sed -i "s/multiplication-app-[0-9]*/multiplication-app-$VERSION/g" sw.js
+          # Remplacement dans sw.js
+          sed -i "s/multiplication-app-[0-9]\+/multiplication-app-$VERSION/g" sw.js
 
-          # Vérification visuelle dans les logs GitHub
-          echo "--- VERIFICATION HTML ---"
-          grep "?v=" index.html | head -n 2
-          echo "--- VERIFICATION SW ---"
-          grep "CACHE_NAME" sw.js
+          echo "----- CHECK HTML -----"
+          grep "v=$VERSION" index.html || true
+          echo "----- CHECK SW -----"
+          grep "$VERSION" sw.js || true
 
-      - name: 🚀 Déploiement sur GitHub Pages
+      - name: 🚀 Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
-          # Cette option est la CLÉ : elle force l'inclusion de vendor
-          # même s'il est dans votre .gitignore
           force_orphan: true
