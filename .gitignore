@@ -1,6 +1,5 @@
 # Dépendances
 node_modules/
-package-lock.json
 
 # Fichiers de build (si vous voulez rebuild en prod)
 vendor/
