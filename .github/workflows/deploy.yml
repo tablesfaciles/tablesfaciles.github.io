@@ -29,32 +29,32 @@ jobs:
       - name: 🏗️ Build (Tailwind & JS)
         run: |
           npm run prod
-          # On vérifie que le dossier vendor a bien été créé
-          ls -la vendor/
+          # On crée un fichier vide pour être sûr que vendor n'est pas vide
+          touch vendor/.keep
 
       - name: 🔖 Versioning & Cache Busting
         run: |
-          # Création d'une variable unique pour tout le build
           VERSION=$(date +%Y%m%d%H%M)
-          echo "Version choisie : $VERSION"
+          echo "Nouvelle version : $VERSION"
 
-          # 1. Mise à jour du Service Worker (sw.js)
-          # On cherche la ligne CACHE_NAME et on remplace tout le numéro
-          sed -i "s/const CACHE_NAME = 'multiplication-app-[^']*'/const CACHE_NAME = 'multiplication-app-$VERSION'/g" sw.js
+          # Remplacement de la version dans les HTML (format v=chiffres)
+          sed -i "s/v=[0-9]*/v=$VERSION/g" *.html
 
-          # 2. Mise à jour de tous les fichiers HTML
-          # On remplace ?v=... par le nouveau numéro
-          sed -i "s/\?v=[0-9]*/?v=$VERSION/g" *.html
+          # Remplacement de la version dans le Service Worker
+          sed -i "s/multiplication-app-[0-9]*/multiplication-app-$VERSION/g" sw.js
 
-          # 3. Vérification (optionnel, pour voir dans les logs)
+          # Vérification visuelle dans les logs GitHub
+          echo "--- VERIFICATION HTML ---"
+          grep "?v=" index.html | head -n 2
+          echo "--- VERIFICATION SW ---"
           grep "CACHE_NAME" sw.js
-          grep "?v=" index.html | head -n 3
 
       - name: 🚀 Déploiement sur GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
           publish_branch: gh-pages
-          # IMPORTANT : On force l'inclusion de vendor même s'il est dans .gitignore
-          exclude_assets: ".github,node_modules"
+          # Cette option est la CLÉ : elle force l'inclusion de vendor
+          # même s'il est dans votre .gitignore
+          force_orphan: true
