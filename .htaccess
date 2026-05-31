@@ -5,7 +5,11 @@
 # Activer le mod_rewrite
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    RewriteBase /multiplication/
+
+    # === FORCER LE TRAILING SLASH - RÈGLE PRIORITAIRE ===
+    # Rediriger /multiplication vers /multiplication/ AVANT tout le reste
+    RewriteRule ^multiplication$ multiplication/ [L,R=301]
 
     # Forcer HTTPS
     RewriteCond %{HTTPS} off
