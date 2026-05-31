@@ -1,9 +1,6 @@
 # Dépendances
 node_modules/
 
-# Fichiers de build (si vous voulez rebuild en prod)
-vendor/
-
 # Fichiers système
 .DS_Store
 .DS_Store?
