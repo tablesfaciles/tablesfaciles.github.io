@@ -675,7 +675,16 @@ document.addEventListener('alpine:init', () => {
       }
       return array;
     },
-    scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
+    scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); },
+    getOperationLabel(plural = false) {
+      const labels = {
+        multiplication: plural ? "multiplications" : "multiplication",
+        division: plural ? "divisions" : "division",
+        addition: plural ? "additions" : "addition",
+        soustraction: plural ? "soustractions" : "soustraction"
+      };
+      return labels[this.operationType] || "multiplication";
+    }
   }));
 
   Alpine.data('pythagoreComponent', () => ({
@@ -736,6 +745,19 @@ document.addEventListener('alpine:init', () => {
       if (total === 0) return 0;
       let discovered = this.discoveredCells.filter(cell => this.selectedTablesDiscover.includes(cell.row) || this.selectedTablesDiscover.includes(cell.col)).length;
       return (discovered / total) * 100;
+    },
+    getTotalCellsToDiscover() {
+      let total = 0;
+      for (let r = 2; r <= 9; r++) { for (let c = 2; c <= 9; c++) {
+          if (this.selectedTablesDiscover.includes(r) || this.selectedTablesDiscover.includes(c)) total++;
+      }}
+      return total;
+    },
+    isHeaderColHighlighted(col) {
+      return this.selectedCol === col;
+    },
+    isHeaderRowHighlighted(row) {
+      return this.selectedRow === row;
     }
   }));
 
