@@ -28,7 +28,7 @@
       sizes="16x16"
       href="img/favicons/favicon-16x16.png"
     />
-    <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="/manifest.json" />
     <link
       rel="mask-icon"
       href="img/favicons/safari-pinned-tab.svg"
@@ -75,13 +75,20 @@
             <span class="text-xl font-bold">Multiplication</span>
           </div>
 
-          <div class="hidden lg:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
+          <div
+            class="hidden lg:flex space-x-1 items-center text-sm"
+            role="navigation"
+            aria-label="Menu principal"
+          >
             <a
               href="index.html"
               class="bg-blue-800 hover:bg-blue-900 px-3 py-2 rounded transition"
               >🏠 Accueil</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
+            <div
+              class="w-px h-6 bg-white bg-opacity-20"
+              aria-hidden="true"
+            ></div>
             <a
               href="debutant.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -97,7 +104,10 @@
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
               >🔥 Expert</a
             >
-            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
+            <div
+              class="w-px h-6 bg-white bg-opacity-20"
+              aria-hidden="true"
+            ></div>
             <a
               href="operations-aleatoires.html"
               class="hover:bg-blue-800 px-3 py-2 rounded transition"
@@ -398,7 +408,12 @@
             class="flex flex-col h-full bg-gradient-to-br from-pink-500 to-rose-500 dark:from-pink-700 dark:to-rose-700 rounded-lg shadow-2xl overflow-hidden hover:shadow-3xl transition transform hover:scale-105"
           >
             <div class="h-32 flex items-center justify-center flex-shrink-0">
-              <span class="text-6xl" role="img" aria-label="Point d'interrogation">❓</span>
+              <span
+                class="text-6xl"
+                role="img"
+                aria-label="Point d'interrogation"
+                >❓</span
+              >
             </div>
             <div class="p-6 bg-white dark:bg-gray-800 flex-1 flex flex-col">
               <h3
@@ -427,7 +442,9 @@
             class="flex flex-col h-full bg-gradient-to-br from-cyan-500 to-cyan-600 dark:from-cyan-700 dark:to-cyan-800 rounded-lg shadow-2xl overflow-hidden hover:shadow-3xl transition transform hover:scale-105"
           >
             <div class="h-32 flex items-center justify-center flex-shrink-0">
-              <span class="text-6xl" role="img" aria-label="Graphique en hausse">📈</span>
+              <span class="text-6xl" role="img" aria-label="Graphique en hausse"
+                >📈</span
+              >
             </div>
             <div class="p-6 bg-white dark:bg-gray-800 flex-1 flex flex-col">
               <h3
@@ -560,7 +577,7 @@
     <!-- Bloc : Service Worker -->
     <script>
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js").then((reg) => {
+        navigator.serviceWorker.register("/sw.js").then((reg) => {
           reg.addEventListener("updatefound", () => {
             const newWorker = reg.installing;
             newWorker.addEventListener("statechange", () => {
