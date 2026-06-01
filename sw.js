@@ -69,7 +69,7 @@ self.addEventListener('fetch', event => {
 
           // Si c'est une page HTML non trouvée, on renvoie l'index
           if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
+            return caches.match('/index.html');
           }
         });
       })
