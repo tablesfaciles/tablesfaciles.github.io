@@ -12,12 +12,12 @@
   "categories": ["education", "productivity"],
   "icons": [
     {
-      "src": "/img/favicons/icon-192.png",
+      "src": "/img/favicons/web-app-manifest-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/img/favicons/icon-512.png",
+      "src": "/img/favicons/web-app-manifest-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
@@ -30,7 +30,7 @@
       "url": "/debutant.html",
       "icons": [
         {
-          "src": "/img/favicons/icon-192.png",
+          "src": "/img/favicons/web-app-manifest-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -43,7 +43,7 @@
       "url": "/quiz.html",
       "icons": [
         {
-          "src": "/img/favicons/icon-192.png",
+          "src": "/img/favicons/web-app-manifest-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
@@ -56,7 +56,7 @@
       "url": "/pythagore.html",
       "icons": [
         {
-          "src": "/img/favicons/icon-192.png",
+          "src": "/img/favicons/web-app-manifest-192x192.png",
           "sizes": "192x192",
           "type": "image/png"
         }
