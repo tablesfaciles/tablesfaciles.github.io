@@ -187,6 +187,11 @@ document.addEventListener('alpine:init', () => {
       // Utiliser un grade par défaut si latestGrade n'est pas encore défini (par exemple, au tout premier chargement)
       const gradeForReevaluation = this.latestGrade || 'C'; // Utilisez 'C' comme grade par défaut si non trouvé
       this.checkLevelProgression(gradeForReevaluation, true);
+
+      // Appliquer automatiquement la progression si proposedNextLevel est true au chargement
+      if (this.proposedNextLevel && (this.latestGrade === 'A' || this.latestGrade === 'A+')) {
+        this.acceptLevelUp();
+      }
     },
 
     loadLevel() {
@@ -253,6 +258,7 @@ document.addEventListener('alpine:init', () => {
           this.numOfQuestions = prefs.numOfQuestions || 10;
           this.selectedValues = prefs.selectedValues || [2, 3, 4, 5, 6, 7, 8, 9];
           this.proposedNextLevel = typeof prefs.proposedNextLevel !== 'undefined' ? prefs.proposedNextLevel : false; // Charge l'état
+          this.latestGrade = prefs.latestGrade || null; // Charge le dernier grade
         } catch (e) {
           console.error('Erreur chargement préférences:', e);
         }
@@ -266,7 +272,8 @@ document.addEventListener('alpine:init', () => {
         chronoMode: this.chronoMode,
         numOfQuestions: this.numOfQuestions,
         selectedValues: this.selectedValues,
-        proposedNextLevel: this.proposedNextLevel
+        proposedNextLevel: this.proposedNextLevel,
+        latestGrade: this.latestGrade
       };
       localStorage.setItem('quizPreferences', JSON.stringify(prefs));
     },
@@ -535,6 +542,7 @@ document.addEventListener('alpine:init', () => {
       this.currentLevel++;
       localStorage.setItem('quiz_current_level', this.currentLevel);
       this.proposedNextLevel = false;
+      this.latestGrade = null; // Réinitialiser le grade après avoir appliqué la progression
       this.saveQuizPreferences();
     },
 
