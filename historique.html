@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="multiplication, table pythagore, tables multiplication aléatoires, exercices, Quiz opérations mathématiques, Entraînement au calcul mental"
+    />
+    <title>Historique de progression</title>
+
+    <!-- Bloc : Favicons & PWA -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="mask-icon"
+      href="img/favicons/safari-pinned-tab.svg"
+      color="#1e40af"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Multiplication" />
+    <meta name="msapplication-TileColor" content="#1e40af" />
+    <meta name="theme-color" content="#1e40af" />
+
+    <!-- Bloc : Styles Tailwind -->
+    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202606011403" />
+  </head>
+
+  <body
+    class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
+  >
+    <!-- Bloc : Navigation -->
+    <nav
+      class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
+      x-data="$store.nav"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 gap-4">
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <svg
+              class="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <span class="text-xl font-bold">Multiplication</span>
+          </div>
+
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
+            <a
+              href="index.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >🏠 Accueil</a
+            >
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
+            <a
+              href="debutant.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >👶 Débutants</a
+            >
+            <a
+              href="intermediaire.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >📘 Intermédiaire</a
+            >
+            <a
+              href="expert.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >🔥 Expert</a
+            >
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
+            <a
+              href="operations-aleatoires.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="bg-blue-800 px-3 py-2 rounded transition shadow-inner"
+              aria-current="page"
+              >📈 Historique</a
+            >
+          </div>
+
+          <button
+            @click="toggle()"
+            class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                x-show="!mobileMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+              <path
+                x-show="mobileMenuOpen"
+                x-cloak
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div
+          x-show="mobileMenuOpen"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0 transform -translate-y-2"
+          x-transition:enter-end="opacity-100 transform translate-y-0"
+          class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4"
+          id="mobile-menu"
+          x-cloak
+        >
+          <div class="flex flex-col space-y-1 pt-2">
+            <a
+              href="index.html"
+              class="block px-3 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >🏠 Accueil</a
+            >
+            <div class="px-3 py-2 text-sm font-semibold text-blue-200">
+              APPRENTISSAGE
+            </div>
+            <a
+              href="debutant.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >👶 Débutants (1-5)</a
+            >
+            <a
+              href="intermediaire.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >📘 Intermédiaire (6-8)</a
+            >
+            <a
+              href="expert.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >🔥 Expert (9+)</a
+            >
+            <div class="px-3 py-2 text-sm font-semibold text-blue-200">
+              EXERCICES
+            </div>
+            <a
+              href="operations-aleatoires.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition shadow-inner"
+              >📈 Historique</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bloc : Contenu principal -->
+    <main
+      class="flex-grow max-w-6xl mx-auto px-4 py-12"
+      x-data="historyComponent"
+    >
+      <h1 class="text-4xl font-bold text-center mb-8">
+        Historique de progression
+      </h1>
+
+      <!-- Bloc : Navigation par onglets -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8">
+        <button
+          @click="setTab('all')"
+          :class="{ 'bg-blue-600 text-white shadow-md': activeTab === 'all', 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200': activeTab !== 'all' }"
+          class="py-2 px-5 rounded-full font-semibold transition-colors"
+        >
+          Tous les Quiz
+        </button>
+        <button
+          @click="setTab('parcours')"
+          :class="{ 'bg-indigo-600 text-white shadow-md': activeTab === 'parcours', 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200': activeTab !== 'parcours' }"
+          class="py-2 px-5 rounded-full font-semibold transition-colors"
+        >
+          Parcours
+        </button>
+        <button
+          @click="setTab('libre')"
+          :class="{ 'bg-blue-600 text-white shadow-md': activeTab === 'libre', 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200': activeTab !== 'libre' }"
+          class="py-2 px-5 rounded-full font-semibold transition-colors"
+        >
+          Quiz Libre
+        </button>
+      </div>
+
+      <!-- Bloc : Effacer l'historique -->
+      <div
+        class="flex justify-center mb-8"
+        x-show="filteredAndSortedResults.length > 0"
+      >
+        <div x-data="{ confirming: false }">
+          <button
+            x-show="!confirming"
+            @click="confirming = true"
+            class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition"
+          >
+            Effacer l'historique
+          </button>
+
+          <div
+            x-show="confirming"
+            x-transition
+            class="flex items-center gap-3 bg-red-50 dark:bg-red-900/20 px-6 py-3 rounded-lg border-2 border-red-600"
+            x-cloak
+          >
+            <span class="text-sm font-bold text-red-600 dark:text-red-400"
+              >Êtes-vous sûr ?</span
+            >
+            <button
+              @click="clearHistory(); confirming = false"
+              class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition"
+            >
+              Oui, supprimer
+            </button>
+            <button
+              @click="confirming = false"
+              class="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-900 dark:text-white font-bold px-4 py-2 rounded transition"
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc : Message d'absence de données -->
+      <template x-if="filteredAndSortedResults.length === 0">
+        <div class="bg-blue-50 dark:bg-blue-900/20 p-12 rounded-lg text-center">
+          <svg
+            class="w-16 h-16 mx-auto text-blue-600 mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <h2 class="text-2xl font-bold mb-2">Aucun résultat</h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-6">
+            Vous n'avez pas encore complété de quiz
+          </p>
+          <a
+            href="quiz.html"
+            class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition"
+          >
+            Commencer un quiz
+          </a>
+        </div>
+      </template>
+
+      <!-- Bloc : Liste des résultats -->
+      <template x-if="filteredAndSortedResults.length > 0">
+        <div class="space-y-6">
+          <!-- Bloc : Statistiques globales -->
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg">
+              <div
+                class="text-3xl font-bold text-blue-600"
+                x-text="filteredAndSortedResults.length"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Quiz complétés
+              </div>
+            </div>
+            <div class="bg-green-50 dark:bg-green-900/20 p-6 rounded-lg">
+              <div
+                class="text-3xl font-bold text-green-600"
+                x-text="getTotalCorrect()"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Réponses correctes
+              </div>
+            </div>
+            <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg">
+              <div
+                class="text-3xl font-bold text-red-600"
+                x-text="getTotalIncorrect()"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Réponses incorrectes
+              </div>
+            </div>
+            <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg">
+              <div
+                class="text-3xl font-bold text-purple-600"
+                x-text="`${getGlobalScore()}%`"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Score moyen
+              </div>
+            </div>
+          </div>
+          <!-- Bloc : Graphique de progression -->
+          <div
+            class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg mb-8"
+            x-show="filteredAndSortedResults.length > 1"
+          >
+            <h3 class="text-lg font-bold mb-4 text-center">
+              Évolution de vos scores (%)
+            </h3>
+            <div class="relative w-full h-[300px]">
+              <canvas id="progressionChart" aria-label="Graphique de progression des scores" role="img"></canvas>
+            </div>
+          </div>
+          <!-- Bloc : Historique des quiz -->
+          <div class="space-y-4">
+            <template
+              x-for="(result, index) in filteredAndSortedResults"
+              :key="`${result.quizProperties.id}-${index}`"
+            >
+              <div
+                class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+              >
+                <!-- Bloc : Détails du quiz (en-tête) -->
+                <button
+                  @click="toggleAccordion(index)"
+                  class="w-full p-6 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-gray-700 transition font-semibold"
+                  :aria-expanded="openAccordions.includes(index)"
+                >
+                  <div class="text-left flex-1">
+                    <div class="font-bold">
+                      <template x-if="result.quizProperties.modeApprentissage === true">
+                        <span>Parcours (Niveau <span x-text="result.quizProperties.level + 1"></span> : <span x-text="window.LEARNING_PATH[result.quizProperties.level]?.name || 'Niveau inconnu'"></span>)</span>
+                      </template>
+                      <template x-if="result.quizProperties.modeApprentissage === false">
+                        <span>Quiz <span class="capitalize" x-text="result.quizProperties.operationType"></span> Libre</span>
+                      </template>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                      <span x-text="result.quizProperties.date"></span>
+                      •
+                      <span
+                        x-text="`${result.pairs.filter(p => p.isCorrect).length}/${result.pairs.length} correctes`"
+                      ></span>
+                    </div>
+                  </div>
+                  <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                      <div
+                        class="text-lg font-bold"
+                        :class="getScoreClass(result)"
+                      >
+                        <span
+                          x-text="`${Math.round((result.pairs.filter(p => p.isCorrect).length / result.pairs.length) * 100)}%`"
+                        ></span>
+                      </div>
+                    </div>
+                    <svg
+                      :class="{ 'transform rotate-180': openAccordions.includes(index) }"
+                      class="w-6 h-6 transition transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                      ></path>
+                    </svg>
+                  </div>
+                </button>
+
+                <!-- Bloc : Détails du quiz (contenu) -->
+                <div
+                  x-show="openAccordions.includes(index)"
+                  x-transition
+                  class="border-t border-gray-200 dark:border-gray-700 p-6"
+                  x-cloak
+                >
+                  <!-- Bloc : Informations de temps -->
+                  <div
+                    class="mb-6 py-3 px-2 border-b border-gray-100 dark:border-gray-800"
+                  >
+                    <div
+                      class="flex flex-wrap justify-center gap-4 md:gap-8 text-sm"
+                    >
+                      <div class="flex items-center space-x-2">
+                        <svg
+                          class="w-4 h-4 text-blue-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          aria-hidden="true"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
+                          ></path>
+                        </svg>
+                        <span
+                          class="font-medium dark:text-gray-300"
+                          x-text="result.quizProperties.chronoMode === 'question' ? 'Questions' : 'Global'"
+                        ></span>
+                      </div>
+
+                      <template
+                        x-if="result.quizProperties.chronoMode === 'quiz'"
+                      >
+                        <div
+                          class="flex flex-wrap justify-center gap-4 md:gap-8"
+                        >
+                          <div class="flex items-center space-x-2">
+                            <svg
+                              class="w-4 h-4 text-blue-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                              ></path>
+                            </svg>
+                            <span class="text-gray-600 dark:text-gray-400"
+                              >Alloué:
+                              <b
+                                class="text-gray-900 dark:text-white"
+                                x-text="$store.quiz.formatTime(result.quizProperties.totalSecondsAllocated)"
+                              ></b
+                            ></span>
+                          </div>
+                          <div class="flex items-center space-x-2">
+                            <svg
+                              class="w-4 h-4 text-indigo-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"
+                              ></path>
+                            </svg>
+                            <span class="text-gray-600 dark:text-gray-400"
+                              >Temps:
+                              <b
+                                class="text-gray-900 dark:text-white"
+                                x-text="$store.quiz.formatTime(result.quizProperties.timeUsed)"
+                              ></b
+                            ></span>
+                          </div>
+                        </div>
+                      </template>
+
+                      <template
+                        x-if="result.quizProperties.chronoMode === 'question'"
+                      >
+                        <div
+                          class="flex flex-wrap justify-center gap-4 md:gap-8"
+                        >
+                          <div class="flex items-center space-x-2">
+                            <svg
+                              class="w-4 h-4 text-blue-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                              ></path>
+                            </svg>
+                            <span class="text-gray-600 dark:text-gray-400"
+                              >Cadence:
+                              <b
+                                class="text-gray-900 dark:text-white"
+                                x-text="result.quizProperties.secondsChrono + 's/q'"
+                              ></b
+                            ></span>
+                          </div>
+                          <div class="flex items-center space-x-2">
+                            <svg
+                              class="w-4 h-4 text-indigo-500"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                              ></path>
+                            </svg>
+                            <span class="text-gray-600 dark:text-gray-400"
+                              >Temps total:
+                              <b
+                                class="text-gray-900 dark:text-white"
+                                x-text="$store.quiz.formatTime(result.quizProperties.timeUsed)"
+                              ></b
+                            ></span>
+                          </div>
+                        </div>
+                      </template>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div
+                      class="bg-green-50 dark:bg-green-900/20 p-4 rounded text-center"
+                    >
+                      <div
+                        class="text-2xl font-bold text-green-600"
+                        x-text="result.pairs.filter(p => p.isCorrect).length"
+                      ></div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">
+                        Correctes
+                      </div>
+                    </div>
+                    <div
+                      class="bg-red-50 dark:bg-red-900/20 p-4 rounded text-center"
+                    >
+                      <div
+                        class="text-2xl font-bold text-red-600"
+                        x-text="result.pairs.filter(p => !p.isCorrect).length"
+                      ></div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">
+                        Incorrectes
+                      </div>
+                    </div>
+                    <div
+                      class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded text-center"
+                    >
+                      <div
+                        class="text-2xl font-bold text-blue-600"
+                        x-text="result.quizProperties.numOfQuestions"
+                      ></div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">
+                        Total
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Bloc : Récapitulatif des réponses -->
+                  <div class="space-y-2 max-h-96 overflow-y-auto">
+                    <template
+                      x-for="(pair, pIndex) in (result.pairs || [])"
+                      :key="`quiz-${index}-p-${pIndex}`"
+                    >
+                      <div
+                        :class="pair.isCorrect ? 'bg-green-50 dark:bg-green-900/20 border-l-4 border-green-600' : 'bg-red-50 dark:bg-red-900/20 border-l-4 border-red-600'"
+                        class="p-4 rounded"
+                      >
+                        <div
+                          class="flex justify-between items-center font-semibold text-lg"
+                        >
+                          <div>
+                            <span x-text="pair.factors[0]"></span>
+                            <span
+                              class="mx-2"
+                              x-text="result.quizProperties.operationType === 'multiplication' ? '×' : result.quizProperties.operationType === 'division' ? '÷' : result.quizProperties.operationType === 'addition' ? '+' : '−'"
+                              aria-hidden="true"
+                            ></span>
+                            <span x-text="pair.factors[1]"></span>
+                            <span class="mx-2">=</span>
+                            <span
+                              x-text="result.quizProperties.operationType === 'multiplication' ? pair.factors[0] * pair.factors[1] : result.quizProperties.operationType === 'division' ? pair.factors[0] / pair.factors[1] : result.quizProperties.operationType === 'addition' ? pair.factors[0] + pair.factors[1] : pair.factors[0] - pair.factors[1]"
+                            ></span>
+                          </div>
+                          <span
+                            :class="pair.isCorrect ? 'text-green-600' : 'text-red-600'"
+                            class="font-bold"
+                          >
+                            <span x-show="pair.isCorrect" aria-label="Correct">✓</span>
+                            <span x-show="!pair.isCorrect" aria-label="Incorrect">✗</span>
+                          </span>
+                        </div>
+                        <div
+                          x-show="!pair.isCorrect"
+                          class="mt-2 text-sm text-red-600 dark:text-red-400"
+                        >
+                          votre réponse :
+                          <span x-text="pair.answer" class="font-bold"></span>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+
+                  <!-- Bloc : Action de suppression -->
+                  <div x-data="{ confirming: false }" class="mt-4">
+                    <button
+                      x-show="!confirming"
+                      @click="confirming = true"
+                      class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition"
+                    >
+                      Supprimer ce quiz
+                    </button>
+
+                    <div
+                      x-show="confirming"
+                      x-transition
+                      class="flex items-center gap-3 justify-center bg-red-50 dark:bg-red-900/20 px-4 py-3 rounded-lg border-2 border-red-600"
+                      x-cloak
+                    >
+                      <span
+                        class="text-sm font-bold text-red-600 dark:text-red-400"
+                        >Êtes-vous sûr ?</span
+                      >
+                      <button
+                        @click="deleteResult(index); confirming = false"
+                        class="bg-red-600 hover:bg-red-700 text-white font-bold px-4 py-2 rounded transition"
+                      >
+                        Oui
+                      </button>
+                      <button
+                        @click="confirming = false"
+                        class="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-900 dark:text-white font-bold px-4 py-2 rounded transition"
+                      >
+                        Annuler
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </template>
+    </main>
+
+    <!-- Bloc : Pied de page -->
+    <footer
+      class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 py-8 mt-12"
+    >
+      <div class="max-w-7xl mx-auto text-center">
+        <p>
+          &copy; 2024 Application de Multiplication - Version Alpine.js &
+          Tailwind
+        </p>
+      </div>
+    </footer>
+    <!-- Bloc : Bouton flottant Quiz -->
+    <a
+      href="quiz.html"
+      class="fixed z-[9999] bottom-8 right-8 flex items-center bg-blue-600/20 hover:bg-blue-600/30 backdrop-blur-md rounded-full p-1 shadow-2xl transition-all hover:scale-105 group border border-white/20"
+      aria-label="Lancer un nouveau Quiz"
+    >
+      <div
+        class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg group-hover:bg-blue-500 transition-colors flex-shrink-0"
+      >
+        <svg
+          class="w-7 h-7"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="3"
+            d="M12 4v16m8-8H4"
+          ></path>
+        </svg>
+      </div>
+
+      <span
+        class="px-5 text-blue-900 dark:text-blue-100 font-bold uppercase tracking-widest text-xs whitespace-nowrap"
+      >
+        Lancer un Quiz
+      </span>
+    </a>
+    <!-- Bloc : Scripts Alpine.js et Chart.js -->
+    <script defer src="vendor/chart.umd.min.js?v=202606011403"></script>
+    <script defer src="./js/alpine-store.js?v=202606011403"></script>
+    <script defer src="vendor/alpinejs.min.js?v=202606011403"></script>
+
+    <!-- Bloc : Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").then((reg) => {
+          reg.addEventListener("updatefound", () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener("statechange", () => {
+              if (
+                newWorker.state === "installed" &&
+                navigator.serviceWorker.controller
+              ) {
+                // Une nouvelle version est là, on recharge automatiquement
+                window.location.reload();
+              }
+            });
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

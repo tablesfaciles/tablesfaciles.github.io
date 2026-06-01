@@ -1,0 +1,67 @@
+{
+  "id": "/",
+  "name": "Maîtriser la Multiplication",
+  "short_name": "Multiplication",
+  "description": "Application interactive pour apprendre les tables de multiplication avec quiz, exercices aléatoires et table de Pythagore.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#1e40af",
+  "background_color": "#ffffff",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {
+      "src": "/img/favicons/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/img/favicons/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mode Débutants",
+      "short_name": "Débutants",
+      "description": "Tables de 1 à 5 pour les débutants",
+      "url": "/debutant.html",
+      "icons": [
+        {
+          "src": "/img/favicons/web-app-manifest-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Quiz",
+      "short_name": "Quiz",
+      "description": "Exercices quiz chronométrés",
+      "url": "/quiz.html",
+      "icons": [
+        {
+          "src": "/img/favicons/web-app-manifest-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Table de Pythagore",
+      "short_name": "Pythagore",
+      "description": "Table de Pythagore interactive",
+      "url": "/pythagore.html",
+      "icons": [
+        {
+          "src": "/img/favicons/web-app-manifest-192x192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false
+}

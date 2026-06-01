@@ -1,0 +1,1131 @@
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, orientation=portrait"
+    />
+    <meta
+      name="keywords"
+      content="multiplication, table pythagore, tables multiplication aléatoires, exercices, Quiz opérations mathématiques, Entraînement au calcul mental"
+    />
+    <title>Quiz d'opérations mathématiques</title>
+
+    <!-- Bloc : Favicons & PWA -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="mask-icon"
+      href="img/favicons/safari-pinned-tab.svg"
+      color="#1e40af"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Multiplication" />
+    <meta name="msapplication-TileColor" content="#1e40af" />
+    <meta name="theme-color" content="#1e40af" />
+
+    <!-- Bloc : Styles Tailwind -->
+    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202606011403" />
+  </head>
+
+  <body
+    class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
+  >
+    <!-- Bloc : Navigation -->
+    <nav
+      class="bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg"
+      x-data="$store.nav"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 gap-4">
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <svg
+              class="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <span class="text-xl font-bold">Multiplication</span>
+          </div>
+
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
+            <a
+              href="index.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >🏠 Accueil</a
+            >
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
+            <a
+              href="debutant.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >👶 Débutants</a
+            >
+            <a
+              href="intermediaire.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >📘 Intermédiaire</a
+            >
+            <a
+              href="expert.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >🔥 Expert</a
+            >
+            <div class="w-px h-6 bg-white bg-opacity-20" aria-hidden="true"></div>
+            <a
+              href="operations-aleatoires.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="bg-blue-800 px-3 py-2 rounded shadow-inner"
+              aria-current="page"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="hover:bg-blue-800 px-3 py-2 rounded transition"
+              >📈 Historique</a
+            >
+          </div>
+
+          <button
+            @click="toggle()"
+            class="xl:hidden p-2 rounded hover:bg-blue-800 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                x-show="!mobileMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+              <path
+                x-show="mobileMenuOpen"
+                x-cloak
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div
+          x-show="mobileMenuOpen"
+          x-transition:enter="transition ease-out duration-200"
+          x-transition:enter-start="opacity-0 transform -translate-y-2"
+          x-transition:enter-end="opacity-100 transform translate-y-0"
+          class="xl:hidden border-t border-blue-500 bg-blue-700 pb-4"
+          id="mobile-menu"
+          x-cloak
+        >
+          <div class="flex flex-col space-y-1 pt-2">
+            <a
+              href="index.html"
+              class="block px-3 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >🏠 Accueil</a
+            >
+            <div
+              class="px-4 py-2 text-xs font-bold text-blue-200 uppercase tracking-widest"
+            >
+              Apprentissage
+            </div>
+            <a
+              href="debutant.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >👶 Débutants (1-5)</a
+            >
+            <a
+              href="intermediaire.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >📘 Intermédiaire (6-8)</a
+            >
+            <a
+              href="expert.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >🔥 Expert (9+)</a
+            >
+            <div
+              class="px-4 py-2 text-xs font-bold text-blue-200 uppercase tracking-widest mt-2"
+            >
+              Exercices
+            </div>
+            <a
+              href="operations-aleatoires.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="block px-6 py-2 bg-blue-800 rounded mx-2 transition shadow-inner"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="block px-6 py-2 hover:bg-blue-800 rounded mx-2 transition"
+              >📈 Historique</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bloc : Contenu principal -->
+    <main
+      class="flex-grow max-w-4xl mx-auto px-4 py-12 w-full"
+      x-data="quizComponent"
+    >
+      <!-- Bloc : Écran de sélection du mode de démarrage -->
+      <div
+        x-show="!isStarted && selectedStartMode === 'choose'"
+        x-transition
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 text-center"
+      >
+        <div class="mb-8">
+          <div class="inline-block bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-4 py-1.5 rounded-full text-sm font-bold mb-4 border border-indigo-200 dark:border-indigo-800">
+            Niveau Actuel : <span x-text="$store.quiz.currentLevel + 1"></span>
+          </div>
+          <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-4">Choisissez votre mode</h1>
+          <p class="text-gray-600 dark:text-gray-400 max-w-md mx-auto">Voulez-vous suivre votre parcours pédagogique ou configurer un exercice libre ?</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <button
+            @click="selectStartMode('learning')"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white p-8 rounded-3xl transition shadow-xl flex flex-col items-center group"
+          >
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎓</div>
+            <span class="text-xl font-bold mb-2">Mon Parcours</span>
+            <span class="text-xs opacity-80 leading-tight">Progression pédagogique guidée et intelligente</span>
+          </button>
+
+          <button
+            @click="selectStartMode('free')"
+            class="bg-blue-600 hover:bg-blue-700 text-white p-8 rounded-3xl transition shadow-xl flex flex-col items-center group"
+          >
+            <div class="text-5xl mb-4 group-hover:scale-110 transition-transform">🎲</div>
+            <span class="text-xl font-bold mb-2">Quiz Libre</span>
+            <span class="text-xs opacity-80 leading-tight">Configurez vos propres règles et exercices</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Bloc : Aperçu du parcours d'apprentissage -->
+      <div
+        x-show="!isStarted && selectedStartMode === 'learning'"
+        x-transition
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden"
+      >
+        <div class="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600 flex justify-between items-center">
+          <button @click="selectedStartMode = 'choose'" class="text-gray-500 hover:text-indigo-600 font-bold flex items-center gap-1 transition">
+            ← Retour
+          </button>
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Parcours Pédagogique</span>
+        </div>
+
+        <div class="p-8">
+          <div class="flex flex-col md:flex-row gap-8 items-start">
+            <div class="flex-grow space-y-6">
+              <div>
+                <div class="text-indigo-600 font-black text-xl mb-1 uppercase tracking-tighter">Niveau <span x-text="$store.quiz.currentLevel + 1"></span></div>
+                <h2 class="text-4xl font-black text-gray-900 dark:text-white leading-none" x-text="window.LEARNING_PATH[$store.quiz.currentLevel]?.name"></h2>
+              </div>
+
+              <p class="text-lg text-gray-600 dark:text-gray-400 italic" x-text="window.LEARNING_PATH[$store.quiz.currentLevel]?.description"></p>
+
+              <!-- BLOC : Liens vers les pages d'apprentissage -->
+              <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-2xl border border-blue-100 dark:border-blue-800/30"
+                   x-show="window.LEARNING_PATH[$store.quiz.currentLevel]?.links">
+                <h3 class="font-bold text-blue-900 dark:text-blue-200 mb-3 flex items-center gap-2">
+                  <span class="text-xl">💡</span> Pour t'aider à apprendre
+                </h3>
+                <div class="flex flex-wrap gap-3">
+                  <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.debutant">
+                    <a href="debutant.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200 font-semibold shadow-sm hover:bg-indigo-200 hover:dark:bg-indigo-600 transition">👶 Tables Faciles</a>
+                  </template>
+                  <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.intermediaire">
+                    <a href="intermediaire.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200 font-semibold shadow-sm hover:bg-indigo-200 hover:dark:bg-indigo-600 transition">📘 Tables Moyennes</a>
+                  </template>
+                  <template x-if="window.LEARNING_PATH[$store.quiz.currentLevel]?.links.expert">
+                    <a href="expert.html" class="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-100 dark:bg-indigo-700 text-indigo-800 dark:text-indigo-200 font-semibold shadow-sm hover:bg-indigo-200 hover:dark:bg-indigo-600 transition">🔥 Tables Difficiles</a>
+                  </template>
+                </div>
+              </div>
+
+              <div class="bg-indigo-50 dark:bg-indigo-900/20 p-6 rounded-2xl border border-indigo-100 dark:border-indigo-800/30">
+                <h3 class="font-bold text-indigo-900 dark:text-indigo-200 mb-3 flex items-center gap-2">
+                  <span class="text-xl">📚</span> Tables à pratiquer dans ce niveau
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                  <template x-for="table in window.LEARNING_PATH[$store.quiz.currentLevel]?.cumulativeTables" :key="table">
+                    <span class="bg-white dark:bg-indigo-800 px-4 py-2 rounded-xl shadow-sm font-bold text-indigo-600 dark:text-indigo-100" x-text="'Table de ' + table"></span>
+                  </template>
+                </div>
+              </div>
+
+              <!-- BLOC : Astuces des tables -->
+              <div class="bg-yellow-50 dark:bg-yellow-900/20 p-6 rounded-2xl border border-yellow-100 dark:border-yellow-800/30">
+                <h3 class="font-bold text-yellow-900 dark:text-yellow-200 mb-3 flex items-center gap-2">
+                  <span class="text-xl">🌟</span> Mes petites astuces
+                </h3>
+                <ul class="list-disc list-inside text-gray-700 dark:text-gray-300 space-y-2">
+                  <template x-for="table in window.LEARNING_PATH[$store.quiz.currentLevel]?.cumulativeTables" :key="'tip-' + table">
+                    <li x-text="$store.quiz.tableTips[table] || `Pas d'astuce spéciale pour la table de ${table} pour le moment.`"></li>
+                  </template>
+                </ul>
+              </div>
+            </div>
+
+            <div class="w-full md:w-64 flex-shrink-0 bg-gray-50 dark:bg-gray-700/50 p-6 rounded-3xl space-y-4">
+              <h3 class="text-xs font-black uppercase text-gray-400 tracking-widest text-center">Paramètres du défi</h3>
+              <div class="space-y-3">
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Questions</span>
+                  <span class="font-bold" x-text="window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.numOfQuestions"></span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Vitesse</span>
+                  <span class="font-bold" x-text="window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.secondsChrono + 's/q'"></span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Révision</span>
+                  <span class="font-bold" x-text="(window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.revisionPercentage * 100).toFixed(0) + '%'"></span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                  <span class="text-gray-500">Opération</span>
+                  <span class="font-bold capitalize" x-text="window.LEARNING_PATH_SETTINGS[$store.quiz.currentLevel]?.operationType"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button
+            @click="startLearningPath()"
+            class="w-full mt-10 bg-indigo-600 hover:bg-indigo-700 text-white font-black py-5 rounded-2xl transition shadow-xl shadow-indigo-200 dark:shadow-none transform hover:scale-[1.02] active:scale-95 text-xl"
+          >
+            Lancer mon Parcours 🚀
+          </button>
+        </div>
+      </div>
+
+      <!-- Bloc : Configuration du quiz libre -->
+      <div
+        x-show="!isStarted && selectedStartMode === 'free'"
+        x-transition
+        class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden"
+      >
+        <div class="p-4 bg-gray-50 dark:bg-gray-700 border-b border-gray-100 dark:border-gray-600 flex justify-between items-center">
+          <button @click="selectedStartMode = 'choose'" class="text-gray-500 hover:text-blue-600 font-bold flex items-center gap-1 transition">
+            ← Retour
+          </button>
+          <span class="text-xs font-bold uppercase tracking-widest text-gray-400">Exercice Personnalisé</span>
+        </div>
+
+        <div class="p-8">
+          <form @submit.prevent="startQuiz" class="space-y-6">
+            <!-- Bloc : Type d'opération -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+              <legend
+                class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
+                >Type d'opération</legend
+              >
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <template
+                  x-for="op in ['multiplication', 'division', 'addition', 'soustraction']"
+                  :key="op"
+                >
+                  <button
+                    type="button"
+                    @click="$store.quiz.operationType = op"
+                    :class="$store.quiz.operationType === op ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 rounded-lg transition font-semibold leading-tight min-h-[85px] text-center shadow-sm"
+                    :aria-pressed="$store.quiz.operationType === op"
+                  >
+                    <span
+                      class="text-2xl sm:text-3xl mb-1"
+                      x-text="op === 'multiplication' ? '×' : op === 'division' ? '÷' : op === 'addition' ? '+' : '−'"
+                      aria-hidden="true"
+                    >
+                    </span>
+
+                    <span
+                      class="text-[10px] sm:text-xs uppercase opacity-90 break-all"
+                      x-text="op"
+                    >
+                    </span>
+                  </button>
+                </template>
+              </div>
+            </fieldset>
+
+            <!-- Bloc : Nombre de questions -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+              <label class="block text-lg font-bold mb-3" for="num-questions">
+                Nombre de questions :
+                <span
+                  x-text="$store.quiz.numOfQuestions"
+                  class="text-blue-600"
+                ></span>
+              </label>
+              <input
+                id="num-questions"
+                type="range"
+                min="5"
+                max="50"
+                x-model.number="$store.quiz.numOfQuestions"
+                class="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            </div>
+
+            <!-- Bloc : Mode de chrono -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-4 sm:p-6 rounded-lg border-none">
+              <legend
+                class="block text-lg font-bold mb-4 dark:text-white sm:text-left"
+                >Mode du chrono</legend
+              >
+              <div class="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  @click="$store.quiz.chronoMode = 'question'"
+                  :class="$store.quiz.chronoMode === 'question' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                  :aria-pressed="$store.quiz.chronoMode === 'question'"
+                >
+                  <span class="text-2xl mb-1" role="img" aria-label="Chronomètre">⏱️</span>
+                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                    >Temps limité</span
+                  >
+                  <span class="text-xs sm:text-sm">Par question</span>
+                </button>
+
+                <button
+                  type="button"
+                  @click="$store.quiz.chronoMode = 'quiz'"
+                  :class="$store.quiz.chronoMode === 'quiz' ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                  class="flex flex-col items-center justify-center p-3 rounded-lg transition font-semibold leading-tight min-h-[80px] text-center"
+                  :aria-pressed="$store.quiz.chronoMode === 'quiz'"
+                >
+                  <span class="text-2xl mb-1" role="img" aria-label="Sablier">⏲️</span>
+                  <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                    >Chrono global</span
+                  >
+                  <span class="text-xs sm:text-sm">Pour le quiz</span>
+                </button>
+              </div>
+            </fieldset>
+
+            <!-- Bloc : Durée du chrono -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+              <legend
+                class="block text-lg font-bold mb-3"
+                x-text="$store.quiz.chronoMode === 'question' ? 'Durée du chrono par question' : 'Durée totale du quiz'"
+              ></legend>
+
+              <!-- Bloc : Présélections chrono (par question) -->
+              <template x-if="$store.quiz.chronoMode === 'question'">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 15"
+                    :class="$store.quiz.secondsChrono === 15 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                    aria-label="Rapide : 15 secondes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Rapide</span
+                    >
+                    <span class="text-xs sm:text-sm">15 sec</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 30"
+                    :class="$store.quiz.secondsChrono === 30 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                    aria-label="Standard : 30 secondes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Standard</span
+                    >
+                    <span class="text-xs sm:text-sm">30 sec</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 60"
+                    :class="$store.quiz.secondsChrono === 60 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[75px] text-center"
+                    aria-label="Zen : 60 secondes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Zen</span
+                    >
+                    <span class="text-xs sm:text-sm">60 sec</span>
+                  </button>
+                </div>
+              </template>
+              <!-- Bloc : Présélections chrono (global) -->
+              <template x-if="$store.quiz.chronoMode === 'quiz'">
+                <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6">
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 120"
+                    :class="$store.quiz.secondsChrono === 120 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                    aria-label="Courte : 2 minutes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⚡</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Courte</span
+                    >
+                    <span class="text-xs sm:text-sm">2 min</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 300"
+                    :class="$store.quiz.secondsChrono === 300 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                    aria-label="Moyenne : 5 minutes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">⏱️</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Moyenne</span
+                    >
+                    <span class="text-xs sm:text-sm">5 min</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    @click="$store.quiz.secondsChrono = 600"
+                    :class="$store.quiz.secondsChrono === 600 ? 'bg-blue-600 text-white ring-2 ring-blue-300' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                    class="flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg transition font-semibold leading-tight min-h-[70px]"
+                    aria-label="Longue : 10 minutes"
+                  >
+                    <span class="text-lg sm:text-xl mb-1" aria-hidden="true">🐢</span>
+                    <span class="text-[10px] sm:text-xs uppercase opacity-80"
+                      >Longue</span
+                    >
+                    <span class="text-xs sm:text-sm">10 min</span>
+                  </button>
+                </div>
+              </template>
+
+              <!-- Bloc : Sélection chrono personnalisée (par question) -->
+              <template x-if="$store.quiz.chronoMode === 'question'">
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span
+                      class="text-sm font-medium text-gray-600 dark:text-gray-300"
+                      >Affinage :</span
+                    >
+                    <span
+                      class="text-lg font-bold text-blue-600 dark:text-blue-400"
+                      x-text="$store.quiz.secondsChrono"
+                    ></span>
+                    <span
+                      class="text-sm font-medium text-gray-600 dark:text-gray-300"
+                      >secondes</span
+                    >
+                  </div>
+
+                  <div class="relative pt-8 pb-1">
+                    <div
+                      class="absolute top-0 left-0 right-0 pointer-events-none"
+                    >
+                      <div
+                        class="absolute flex flex-col items-center left-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span
+                          class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                          >15s</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center left-[33.33%] -translateX-1/2"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >30s</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center right-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >60s</span
+                        >
+                      </div>
+                    </div>
+
+                    <!-- Bloc : Curseur de sélection -->
+                    <input
+                      type="range"
+                      x-model.number="$store.quiz.secondsChrono"
+                      min="15"
+                      max="60"
+                      step="1"
+                      class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      aria-label="Affinage du temps par question"
+                    />
+                  </div>
+                </div>
+              </template>
+
+              <!-- Bloc : Sélection chrono personnalisée (global) -->
+              <template x-if="$store.quiz.chronoMode === 'quiz'">
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center">
+                    <span
+                      class="text-sm font-medium text-gray-600 dark:text-gray-300"
+                      >Affinage :</span
+                    >
+                    <span
+                      class="text-lg font-bold text-blue-600 dark:text-blue-400"
+                      x-text="Math.floor($store.quiz.secondsChrono / 60) + 'min ' + ($store.quiz.secondsChrono % 60) + 's'"
+                    ></span>
+                  </div>
+
+                  <div class="relative pt-8 pb-1">
+                    <div
+                      class="absolute top-0 left-0 right-0 pointer-events-none"
+                    >
+                      <div
+                        class="absolute flex flex-col items-center left-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span
+                          class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                          >2 min</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center left-[37.5%] -translateX-1/2"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >5 min</span
+                        >
+                      </div>
+                      <div
+                        class="absolute flex flex-col items-center right-0"
+                      >
+                        <div
+                          class="w-0.5 h-3 bg-gray-400 dark:bg-gray-500 mb-1"
+                        ></div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400"
+                          >10 min</span
+                        >
+                      </div>
+                    </div>
+
+                    <!-- Bloc : Curseur de sélection -->
+                    <input
+                      type="range"
+                      x-model.number="$store.quiz.secondsChrono"
+                      min="120"
+                      max="600"
+                      step="5"
+                      class="w-full h-1.5 bg-gray-300 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                      aria-label="Affinage du temps total du quiz"
+                    />
+                  </div>
+                </div>
+              </template>
+            </fieldset>
+
+            <!-- Bloc : Tables à pratiquer -->
+            <fieldset class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg border-none">
+              <legend class="block text-lg font-bold mb-3"
+                >Tables à pratiquer</legend
+              >
+              <div class="space-y-3">
+                <div class="flex gap-2">
+                  <button
+                    type="button"
+                    @click="selectAllTables()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-3 rounded transition text-sm"
+                  >
+                    ✓ Tout sélectionner
+                  </button>
+                  <button
+                    type="button"
+                    @click="deselectAllTables()"
+                    class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-3 rounded transition text-sm"
+                  >
+                    ✗ Tout désélectionner
+                  </button>
+                </div>
+                <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
+                  <template x-for="num in [2, 3, 4, 5, 6, 7, 8, 9]" :key="num">
+                    <button
+                      type="button"
+                      @click="toggleTable(num)"
+                      :class="$store.quiz.selectedValues.includes(num) ? 'bg-blue-600 text-white' : 'bg-white dark:bg-gray-600 text-gray-900 dark:text-white border border-gray-300'"
+                      class="p-2 rounded transition font-semibold"
+                      :aria-pressed="$store.quiz.selectedValues.includes(num)"
+                    >
+                      <span x-text="num"></span>
+                    </button>
+                  </template>
+                </div>
+              </div>
+            </fieldset>
+
+            <!-- Bloc : Options -->
+            <div class="flex items-center space-x-4">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  x-model="$store.quiz.shouldSaveResult"
+                  class="w-4 h-4"
+                />
+                <span>Sauvegarder les résultats</span>
+              </label>
+            </div>
+
+            <!-- Bloc : Bouton démarrage -->
+            <div class="flex flex-col sm:flex-row gap-4">
+              <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-5 rounded-2xl transition shadow-xl transform hover:scale-[1.02] active:scale-95 text-xl"
+              >
+                Lancer l'exercice 🎲
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Bloc : Interface de jeu -->
+      <div
+        x-show="isStarted && !isFinished"
+        x-ref="quizSection"
+        x-transition
+        class="space-y-6"
+        x-cloak
+      >
+        <!-- Bloc : Statistiques de jeu -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="text-center">
+              <div
+                class="text-4xl font-bold text-blue-600"
+                :class="remainingTime <= 5 ? 'text-red-600' : ''"
+                x-text="$store.quiz.chronoMode === 'quiz' && remainingTime >= 60 ? Math.floor(remainingTime / 60) + ':' + String(remainingTime % 60).padStart(2, '0') : remainingTime"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Temps restant
+              </div>
+            </div>
+
+            <div class="text-center">
+              <div
+                class="text-2xl font-bold"
+                x-text="`${$store.quiz.currentQuestionIndex + 1}/${$store.quiz.numOfQuestions}`"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Question
+              </div>
+            </div>
+
+            <div class="text-center">
+              <div
+                class="text-2xl font-bold text-green-600"
+                x-text="`${$store.quiz.numCorrectAnswers}/${$store.quiz.numCorrectAnswers + $store.quiz.numIncorrectAnswers}`"
+              ></div>
+              <div class="text-sm text-gray-600 dark:text-gray-400">
+                Correctes
+              </div>
+            </div>
+          </div>
+
+          <!-- Bloc : Barre de progression (questions) -->
+          <div class="mt-4 bg-gray-300 rounded-full h-2 dark:bg-gray-700 overflow-hidden">
+            <div
+              class="bg-blue-600 h-2 transition-all duration-300"
+              :style="`width: ${($store.quiz.currentQuestionIndex / $store.quiz.numOfQuestions) * 100}%`"
+              role="progressbar"
+              :aria-valuenow="Math.round(($store.quiz.currentQuestionIndex / $store.quiz.numOfQuestions) * 100)"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+        </div>
+        <!-- Bloc : Barre de progression (temps) -->
+        <div
+          class="mt-6 bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden shadow-inner relative"
+        >
+          <div
+            class="h-full transition-all ease-linear"
+            :class="timeRatio > 0.5 ? 'bg-green-500' : (timeRatio > 0.2 ? 'bg-orange-500' : 'bg-red-500 animate-pulse')"
+            :style="`width: ${timeRatio * 100}%; transition: width 1s linear;`"
+            role="progressbar"
+            :aria-valuenow="Math.round(timeRatio * 100)"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+
+        <!-- Bloc : Question actuelle -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+          <template x-if="$store.quiz.currentPair">
+            <div class="text-center">
+              <div
+                class="text-5xl font-bold mb-4 text-gray-900 dark:text-white"
+              >
+                <span x-text="$store.quiz.currentPair.factors[0]"></span>
+                <span
+                  x-text="$store.quiz.operatorSymbols[$store.quiz.operationType].string"
+                  class="text-blue-600 mx-4"
+                  aria-hidden="true"
+                ></span>
+                <span x-text="$store.quiz.currentPair.factors[1]"></span>
+              </div>
+
+              <!-- Bloc : Saisie de la réponse -->
+              <form @submit.prevent="submitAnswer" class="mt-8">
+                <div class="flex gap-2 justify-center">
+                  <input
+                    type="text"
+                    x-model="userAnswer"
+                    x-ref="answerInput"
+                    @input="userAnswer = userAnswer.replace(/[^0-9]/g, '')"
+                    @keyup.enter="submitAnswer()"
+                    class="text-2xl p-3 border-2 border-blue-600 rounded-lg text-center w-24 dark:bg-gray-700 dark:text-white focus:outline-none focus:border-blue-700"
+                    placeholder="?"
+                    autofocus
+                    inputmode="numeric"
+                    aria-label="Votre réponse"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg transition"
+                  >
+                    Valider
+                  </button>
+                </div>
+              </form>
+
+              <!-- Bloc : Feedback visuel -->
+              <div
+                x-show="showFeedback && !isFeedbackModalVisible"
+                x-transition
+                class="mt-8"
+              >
+                <template x-if="feedbackType === 'correct'">
+                  <div
+                    class="bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-l-4 border-green-600 p-6 rounded-lg text-center"
+                    role="alert"
+                  >
+                    <div class="text-5xl mb-3" aria-hidden="true">✓</div>
+                    <div class="text-2xl font-bold">Correct ! Bravo !</div>
+                  </div>
+                </template>
+                <template x-if="feedbackType === 'incorrect'">
+                  <div
+                    class="bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-l-4 border-red-600 p-6 rounded-lg text-center"
+                    role="alert"
+                  >
+                    <div class="text-5xl mb-3" aria-hidden="true">✗</div>
+                    <div class="text-2xl font-bold mb-4">Mauvaise réponse</div>
+                    <div class="mt-4 text-lg">
+                      La bonne réponse est :
+                      <div
+                        class="text-3xl font-bold mt-2"
+                        x-text="$store.quiz.getCorrectAnswer($store.quiz.currentPair.factors[0], $store.quiz.currentPair.factors[1])"
+                      ></div>
+                    </div>
+                  </div>
+                </template>
+                <template x-if="feedbackType === 'noAnswer'">
+                  <div
+                    class="bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border-l-4 border-orange-600 p-6 rounded-lg text-center"
+                    role="alert"
+                  >
+                    <div class="text-5xl mb-3" aria-hidden="true">⏱️</div>
+                    <div class="text-2xl font-bold mb-4">Temps écoulé</div>
+                    <div class="mt-4 text-lg">
+                      La bonne réponse était :
+                      <div
+                        class="text-3xl font-bold mt-2"
+                        x-text="$store.quiz.getCorrectAnswer($store.quiz.currentPair.factors[0], $store.quiz.currentPair.factors[1])"
+                      ></div>
+                    </div>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <!-- Bloc : Résultats finaux -->
+      <div x-show="isFinished" x-transition class="space-y-6" x-cloak>
+        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl overflow-hidden border border-gray-100 dark:border-gray-700">
+          <!-- Header Résultats -->
+          <div class="bg-blue-600 py-6 text-white text-center">
+            <h2 class="text-4xl font-black tracking-widest uppercase">Résultats</h2>
+          </div>
+
+          <div class="p-8">
+            <!-- Dashboard de Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              <!-- Carte Note -->
+              <div class="bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-600 text-center flex flex-col items-center justify-center">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Ta Note</span>
+                <div
+                  class="text-7xl font-black mb-1"
+                  :class="{
+                    'text-yellow-500': $store.quiz.latestGrade === 'A+',
+                    'text-green-500': $store.quiz.latestGrade === 'A',
+                    'text-blue-500': $store.quiz.latestGrade === 'B',
+                    'text-orange-500': $store.quiz.latestGrade === 'C'
+                  }"
+                  x-text="$store.quiz.latestGrade"
+                ></div>
+              </div>
+
+              <!-- Carte Vitesse -->
+              <div class="bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-600 text-center flex flex-col items-center justify-center">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Vitesse</span>
+                <div class="text-5xl font-black text-blue-600 dark:text-blue-400 mb-1">
+                  <span x-text="(timePerQuestion.reduce((a, b) => a + b, 0) / $store.quiz.numOfQuestions).toFixed(1)"></span><span class="text-2xl">s</span>
+                </div>
+                <span class="text-[10px] text-gray-400">par question</span>
+              </div>
+
+              <!-- Carte Bête Noire -->
+              <div class="bg-white dark:bg-gray-700 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-600 text-center flex flex-col items-center justify-center">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2">Bête Noire</span>
+                <template x-if="$store.quiz.beteNoire">
+                  <div>
+                    <div class="text-4xl font-black text-red-500 mb-1">
+                      <span x-text="$store.quiz.beteNoire[0]"></span>
+                      <span class="text-2xl mx-1 text-gray-400">×</span>
+                      <span x-text="$store.quiz.beteNoire[1]"></span>
+                    </div>
+                    <span class="text-[10px] text-gray-400">À travailler !</span>
+                  </div>
+                </template>
+                <template x-if="!$store.quiz.beteNoire">
+                  <div class="text-2xl font-bold text-green-500">Aucune ! 🎉</div>
+                </template>
+              </div>
+            </div>
+
+            <!-- Promotion de Niveau (Conditionnelle) -->
+            <template x-if="$store.quiz.proposedNextLevel">
+              <div class="mb-10 bg-gradient-to-r from-orange-400 to-pink-500 rounded-2xl p-8 text-white text-center shadow-xl animate-bounce-soft">
+                <h3 class="text-2xl font-black mb-2 flex items-center justify-center gap-2">
+                  INCROYABLE ! 🌟
+                </h3>
+                <p class="mb-6 opacity-90 font-medium">Tu as maîtrisé ce niveau ! Prêt pour la suite ?</p>
+                <button
+                  @click="acceptLevelUp()"
+                  class="bg-white text-orange-500 hover:bg-orange-50 font-black py-4 px-10 rounded-full transition transform hover:scale-110 active:scale-95 shadow-lg uppercase tracking-wider"
+                >
+                  Passer au Niveau Suivant !
+                </button>
+              </div>
+            </template>
+
+          <!-- Bloc : Détail des réponses -->
+          <div class="space-y-2 max-h-96 overflow-y-auto">
+            <template x-for="(pair, index) in $store.quiz.pairs" :key="index">
+              <div
+                :class="pair.isCorrect ? 'bg-green-50 dark:bg-green-900/20 border-l-4 border-green-600' : 'bg-red-50 dark:bg-red-900/20 border-l-4 border-red-600'"
+                class="p-4 rounded"
+              >
+                <div
+                  class="flex justify-between items-center font-semibold text-lg"
+                >
+                  <div>
+                    <span x-text="pair.factors[0]"></span>
+                    <span
+                      x-text="$store.quiz.operatorSymbols[$store.quiz.operationType].string"
+                      class="mx-2"
+                      aria-hidden="true"
+                    ></span>
+                    <span x-text="pair.factors[1]"></span>
+                    <span class="mx-2">=</span>
+                    <span
+                      x-text="$store.quiz.getCorrectAnswer(pair.factors[0], pair.factors[1])"
+                    ></span>
+                  </div>
+                  <span
+                    :class="pair.isCorrect ? 'text-green-600' : 'text-red-600'"
+                    class="font-bold"
+                  >
+                    <span x-show="pair.isCorrect" aria-label="Correct">✓</span>
+                    <span x-show="!pair.isCorrect" aria-label="Incorrect">✗</span>
+                  </span>
+                </div>
+                <div
+                  x-show="!pair.isCorrect"
+                  class="mt-2 text-sm text-red-600 dark:text-red-400"
+                >
+                  votre réponse :
+                  <span x-text="pair.answer" class="font-bold"></span>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <!-- Bloc : Actions finales -->
+          <div class="mt-8 flex gap-4">
+            <button
+              @click="resetQuiz()"
+              class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition"
+            >
+              Recommencer
+            </button>
+            <a
+              href="historique.html"
+              class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 rounded-lg transition text-center"
+            >
+              Voir l'historique
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc : Modal de feedback (Mobile) -->
+      <div
+        x-show="isFeedbackModalVisible"
+        class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 h-screen w-screen"
+        aria-modal="true"
+        role="dialog"
+        x-cloak
+      >
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl p-8 max-w-md w-11/12"
+        >
+          <template x-if="feedbackType === 'correct'">
+            <div class="bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-200 border-l-4 border-green-600 p-6 rounded-lg text-center">
+                <div class="text-5xl mb-3" aria-hidden="true">✓</div>
+                <div class="text-2xl font-bold">Correct !</div>
+                <div class="text-lg mt-2">Bravo !</div>
+            </div>
+          </template>
+          <template x-if="feedbackType === 'incorrect'">
+            <div class="bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-200 border-l-4 border-red-600 p-6 rounded-lg text-center">
+                <div class="text-5xl mb-3" aria-hidden="true">✗</div>
+                <div class="text-2xl font-bold mb-4">Mauvaise réponse</div>
+                <div class="mt-4 text-lg">La bonne réponse est :<div class="text-3xl font-bold mt-3" x-text="$store.quiz.getCorrectAnswer($store.quiz.currentPair.factors[0], $store.quiz.currentPair.factors[1])"></div></div>
+            </div>
+          </template>
+          <template x-if="feedbackType === 'noAnswer'">
+            <div class="bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-200 border-l-4 border-orange-600 p-6 rounded-lg text-center">
+                <div class="text-5xl mb-3" aria-hidden="true">⏱️</div>
+                <div class="text-2xl font-bold mb-4">Temps écoulé</div>
+                <div class="mt-4 text-lg">La bonne réponse était :<div class="text-3xl font-bold mt-3" x-text="$store.quiz.getCorrectAnswer($store.quiz.currentPair.factors[0], $store.quiz.currentPair.factors[1])"></div></div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bloc : Pied de page -->
+    <footer
+      class="bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 py-8 mt-auto"
+    >
+      <div class="max-w-7xl mx-auto text-center">
+        <p>
+          &copy; 2024 Application de Multiplication - Version Alpine.js &
+          Tailwind
+        </p>
+      </div>
+    </footer>
+
+    <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202606011403"></script>
+    <script defer src="vendor/alpinejs.min.js?v=202606011403"></script>
+
+    <!-- Bloc : Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").then((reg) => {
+          reg.addEventListener("updatefound", () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener("statechange", () => {
+              if (
+                newWorker.state === "installed" &&
+                navigator.serviceWorker.controller
+              ) {
+                // Une nouvelle version est là, on recharge automatiquement
+                window.location.reload();
+              }
+            });
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="keywords"
+      content="apprentissage, intermédiaire, tables de multiplication, enfants, progression"
+    />
+    <title>Niveau Intermédiaire - Tables de 6 à 8</title>
+
+    <!-- Bloc : Favicons & PWA -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="img/favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="img/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="img/favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="mask-icon"
+      href="img/favicons/safari-pinned-tab.svg"
+      color="#1e40af"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Multiplication" />
+    <meta name="msapplication-TileColor" content="#1e40af" />
+    <meta name="theme-color" content="#1e40af" />
+
+    <!-- Bloc : Styles Tailwind -->
+    <link rel="stylesheet" href="vendor/tailwind.min.css?v=202606011403" />
+  </head>
+
+  <body
+    class="bg-gradient-to-br from-lime-100 to-cyan-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 transition-colors duration-300 flex flex-col min-h-screen"
+  >
+    <!-- Bloc : Navigation -->
+    <nav
+      class="bg-gradient-to-br from-green-500 to-blue-500 text-white shadow-lg font-bold sticky top-0 z-50"
+      x-data="$store.nav"
+    >
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 gap-4">
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <svg
+              class="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+              ></path>
+            </svg>
+            <span class="text-xl font-bold">Multiplication</span>
+          </div>
+
+          <div class="hidden xl:flex space-x-1 items-center text-sm" role="navigation" aria-label="Menu principal">
+            <a
+              href="index.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >🏠 Accueil</a
+            >
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
+
+            <a
+              href="debutant.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >👶 Débutants</a
+            >
+
+            <a
+              href="intermediaire.html"
+              class="bg-white/20 ring-2 ring-white px-4 py-2 rounded-lg shadow-md flex items-center transform scale-110 transition-all font-bold"
+              aria-current="page"
+            >
+              <span class="mr-1">📘</span> Intermédiaire
+            </a>
+
+            <a
+              href="expert.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >🔥 Expert</a
+            >
+
+            <div class="w-px h-6 bg-white/20 mx-1" aria-hidden="true"></div>
+            <a
+              href="operations-aleatoires.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="hover:bg-white/20 px-3 py-2 rounded-lg transition font-medium"
+              >📈 Historique</a
+            >
+          </div>
+
+          <button
+            @click="toggle()"
+            class="xl:hidden p-2 rounded-lg hover:bg-white/20 transition focus:outline-none"
+            aria-label="Ouvrir le menu mobile"
+            :aria-expanded="mobileMenuOpen"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                x-show="!mobileMenuOpen"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              ></path>
+              <path
+                x-show="mobileMenuOpen"
+                x-cloak
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+
+        <div
+          x-show="mobileMenuOpen"
+          x-transition
+          class="xl:hidden border-t border-white/20 pb-4"
+          id="mobile-menu"
+        >
+          <div class="flex flex-col space-y-1 pt-3">
+            <a
+              href="index.html"
+              class="block px-4 py-2 hover:bg-white/10 rounded-lg mx-2 transition font-medium"
+              >🏠 Accueil</a
+            >
+            <div
+              class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest"
+            >
+              Apprentissage
+            </div>
+
+            <a
+              href="debutant.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium"
+              >👶 Débutants (1-5)</a
+            >
+
+            <a
+              href="intermediaire.html"
+              class="block px-6 py-3 bg-white/25 border-l-4 border-white mx-2 font-black shadow-inner"
+            >
+              📘 Intermédiaire (6-8)
+            </a>
+
+            <a
+              href="expert.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium"
+              >🔥 Expert (9+)</a
+            >
+
+            <div
+              class="px-4 py-2 text-xs font-bold text-white/60 uppercase tracking-widest mt-2"
+            >
+              Exercices
+            </div>
+            <a
+              href="operations-aleatoires.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium"
+              >🎲 Opérations</a
+            >
+            <a
+              href="pythagore.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium"
+              >📊 Pythagore</a
+            >
+            <a
+              href="quiz.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium"
+              >❓ Quiz</a
+            >
+            <a
+              href="historique.html"
+              class="block px-6 py-2 hover:bg-white/10 rounded-lg mx-2 font-medium"
+              >📈 Historique</a
+            >
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Bloc : Contenu principal -->
+    <main
+      class="flex-grow max-w-6xl mx-auto px-4 py-8 w-full transition-colors duration-300"
+      x-data="niveauComponent"
+    >
+      <!-- Bloc : Titre -->
+      <div class="text-center mb-8">
+        <h1
+          class="text-4xl md:text-5xl font-bold mb-3 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"
+        >
+          📘 Niveau Intermédiaire
+        </h1>
+        <p class="text-lg text-gray-700 dark:text-gray-300">
+          Progressons avec les tables 6 à 8, tu as presque compris !
+        </p>
+      </div>
+
+      <!-- Bloc : Section de sélection -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Bloc : Sélection des tables -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-colors"
+        >
+          <h2 class="text-2xl font-bold mb-4 flex items-center dark:text-white">
+            <span class="text-3xl mr-2" role="img" aria-label="Livres">📚</span> Quelle table maîtriser ?
+          </h2>
+          <div class="grid grid-cols-3 gap-3">
+            <template x-for="num in [6, 7, 8]" :key="num">
+              <button
+                @click="selectTable(num)"
+                :class="selectedTable === num 
+                                ? 'bg-gradient-to-br from-green-500 to-blue-500 text-white scale-105 shadow-lg outline-none' 
+                                : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:scale-105 outline-none'"
+                class="p-3 md:p-4 rounded-lg font-bold text-xl transition transform duration-200"
+                :aria-label="'Apprendre la table de ' + num"
+                :aria-pressed="selectedTable === num"
+              >
+                <span x-text="num"></span>
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <!-- Bloc : Informations -->
+        <div
+          class="bg-gradient-to-br from-yellow-100 to-orange-100 dark:from-yellow-900/30 dark:to-orange-900/30 rounded-lg shadow-lg p-6"
+        >
+          <h2 class="text-2xl font-bold mb-3 flex items-center dark:text-white">
+            <span class="text-3xl mr-2" role="img" aria-label="Ampoule">💡</span> Conseil
+          </h2>
+          <p class="text-gray-800 dark:text-gray-200 mb-3">
+            <strong>Tu progresses bien !</strong> Les tables 6 et 7 sont un peu
+            plus difficiles. Utilise les astuces pour te les mémoriser.
+          </p>
+          <div class="bg-white dark:bg-gray-800 p-3 rounded text-sm">
+            <p>🎯 Astuce: 6 × 6 = 36, 7 × 7 = 49. Apprends les carrés !</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc : Table affichée -->
+      <div
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 mb-8 transition-colors"
+      >
+        <h2 class="text-3xl font-bold mb-6 text-center dark:text-white">
+          Table de
+          <span
+            x-text="selectedTable"
+            class="font-bold text-4xl bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"
+          >
+          </span>
+        </h2>
+
+        <!-- Bloc : Grille de la table -->
+        <div class="grid grid-cols-3 md:grid-cols-5 gap-4 mb-8">
+          <template x-for="i in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" :key="i">
+            <div
+              @click="toggleCellReveal(i)"
+              @keydown.enter="toggleCellReveal(i)"
+              @keydown.space.prevent="toggleCellReveal(i)"
+              :class="revealedCells.includes(i) 
+                            ? 'bg-gradient-to-br from-green-400 to-blue-500' 
+                            : 'bg-gradient-to-br from-green-300 to-blue-300 opacity-90'"
+              class="p-6 rounded-lg shadow-lg hover:scale-105 transition transform text-center text-white cursor-pointer shadow-blue-100 dark:shadow-none"
+              role="button"
+              tabindex="0"
+              :aria-label="'Calcul ' + selectedTable + ' fois ' + i"
+            >
+              <div class="text-sm font-bold opacity-90">
+                <span x-text="selectedTable"></span> × <span x-text="i"></span>
+              </div>
+              <div class="text-3xl font-bold mt-2">
+                <span
+                  x-show="revealedCells.includes(i)"
+                  x-text="selectedTable * i"
+                ></span>
+                <span x-show="!revealedCells.includes(i)">?</span>
+              </div>
+            </div>
+          </template>
+        </div>
+
+        <!-- Bloc : Boutons d'action -->
+        <div class="flex gap-4 justify-center flex-wrap">
+          <button
+            @click="revealAll()"
+            class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-md"
+          >
+            ✓ Voir tout
+          </button>
+          <button
+            @click="hideAll()"
+            class="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-md"
+          >
+            🔄 Recommencer
+          </button>
+          <button
+            @click="aleaTable()"
+            class="bg-gradient-to-r from-violet-500 to-violet-600 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-md"
+          >
+            🎲 Aléatoire
+          </button>
+        </div>
+      </div>
+
+      <!-- Bloc : Astuces -->
+      <div
+        class="bg-gradient-to-r from-pink-50 to-red-50 dark:from-pink-900/20 dark:to-red-900/20 rounded-lg shadow-lg p-8 mb-8"
+      >
+        <h2 class="text-2xl font-bold mb-4 flex items-center dark:text-white">
+          <span class="text-3xl mr-2" role="img" aria-label="Diplôme">🎓</span> Astuces pour cette progression
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm">
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 6">6️⃣</div>
+            <h3 class="font-bold mb-2 dark:text-white">Table de 6</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Tous les résultats sont pairs. Astuce : 6×8 = 48 (ça rime !).
+            </p>
+          </div>
+          <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm">
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 7">7️⃣</div>
+            <h3 class="font-bold mb-2 dark:text-white">Table de 7</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              7×8 = 56. Imagine l'ordre : 5, 6, 7, 8 !
+            </p>
+          </div>
+          <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow-sm">
+            <div class="text-4xl mb-2" role="img" aria-label="Chiffre 8">8️⃣</div>
+            <h3 class="font-bold mb-2 dark:text-white">Table de 8</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              C'est le double de la table de 4. Toujours pair !
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc : Prochaine étape -->
+      <div
+        class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg shadow-lg p-8 text-center"
+      >
+        <h2
+          class="text-2xl font-bold mb-4 flex items-center justify-center dark:text-white"
+        >
+          <span class="text-3xl mr-2" role="img" aria-label="Fusée">🚀</span> Prêt à devenir Expert ?
+        </h2>
+        <p class="text-gray-800 dark:text-gray-200 mb-6">
+          Une fois que tu maîtrises ces tables, le niveau Expert t'attend avec
+          la table de 9 !
+        </p>
+        <a
+          href="expert.html"
+          class="inline-block bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold p-4 rounded-lg transition transform hover:scale-110 shadow-xl outline-none"
+        >
+          🔥 Passer au niveau Expert
+        </a>
+      </div>
+    </main>
+
+    <!-- Bloc : Pied de page -->
+    <footer
+      class="bg-gradient-to-r from-green-600 to-blue-600 text-white py-8 mt-auto"
+    >
+      <div class="max-w-7xl mx-auto text-center">
+        <p>&copy; 2024 Niveau Intermédiaire - Continue ta progression ! 📈</p>
+      </div>
+    </footer>
+
+    <!-- Bloc : Scripts Alpine.js -->
+    <script defer src="./js/alpine-store.js?v=202606011403"></script>
+    <script defer src="vendor/alpinejs.min.js?v=202606011403"></script>
+
+    <!-- Bloc : Service Worker -->
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").then((reg) => {
+          reg.addEventListener("updatefound", () => {
+            const newWorker = reg.installing;
+            newWorker.addEventListener("statechange", () => {
+              if (
+                newWorker.state === "installed" &&
+                navigator.serviceWorker.controller
+              ) {
+                // Une nouvelle version est là, on recharge automatiquement
+                window.location.reload();
+              }
+            });
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

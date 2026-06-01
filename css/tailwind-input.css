@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @supports (selector(::-webkit-scrollbar)) {
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      ::-webkit-scrollbar-track {
+        background: #1f2937;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #6b7280;
+      }
+    }
+  }
+}
+
+/* Custom styles remaining if necessary (e.g. for dynamic elements not yet refactored) */
+#countdown {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-size: 3em;
+  font-weight: 700;
+}
+
+.box {
+  position: relative;
+}
+
+.box span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.rotate-svg {
+  transform-origin: center center;
+  transform: rotate(-90deg);
+}
+
+svg circle {
+  fill: none;
+  stroke: url(#gradient);
+  stroke-width: 10px;
+  stroke-linecap: round;
+  transform: translate(5px, 5px);
+  stroke-dasharray: 313;
+  stroke-dashoffset: 313;
+}
+
+.fond {
+  stroke: #e9f0f3;
+  stroke-dashoffset: 0;
+}
+
+@keyframes circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+[x-cloak] {
+  display: none !important;
+}
