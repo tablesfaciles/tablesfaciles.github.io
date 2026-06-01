@@ -64,11 +64,11 @@ self.addEventListener('fetch', event => {
       })
       .catch(() => {
         // En cas de panne réseau, on cherche dans le cache
-        return caches.match(event.request).then(cachedResponse => {
+        return caches.match(event.request, { ignoreSearch: true }).then(cachedResponse => {
           if (cachedResponse) return cachedResponse;
 
           // Si c'est une page HTML non trouvée, on renvoie l'index
-          if (event.request.headers.get('accept').includes('text/html')) {
+          if (event.request.mode === 'navigate') {
             return caches.match('./index.html');
           }
         });
