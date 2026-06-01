@@ -1,4 +1,5 @@
 {
+  "id": "/",
   "name": "Maîtriser la Multiplication",
   "short_name": "Multiplication",
   "description": "Application interactive pour apprendre les tables de multiplication avec quiz, exercices aléatoires et table de Pythagore.",

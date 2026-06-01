@@ -1,18 +1,18 @@
 const CACHE_NAME = 'multiplication-app-202603291616'; // Incrémente ce numéro à chaque mise à jour
 const urlsToCache = [
-  './',
-  './index.html',
-  './debutant.html',
-  './intermediaire.html',
-  './expert.html',
-  './operations-aleatoires.html',
-  './pythagore.html',
-  './quiz.html',
-  './historique.html',
-  './js/alpine-store.js',
-  './vendor/tailwind.min.css',
-  './vendor/alpinejs.min.js',
-  './vendor/chart.umd.min.js'
+  '/',
+  '/index.html',
+  '/debutant.html',
+  '/intermediaire.html',
+  '/expert.html',
+  '/operations-aleatoires.html',
+  '/pythagore.html',
+  '/quiz.html',
+  '/historique.html',
+  '/js/alpine-store.js',
+  '/vendor/tailwind.min.css',
+  '/vendor/alpinejs.min.js',
+  '/vendor/chart.umd.min.js'
 ];
 
 // Installation : Mise en cache initiale
